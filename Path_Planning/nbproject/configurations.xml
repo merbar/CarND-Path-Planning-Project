@@ -1,0 +1,4560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="../src" name="0">
+      <df name="Eigen-3.3">
+        <df name="bench">
+          <df name="btl">
+            <df name="data">
+              <in>mean.cxx</in>
+              <in>regularize.cxx</in>
+              <in>smooth.cxx</in>
+            </df>
+            <df name="libs">
+              <df name="BLAS">
+                <in>main.cpp</in>
+              </df>
+              <df name="blaze">
+                <in>main.cpp</in>
+              </df>
+              <df name="blitz">
+                <in>btl_blitz.cpp</in>
+                <in>btl_tiny_blitz.cpp</in>
+              </df>
+              <df name="eigen2">
+                <in>btl_tiny_eigen2.cpp</in>
+                <in>main_adv.cpp</in>
+                <in>main_linear.cpp</in>
+                <in>main_matmat.cpp</in>
+                <in>main_vecmat.cpp</in>
+              </df>
+              <df name="eigen3">
+                <in>btl_tiny_eigen3.cpp</in>
+                <in>main_adv.cpp</in>
+                <in>main_linear.cpp</in>
+                <in>main_matmat.cpp</in>
+                <in>main_vecmat.cpp</in>
+              </df>
+              <df name="gmm">
+                <in>main.cpp</in>
+              </df>
+              <df name="mtl4">
+                <in>main.cpp</in>
+              </df>
+              <df name="STL">
+                <in>main.cpp</in>
+              </df>
+              <df name="tensors">
+                <in>main_linear.cpp</in>
+                <in>main_matmat.cpp</in>
+                <in>main_vecmat.cpp</in>
+              </df>
+              <df name="tvmet">
+                <in>main.cpp</in>
+              </df>
+              <df name="ublas">
+                <in>main.cpp</in>
+              </df>
+            </df>
+          </df>
+          <df name="perf_monitoring">
+            <df name="gemm">
+              <in>gemm.cpp</in>
+              <in>lazy_gemm.cpp</in>
+            </df>
+          </df>
+          <df name="spbench">
+            <in>sp_solver.cpp</in>
+            <in>spbenchsolver.cpp</in>
+            <in>test_sparseLU.cpp</in>
+          </df>
+          <df name="tensors">
+            <in>benchmark_main.cc</in>
+            <in>contraction_benchmarks_cpu.cc</in>
+            <in>tensor_benchmarks_cpu.cc</in>
+            <in>tensor_benchmarks_sycl.cc</in>
+          </df>
+          <in>analyze-blocking-sizes.cpp</in>
+          <in>basicbenchmark.cpp</in>
+          <in>benchBlasGemm.cpp</in>
+          <in>benchCholesky.cpp</in>
+          <in>benchEigenSolver.cpp</in>
+          <in>benchFFT.cpp</in>
+          <in>benchGeometry.cpp</in>
+          <in>benchVecAdd.cpp</in>
+          <in>bench_gemm.cpp</in>
+          <in>bench_norm.cpp</in>
+          <in>bench_reverse.cpp</in>
+          <in>bench_sum.cpp</in>
+          <in>benchmark-blocking-sizes.cpp</in>
+          <in>benchmark.cpp</in>
+          <in>benchmarkSlice.cpp</in>
+          <in>benchmarkX.cpp</in>
+          <in>benchmarkXcwise.cpp</in>
+          <in>check_cache_queries.cpp</in>
+          <in>dense_solvers.cpp</in>
+          <in>eig33.cpp</in>
+          <in>geometry.cpp</in>
+          <in>product_threshold.cpp</in>
+          <in>quat_slerp.cpp</in>
+          <in>quatmul.cpp</in>
+          <in>sparse_cholesky.cpp</in>
+          <in>sparse_dense_product.cpp</in>
+          <in>sparse_lu.cpp</in>
+          <in>sparse_product.cpp</in>
+          <in>sparse_randomsetter.cpp</in>
+          <in>sparse_setter.cpp</in>
+          <in>sparse_transpose.cpp</in>
+          <in>sparse_trisolver.cpp</in>
+          <in>spmv.cpp</in>
+          <in>vdw_new.cpp</in>
+        </df>
+        <df name="blas">
+          <df name="f2c">
+            <in>chbmv.c</in>
+            <in>chpmv.c</in>
+            <in>complexdots.c</in>
+            <in>ctbmv.c</in>
+            <in>d_cnjg.c</in>
+            <in>drotm.c</in>
+            <in>drotmg.c</in>
+            <in>dsbmv.c</in>
+            <in>dspmv.c</in>
+            <in>dtbmv.c</in>
+            <in>lsame.c</in>
+            <in>r_cnjg.c</in>
+            <in>srotm.c</in>
+            <in>srotmg.c</in>
+            <in>ssbmv.c</in>
+            <in>sspmv.c</in>
+            <in>stbmv.c</in>
+            <in>zhbmv.c</in>
+            <in>zhpmv.c</in>
+            <in>ztbmv.c</in>
+          </df>
+          <df name="fortran">
+            <in>complexdots.f</in>
+          </df>
+          <df name="testing">
+            <in>cblat1.f</in>
+            <in>cblat2.f</in>
+            <in>cblat3.f</in>
+            <in>dblat1.f</in>
+            <in>dblat2.f</in>
+            <in>dblat3.f</in>
+            <in>sblat1.f</in>
+            <in>sblat2.f</in>
+            <in>sblat3.f</in>
+            <in>zblat1.f</in>
+            <in>zblat2.f</in>
+            <in>zblat3.f</in>
+          </df>
+          <in>complex_double.cpp</in>
+          <in>complex_single.cpp</in>
+          <in>double.cpp</in>
+          <in>single.cpp</in>
+          <in>xerbla.cpp</in>
+        </df>
+        <df name="demos">
+          <df name="mandelbrot">
+            <in>mandelbrot.cpp</in>
+          </df>
+          <df name="mix_eigen_and_c">
+            <in>binary_library.cpp</in>
+            <in>example.c</in>
+          </df>
+          <df name="opengl">
+            <in>camera.cpp</in>
+            <in>gpuhelper.cpp</in>
+            <in>icosphere.cpp</in>
+            <in>quaternion_demo.cpp</in>
+            <in>trackball.cpp</in>
+          </df>
+        </df>
+        <df name="doc">
+          <df name="examples">
+            <in>CustomizingEigen_Inheritance.cpp</in>
+            <in>Cwise_erf.cpp</in>
+            <in>Cwise_erfc.cpp</in>
+            <in>Cwise_lgamma.cpp</in>
+            <in>DenseBase_middleCols_int.cpp</in>
+            <in>DenseBase_middleRows_int.cpp</in>
+            <in>DenseBase_template_int_middleCols.cpp</in>
+            <in>DenseBase_template_int_middleRows.cpp</in>
+            <in>QuickStart_example.cpp</in>
+            <in>QuickStart_example2_dynamic.cpp</in>
+            <in>QuickStart_example2_fixed.cpp</in>
+            <in>TemplateKeyword_flexible.cpp</in>
+            <in>TemplateKeyword_simple.cpp</in>
+            <in>TutorialInplaceLU.cpp</in>
+            <in>TutorialLinAlgComputeTwice.cpp</in>
+            <in>TutorialLinAlgExComputeSolveError.cpp</in>
+            <in>TutorialLinAlgExSolveColPivHouseholderQR.cpp</in>
+            <in>TutorialLinAlgExSolveLDLT.cpp</in>
+            <in>TutorialLinAlgInverseDeterminant.cpp</in>
+            <in>TutorialLinAlgRankRevealing.cpp</in>
+            <in>TutorialLinAlgSVDSolve.cpp</in>
+            <in>TutorialLinAlgSelfAdjointEigenSolver.cpp</in>
+            <in>TutorialLinAlgSetThreshold.cpp</in>
+            <in>Tutorial_ArrayClass_accessors.cpp</in>
+            <in>Tutorial_ArrayClass_addition.cpp</in>
+            <in>Tutorial_ArrayClass_cwise_other.cpp</in>
+            <in>Tutorial_ArrayClass_interop.cpp</in>
+            <in>Tutorial_ArrayClass_interop_matrix.cpp</in>
+            <in>Tutorial_ArrayClass_mult.cpp</in>
+            <in>Tutorial_BlockOperations_block_assignment.cpp</in>
+            <in>Tutorial_BlockOperations_colrow.cpp</in>
+            <in>Tutorial_BlockOperations_corner.cpp</in>
+            <in>Tutorial_BlockOperations_print_block.cpp</in>
+            <in>Tutorial_BlockOperations_vector.cpp</in>
+            <in>Tutorial_PartialLU_solve.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_broadcast_1nn.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_broadcast_simple.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_broadcast_simple_rowwise.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_colwise.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_maxnorm.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_reductions_bool.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_reductions_norm.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_reductions_operatornorm.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_rowwise.cpp</in>
+            <in>Tutorial_ReductionsVisitorsBroadcasting_visitors.cpp</in>
+            <in>Tutorial_simple_example_dynamic_size.cpp</in>
+            <in>Tutorial_simple_example_fixed_size.cpp</in>
+            <in>class_Block.cpp</in>
+            <in>class_CwiseBinaryOp.cpp</in>
+            <in>class_CwiseUnaryOp.cpp</in>
+            <in>class_CwiseUnaryOp_ptrfun.cpp</in>
+            <in>class_FixedBlock.cpp</in>
+            <in>class_FixedVectorBlock.cpp</in>
+            <in>class_VectorBlock.cpp</in>
+            <in>function_taking_eigenbase.cpp</in>
+            <in>function_taking_ref.cpp</in>
+            <in>make_circulant.cpp</in>
+            <in>make_circulant2.cpp</in>
+            <in>matrixfree_cg.cpp</in>
+            <in>nullary_indexing.cpp</in>
+            <in>tut_arithmetic_add_sub.cpp</in>
+            <in>tut_arithmetic_dot_cross.cpp</in>
+            <in>tut_arithmetic_matrix_mul.cpp</in>
+            <in>tut_arithmetic_redux_basic.cpp</in>
+            <in>tut_arithmetic_scalar_mul_div.cpp</in>
+            <in>tut_matrix_coefficient_accessors.cpp</in>
+            <in>tut_matrix_resize.cpp</in>
+            <in>tut_matrix_resize_fixed_size.cpp</in>
+          </df>
+          <df name="snippets">
+            <in>AngleAxis_mimic_euler.cpp</in>
+            <in>BiCGSTAB_simple.cpp</in>
+            <in>BiCGSTAB_step_by_step.cpp</in>
+            <in>ColPivHouseholderQR_solve.cpp</in>
+            <in>ComplexEigenSolver_compute.cpp</in>
+            <in>ComplexEigenSolver_eigenvalues.cpp</in>
+            <in>ComplexEigenSolver_eigenvectors.cpp</in>
+            <in>ComplexSchur_compute.cpp</in>
+            <in>ComplexSchur_matrixT.cpp</in>
+            <in>ComplexSchur_matrixU.cpp</in>
+            <in>Cwise_abs.cpp</in>
+            <in>Cwise_abs2.cpp</in>
+            <in>Cwise_acos.cpp</in>
+            <in>Cwise_arg.cpp</in>
+            <in>Cwise_array_power_array.cpp</in>
+            <in>Cwise_asin.cpp</in>
+            <in>Cwise_atan.cpp</in>
+            <in>Cwise_boolean_and.cpp</in>
+            <in>Cwise_boolean_not.cpp</in>
+            <in>Cwise_boolean_or.cpp</in>
+            <in>Cwise_boolean_xor.cpp</in>
+            <in>Cwise_ceil.cpp</in>
+            <in>Cwise_cos.cpp</in>
+            <in>Cwise_cosh.cpp</in>
+            <in>Cwise_cube.cpp</in>
+            <in>Cwise_equal_equal.cpp</in>
+            <in>Cwise_exp.cpp</in>
+            <in>Cwise_floor.cpp</in>
+            <in>Cwise_greater.cpp</in>
+            <in>Cwise_greater_equal.cpp</in>
+            <in>Cwise_inverse.cpp</in>
+            <in>Cwise_isFinite.cpp</in>
+            <in>Cwise_isInf.cpp</in>
+            <in>Cwise_isNaN.cpp</in>
+            <in>Cwise_less.cpp</in>
+            <in>Cwise_less_equal.cpp</in>
+            <in>Cwise_log.cpp</in>
+            <in>Cwise_log10.cpp</in>
+            <in>Cwise_max.cpp</in>
+            <in>Cwise_min.cpp</in>
+            <in>Cwise_minus.cpp</in>
+            <in>Cwise_minus_equal.cpp</in>
+            <in>Cwise_not_equal.cpp</in>
+            <in>Cwise_plus.cpp</in>
+            <in>Cwise_plus_equal.cpp</in>
+            <in>Cwise_pow.cpp</in>
+            <in>Cwise_product.cpp</in>
+            <in>Cwise_quotient.cpp</in>
+            <in>Cwise_round.cpp</in>
+            <in>Cwise_scalar_power_array.cpp</in>
+            <in>Cwise_sign.cpp</in>
+            <in>Cwise_sin.cpp</in>
+            <in>Cwise_sinh.cpp</in>
+            <in>Cwise_slash_equal.cpp</in>
+            <in>Cwise_sqrt.cpp</in>
+            <in>Cwise_square.cpp</in>
+            <in>Cwise_tan.cpp</in>
+            <in>Cwise_tanh.cpp</in>
+            <in>Cwise_times_equal.cpp</in>
+            <in>DenseBase_LinSpaced.cpp</in>
+            <in>DenseBase_LinSpacedInt.cpp</in>
+            <in>DenseBase_LinSpaced_seq.cpp</in>
+            <in>DenseBase_setLinSpaced.cpp</in>
+            <in>DirectionWise_hnormalized.cpp</in>
+            <in>DirectionWise_replicate.cpp</in>
+            <in>DirectionWise_replicate_int.cpp</in>
+            <in>EigenSolver_EigenSolver_MatrixType.cpp</in>
+            <in>EigenSolver_compute.cpp</in>
+            <in>EigenSolver_eigenvalues.cpp</in>
+            <in>EigenSolver_eigenvectors.cpp</in>
+            <in>EigenSolver_pseudoEigenvectors.cpp</in>
+            <in>FullPivHouseholderQR_solve.cpp</in>
+            <in>FullPivLU_image.cpp</in>
+            <in>FullPivLU_kernel.cpp</in>
+            <in>FullPivLU_solve.cpp</in>
+            <in>GeneralizedEigenSolver.cpp</in>
+            <in>HessenbergDecomposition_compute.cpp</in>
+            <in>HessenbergDecomposition_matrixH.cpp</in>
+            <in>HessenbergDecomposition_packedMatrix.cpp</in>
+            <in>HouseholderQR_householderQ.cpp</in>
+            <in>HouseholderQR_solve.cpp</in>
+            <in>HouseholderSequence_HouseholderSequence.cpp</in>
+            <in>IOFormat.cpp</in>
+            <in>JacobiSVD_basic.cpp</in>
+            <in>Jacobi_makeGivens.cpp</in>
+            <in>Jacobi_makeJacobi.cpp</in>
+            <in>LLT_example.cpp</in>
+            <in>LLT_solve.cpp</in>
+            <in>LeastSquaresNormalEquations.cpp</in>
+            <in>LeastSquaresQR.cpp</in>
+            <in>Map_general_stride.cpp</in>
+            <in>Map_inner_stride.cpp</in>
+            <in>Map_outer_stride.cpp</in>
+            <in>Map_placement_new.cpp</in>
+            <in>Map_simple.cpp</in>
+            <in>MatrixBase_adjoint.cpp</in>
+            <in>MatrixBase_all.cpp</in>
+            <in>MatrixBase_applyOnTheLeft.cpp</in>
+            <in>MatrixBase_applyOnTheRight.cpp</in>
+            <in>MatrixBase_array.cpp</in>
+            <in>MatrixBase_array_const.cpp</in>
+            <in>MatrixBase_asDiagonal.cpp</in>
+            <in>MatrixBase_block_int_int.cpp</in>
+            <in>MatrixBase_block_int_int_int_int.cpp</in>
+            <in>MatrixBase_bottomLeftCorner_int_int.cpp</in>
+            <in>MatrixBase_bottomRightCorner_int_int.cpp</in>
+            <in>MatrixBase_bottomRows_int.cpp</in>
+            <in>MatrixBase_cast.cpp</in>
+            <in>MatrixBase_col.cpp</in>
+            <in>MatrixBase_colwise.cpp</in>
+            <in>MatrixBase_computeInverseAndDetWithCheck.cpp</in>
+            <in>MatrixBase_computeInverseWithCheck.cpp</in>
+            <in>MatrixBase_cwiseAbs.cpp</in>
+            <in>MatrixBase_cwiseAbs2.cpp</in>
+            <in>MatrixBase_cwiseEqual.cpp</in>
+            <in>MatrixBase_cwiseInverse.cpp</in>
+            <in>MatrixBase_cwiseMax.cpp</in>
+            <in>MatrixBase_cwiseMin.cpp</in>
+            <in>MatrixBase_cwiseNotEqual.cpp</in>
+            <in>MatrixBase_cwiseProduct.cpp</in>
+            <in>MatrixBase_cwiseQuotient.cpp</in>
+            <in>MatrixBase_cwiseSign.cpp</in>
+            <in>MatrixBase_cwiseSqrt.cpp</in>
+            <in>MatrixBase_diagonal.cpp</in>
+            <in>MatrixBase_diagonal_int.cpp</in>
+            <in>MatrixBase_diagonal_template_int.cpp</in>
+            <in>MatrixBase_eigenvalues.cpp</in>
+            <in>MatrixBase_end_int.cpp</in>
+            <in>MatrixBase_eval.cpp</in>
+            <in>MatrixBase_fixedBlock_int_int.cpp</in>
+            <in>MatrixBase_hnormalized.cpp</in>
+            <in>MatrixBase_homogeneous.cpp</in>
+            <in>MatrixBase_identity.cpp</in>
+            <in>MatrixBase_identity_int_int.cpp</in>
+            <in>MatrixBase_inverse.cpp</in>
+            <in>MatrixBase_isDiagonal.cpp</in>
+            <in>MatrixBase_isIdentity.cpp</in>
+            <in>MatrixBase_isOnes.cpp</in>
+            <in>MatrixBase_isOrthogonal.cpp</in>
+            <in>MatrixBase_isUnitary.cpp</in>
+            <in>MatrixBase_isZero.cpp</in>
+            <in>MatrixBase_leftCols_int.cpp</in>
+            <in>MatrixBase_noalias.cpp</in>
+            <in>MatrixBase_ones.cpp</in>
+            <in>MatrixBase_ones_int.cpp</in>
+            <in>MatrixBase_ones_int_int.cpp</in>
+            <in>MatrixBase_operatorNorm.cpp</in>
+            <in>MatrixBase_prod.cpp</in>
+            <in>MatrixBase_random.cpp</in>
+            <in>MatrixBase_random_int.cpp</in>
+            <in>MatrixBase_random_int_int.cpp</in>
+            <in>MatrixBase_replicate.cpp</in>
+            <in>MatrixBase_replicate_int_int.cpp</in>
+            <in>MatrixBase_reverse.cpp</in>
+            <in>MatrixBase_rightCols_int.cpp</in>
+            <in>MatrixBase_row.cpp</in>
+            <in>MatrixBase_rowwise.cpp</in>
+            <in>MatrixBase_segment_int_int.cpp</in>
+            <in>MatrixBase_select.cpp</in>
+            <in>MatrixBase_selfadjointView.cpp</in>
+            <in>MatrixBase_set.cpp</in>
+            <in>MatrixBase_setIdentity.cpp</in>
+            <in>MatrixBase_setOnes.cpp</in>
+            <in>MatrixBase_setRandom.cpp</in>
+            <in>MatrixBase_setZero.cpp</in>
+            <in>MatrixBase_start_int.cpp</in>
+            <in>MatrixBase_template_int_bottomRows.cpp</in>
+            <in>MatrixBase_template_int_end.cpp</in>
+            <in>MatrixBase_template_int_int_block_int_int_int_int.cpp</in>
+            <in>MatrixBase_template_int_int_bottomLeftCorner.cpp</in>
+            <in>MatrixBase_template_int_int_bottomLeftCorner_int_int.cpp</in>
+            <in>MatrixBase_template_int_int_bottomRightCorner.cpp</in>
+            <in>MatrixBase_template_int_int_bottomRightCorner_int_int.cpp</in>
+            <in>MatrixBase_template_int_int_topLeftCorner.cpp</in>
+            <in>MatrixBase_template_int_int_topLeftCorner_int_int.cpp</in>
+            <in>MatrixBase_template_int_int_topRightCorner.cpp</in>
+            <in>MatrixBase_template_int_int_topRightCorner_int_int.cpp</in>
+            <in>MatrixBase_template_int_leftCols.cpp</in>
+            <in>MatrixBase_template_int_rightCols.cpp</in>
+            <in>MatrixBase_template_int_segment.cpp</in>
+            <in>MatrixBase_template_int_start.cpp</in>
+            <in>MatrixBase_template_int_topRows.cpp</in>
+            <in>MatrixBase_topLeftCorner_int_int.cpp</in>
+            <in>MatrixBase_topRightCorner_int_int.cpp</in>
+            <in>MatrixBase_topRows_int.cpp</in>
+            <in>MatrixBase_transpose.cpp</in>
+            <in>MatrixBase_triangularView.cpp</in>
+            <in>MatrixBase_zero.cpp</in>
+            <in>MatrixBase_zero_int.cpp</in>
+            <in>MatrixBase_zero_int_int.cpp</in>
+            <in>Matrix_resize_NoChange_int.cpp</in>
+            <in>Matrix_resize_int.cpp</in>
+            <in>Matrix_resize_int_NoChange.cpp</in>
+            <in>Matrix_resize_int_int.cpp</in>
+            <in>Matrix_setConstant_int.cpp</in>
+            <in>Matrix_setConstant_int_int.cpp</in>
+            <in>Matrix_setIdentity_int_int.cpp</in>
+            <in>Matrix_setOnes_int.cpp</in>
+            <in>Matrix_setOnes_int_int.cpp</in>
+            <in>Matrix_setRandom_int.cpp</in>
+            <in>Matrix_setRandom_int_int.cpp</in>
+            <in>Matrix_setZero_int.cpp</in>
+            <in>Matrix_setZero_int_int.cpp</in>
+            <in>PartialPivLU_solve.cpp</in>
+            <in>PartialRedux_count.cpp</in>
+            <in>PartialRedux_maxCoeff.cpp</in>
+            <in>PartialRedux_minCoeff.cpp</in>
+            <in>PartialRedux_norm.cpp</in>
+            <in>PartialRedux_prod.cpp</in>
+            <in>PartialRedux_squaredNorm.cpp</in>
+            <in>PartialRedux_sum.cpp</in>
+            <in>RealQZ_compute.cpp</in>
+            <in>RealSchur_RealSchur_MatrixType.cpp</in>
+            <in>RealSchur_compute.cpp</in>
+            <in>SelfAdjointEigenSolver_SelfAdjointEigenSolver.cpp</in>
+            <in>SelfAdjointEigenSolver_SelfAdjointEigenSolver_MatrixType.cpp</in>
+            <in>SelfAdjointEigenSolver_SelfAdjointEigenSolver_MatrixType2.cpp</in>
+            <in>SelfAdjointEigenSolver_compute_MatrixType.cpp</in>
+            <in>SelfAdjointEigenSolver_compute_MatrixType2.cpp</in>
+            <in>SelfAdjointEigenSolver_eigenvalues.cpp</in>
+            <in>SelfAdjointEigenSolver_eigenvectors.cpp</in>
+            <in>SelfAdjointEigenSolver_operatorInverseSqrt.cpp</in>
+            <in>SelfAdjointEigenSolver_operatorSqrt.cpp</in>
+            <in>SelfAdjointView_eigenvalues.cpp</in>
+            <in>SelfAdjointView_operatorNorm.cpp</in>
+            <in>SparseMatrix_coeffs.cpp</in>
+            <in>TopicAliasing_block.cpp</in>
+            <in>TopicAliasing_block_correct.cpp</in>
+            <in>TopicAliasing_cwise.cpp</in>
+            <in>TopicAliasing_mult1.cpp</in>
+            <in>TopicAliasing_mult2.cpp</in>
+            <in>TopicAliasing_mult3.cpp</in>
+            <in>TopicAliasing_mult4.cpp</in>
+            <in>TopicAliasing_mult5.cpp</in>
+            <in>TopicStorageOrders_example.cpp</in>
+            <in>Triangular_solve.cpp</in>
+            <in>Tridiagonalization_Tridiagonalization_MatrixType.cpp</in>
+            <in>Tridiagonalization_compute.cpp</in>
+            <in>Tridiagonalization_decomposeInPlace.cpp</in>
+            <in>Tridiagonalization_diagonal.cpp</in>
+            <in>Tridiagonalization_householderCoefficients.cpp</in>
+            <in>Tridiagonalization_packedMatrix.cpp</in>
+            <in>Tutorial_AdvancedInitialization_Block.cpp</in>
+            <in>Tutorial_AdvancedInitialization_CommaTemporary.cpp</in>
+            <in>Tutorial_AdvancedInitialization_Join.cpp</in>
+            <in>Tutorial_AdvancedInitialization_LinSpaced.cpp</in>
+            <in>Tutorial_AdvancedInitialization_ThreeWays.cpp</in>
+            <in>Tutorial_AdvancedInitialization_Zero.cpp</in>
+            <in>Tutorial_Map_rowmajor.cpp</in>
+            <in>Tutorial_Map_using.cpp</in>
+            <in>Tutorial_ReshapeMat2Mat.cpp</in>
+            <in>Tutorial_ReshapeMat2Vec.cpp</in>
+            <in>Tutorial_SlicingCol.cpp</in>
+            <in>Tutorial_SlicingVec.cpp</in>
+            <in>Tutorial_commainit_01.cpp</in>
+            <in>Tutorial_commainit_01b.cpp</in>
+            <in>Tutorial_commainit_02.cpp</in>
+            <in>Tutorial_solve_matrix_inverse.cpp</in>
+            <in>Tutorial_solve_multiple_rhs.cpp</in>
+            <in>Tutorial_solve_reuse_decomposition.cpp</in>
+            <in>Tutorial_solve_singular.cpp</in>
+            <in>Tutorial_solve_triangular.cpp</in>
+            <in>Tutorial_solve_triangular_inplace.cpp</in>
+            <in>VectorwiseOp_homogeneous.cpp</in>
+            <in>Vectorwise_reverse.cpp</in>
+            <in>class_FullPivLU.cpp</in>
+            <in>tut_arithmetic_redux_minmax.cpp</in>
+            <in>tut_arithmetic_transpose_aliasing.cpp</in>
+            <in>tut_arithmetic_transpose_conjugate.cpp</in>
+            <in>tut_arithmetic_transpose_inplace.cpp</in>
+            <in>tut_matrix_assignment_resizing.cpp</in>
+          </df>
+          <df name="special_examples">
+            <in>Tutorial_sparse_example.cpp</in>
+            <in>Tutorial_sparse_example_details.cpp</in>
+            <in>random_cpp11.cpp</in>
+          </df>
+          <in>tutorial.cpp</in>
+        </df>
+        <df name="failtest">
+          <in>bdcsvd_int.cpp</in>
+          <in>block_nonconst_ctor_on_const_xpr_0.cpp</in>
+          <in>block_nonconst_ctor_on_const_xpr_1.cpp</in>
+          <in>block_nonconst_ctor_on_const_xpr_2.cpp</in>
+          <in>block_on_const_type_actually_const_0.cpp</in>
+          <in>block_on_const_type_actually_const_1.cpp</in>
+          <in>colpivqr_int.cpp</in>
+          <in>const_qualified_block_method_retval_0.cpp</in>
+          <in>const_qualified_block_method_retval_1.cpp</in>
+          <in>const_qualified_diagonal_method_retval.cpp</in>
+          <in>const_qualified_transpose_method_retval.cpp</in>
+          <in>cwiseunaryview_nonconst_ctor_on_const_xpr.cpp</in>
+          <in>cwiseunaryview_on_const_type_actually_const.cpp</in>
+          <in>diagonal_nonconst_ctor_on_const_xpr.cpp</in>
+          <in>diagonal_on_const_type_actually_const.cpp</in>
+          <in>eigensolver_cplx.cpp</in>
+          <in>eigensolver_int.cpp</in>
+          <in>failtest_sanity_check.cpp</in>
+          <in>fullpivlu_int.cpp</in>
+          <in>fullpivqr_int.cpp</in>
+          <in>jacobisvd_int.cpp</in>
+          <in>ldlt_int.cpp</in>
+          <in>llt_int.cpp</in>
+          <in>map_nonconst_ctor_on_const_ptr_0.cpp</in>
+          <in>map_nonconst_ctor_on_const_ptr_1.cpp</in>
+          <in>map_nonconst_ctor_on_const_ptr_2.cpp</in>
+          <in>map_nonconst_ctor_on_const_ptr_3.cpp</in>
+          <in>map_nonconst_ctor_on_const_ptr_4.cpp</in>
+          <in>map_on_const_type_actually_const_0.cpp</in>
+          <in>map_on_const_type_actually_const_1.cpp</in>
+          <in>partialpivlu_int.cpp</in>
+          <in>qr_int.cpp</in>
+          <in>ref_1.cpp</in>
+          <in>ref_2.cpp</in>
+          <in>ref_3.cpp</in>
+          <in>ref_4.cpp</in>
+          <in>ref_5.cpp</in>
+          <in>selfadjointview_nonconst_ctor_on_const_xpr.cpp</in>
+          <in>selfadjointview_on_const_type_actually_const.cpp</in>
+          <in>sparse_ref_1.cpp</in>
+          <in>sparse_ref_2.cpp</in>
+          <in>sparse_ref_3.cpp</in>
+          <in>sparse_ref_4.cpp</in>
+          <in>sparse_ref_5.cpp</in>
+          <in>sparse_storage_mismatch.cpp</in>
+          <in>swap_1.cpp</in>
+          <in>swap_2.cpp</in>
+          <in>ternary_1.cpp</in>
+          <in>ternary_2.cpp</in>
+          <in>transpose_nonconst_ctor_on_const_xpr.cpp</in>
+          <in>transpose_on_const_type_actually_const.cpp</in>
+          <in>triangularview_nonconst_ctor_on_const_xpr.cpp</in>
+          <in>triangularview_on_const_type_actually_const.cpp</in>
+        </df>
+        <df name="lapack">
+          <in>cholesky.cpp</in>
+          <in>clacgv.f</in>
+          <in>cladiv.f</in>
+          <in>clarf.f</in>
+          <in>clarfb.f</in>
+          <in>clarfg.f</in>
+          <in>clarft.f</in>
+          <in>complex_double.cpp</in>
+          <in>complex_single.cpp</in>
+          <in>dladiv.f</in>
+          <in>dlamch.f</in>
+          <in>dlapy2.f</in>
+          <in>dlapy3.f</in>
+          <in>dlarf.f</in>
+          <in>dlarfb.f</in>
+          <in>dlarfg.f</in>
+          <in>dlarft.f</in>
+          <in>double.cpp</in>
+          <in>dsecnd_NONE.f</in>
+          <in>eigenvalues.cpp</in>
+          <in>ilaclc.f</in>
+          <in>ilaclr.f</in>
+          <in>iladlc.f</in>
+          <in>iladlr.f</in>
+          <in>ilaslc.f</in>
+          <in>ilaslr.f</in>
+          <in>ilazlc.f</in>
+          <in>ilazlr.f</in>
+          <in>lu.cpp</in>
+          <in>second_NONE.f</in>
+          <in>single.cpp</in>
+          <in>sladiv.f</in>
+          <in>slamch.f</in>
+          <in>slapy2.f</in>
+          <in>slapy3.f</in>
+          <in>slarf.f</in>
+          <in>slarfb.f</in>
+          <in>slarfg.f</in>
+          <in>slarft.f</in>
+          <in>svd.cpp</in>
+          <in>zlacgv.f</in>
+          <in>zladiv.f</in>
+          <in>zlarf.f</in>
+          <in>zlarfb.f</in>
+          <in>zlarfg.f</in>
+          <in>zlarft.f</in>
+        </df>
+        <df name="scripts">
+          <in>eigen_gen_credits.cpp</in>
+        </df>
+        <df name="test">
+          <in>adjoint.cpp</in>
+          <in>array.cpp</in>
+          <in>array_for_matrix.cpp</in>
+          <in>array_of_string.cpp</in>
+          <in>array_replicate.cpp</in>
+          <in>array_reverse.cpp</in>
+          <in>bandmatrix.cpp</in>
+          <in>basicstuff.cpp</in>
+          <in>bdcsvd.cpp</in>
+          <in>bicgstab.cpp</in>
+          <in>block.cpp</in>
+          <in>boostmultiprec.cpp</in>
+          <in>bug1213.cpp</in>
+          <in>bug1213_main.cpp</in>
+          <in>cholesky.cpp</in>
+          <in>cholmod_support.cpp</in>
+          <in>commainitializer.cpp</in>
+          <in>conjugate_gradient.cpp</in>
+          <in>conservative_resize.cpp</in>
+          <in>constructor.cpp</in>
+          <in>corners.cpp</in>
+          <in>ctorleak.cpp</in>
+          <in>denseLM.cpp</in>
+          <in>dense_storage.cpp</in>
+          <in>determinant.cpp</in>
+          <in>diagonal.cpp</in>
+          <in>diagonalmatrices.cpp</in>
+          <in>dontalign.cpp</in>
+          <in>dynalloc.cpp</in>
+          <in>eigen2support.cpp</in>
+          <in>eigensolver_complex.cpp</in>
+          <in>eigensolver_generalized_real.cpp</in>
+          <in>eigensolver_generic.cpp</in>
+          <in>eigensolver_selfadjoint.cpp</in>
+          <in>evaluators.cpp</in>
+          <in>exceptions.cpp</in>
+          <in>fastmath.cpp</in>
+          <in>first_aligned.cpp</in>
+          <in>geo_alignedbox.cpp</in>
+          <in>geo_eulerangles.cpp</in>
+          <in>geo_homogeneous.cpp</in>
+          <in>geo_hyperplane.cpp</in>
+          <in>geo_orthomethods.cpp</in>
+          <in>geo_parametrizedline.cpp</in>
+          <in>geo_quaternion.cpp</in>
+          <in>geo_transformations.cpp</in>
+          <in>half_float.cpp</in>
+          <in>hessenberg.cpp</in>
+          <in>householder.cpp</in>
+          <in>incomplete_cholesky.cpp</in>
+          <in>inplace_decomposition.cpp</in>
+          <in>integer_types.cpp</in>
+          <in>inverse.cpp</in>
+          <in>is_same_dense.cpp</in>
+          <in>jacobi.cpp</in>
+          <in>jacobisvd.cpp</in>
+          <in>linearstructure.cpp</in>
+          <in>lscg.cpp</in>
+          <in>lu.cpp</in>
+          <in>mapped_matrix.cpp</in>
+          <in>mapstaticmethods.cpp</in>
+          <in>mapstride.cpp</in>
+          <in>meta.cpp</in>
+          <in>metis_support.cpp</in>
+          <in>miscmatrices.cpp</in>
+          <in>mixingtypes.cpp</in>
+          <in>mpl2only.cpp</in>
+          <in>nesting_ops.cpp</in>
+          <in>nomalloc.cpp</in>
+          <in>nullary.cpp</in>
+          <in>packetmath.cpp</in>
+          <in>pardiso_support.cpp</in>
+          <in>pastix_support.cpp</in>
+          <in>permutationmatrices.cpp</in>
+          <in>prec_inverse_4x4.cpp</in>
+          <in>product_extra.cpp</in>
+          <in>product_large.cpp</in>
+          <in>product_mmtr.cpp</in>
+          <in>product_notemporary.cpp</in>
+          <in>product_selfadjoint.cpp</in>
+          <in>product_small.cpp</in>
+          <in>product_symm.cpp</in>
+          <in>product_syrk.cpp</in>
+          <in>product_trmm.cpp</in>
+          <in>product_trmv.cpp</in>
+          <in>product_trsolve.cpp</in>
+          <in>qr.cpp</in>
+          <in>qr_colpivoting.cpp</in>
+          <in>qr_fullpivoting.cpp</in>
+          <in>qtvector.cpp</in>
+          <in>rand.cpp</in>
+          <in>real_qz.cpp</in>
+          <in>redux.cpp</in>
+          <in>ref.cpp</in>
+          <in>resize.cpp</in>
+          <in>rvalue_types.cpp</in>
+          <in>schur_complex.cpp</in>
+          <in>schur_real.cpp</in>
+          <in>selfadjoint.cpp</in>
+          <in>simplicial_cholesky.cpp</in>
+          <in>sizeof.cpp</in>
+          <in>sizeoverflow.cpp</in>
+          <in>smallvectors.cpp</in>
+          <in>sparseLM.cpp</in>
+          <in>sparse_basic.cpp</in>
+          <in>sparse_block.cpp</in>
+          <in>sparse_permutations.cpp</in>
+          <in>sparse_product.cpp</in>
+          <in>sparse_ref.cpp</in>
+          <in>sparse_solvers.cpp</in>
+          <in>sparse_vector.cpp</in>
+          <in>sparselu.cpp</in>
+          <in>sparseqr.cpp</in>
+          <in>special_numbers.cpp</in>
+          <in>spqr_support.cpp</in>
+          <in>stable_norm.cpp</in>
+          <in>stddeque.cpp</in>
+          <in>stddeque_overload.cpp</in>
+          <in>stdlist.cpp</in>
+          <in>stdlist_overload.cpp</in>
+          <in>stdvector.cpp</in>
+          <in>stdvector_overload.cpp</in>
+          <in>superlu_support.cpp</in>
+          <in>swap.cpp</in>
+          <in>triangular.cpp</in>
+          <in>umeyama.cpp</in>
+          <in>umfpack_support.cpp</in>
+          <in>unalignedassert.cpp</in>
+          <in>unalignedcount.cpp</in>
+          <in>upperbidiagonalization.cpp</in>
+          <in>vectorization_logic.cpp</in>
+          <in>vectorwiseop.cpp</in>
+          <in>visitor.cpp</in>
+          <in>zerosized.cpp</in>
+        </df>
+        <df name="unsupported">
+          <df name="bench">
+            <in>bench_svd.cpp</in>
+          </df>
+          <df name="doc">
+            <df name="examples">
+              <in>BVH_Example.cpp</in>
+              <in>EulerAngles.cpp</in>
+              <in>FFT.cpp</in>
+              <in>MatrixExponential.cpp</in>
+              <in>MatrixFunction.cpp</in>
+              <in>MatrixLogarithm.cpp</in>
+              <in>MatrixPower.cpp</in>
+              <in>MatrixPower_optimal.cpp</in>
+              <in>MatrixSine.cpp</in>
+              <in>MatrixSinh.cpp</in>
+              <in>MatrixSquareRoot.cpp</in>
+              <in>PolynomialSolver1.cpp</in>
+              <in>PolynomialUtils1.cpp</in>
+            </df>
+          </df>
+          <df name="test">
+            <in>BVH.cpp</in>
+            <in>EulerAngles.cpp</in>
+            <in>FFT.cpp</in>
+            <in>FFTW.cpp</in>
+            <in>NonLinearOptimization.cpp</in>
+            <in>NumericalDiff.cpp</in>
+            <in>alignedvector3.cpp</in>
+            <in>autodiff.cpp</in>
+            <in>autodiff_scalar.cpp</in>
+            <in>cxx11_eventcount.cpp</in>
+            <in>cxx11_meta.cpp</in>
+            <in>cxx11_non_blocking_thread_pool.cpp</in>
+            <in>cxx11_runqueue.cpp</in>
+            <in>cxx11_tensor_argmax.cpp</in>
+            <in>cxx11_tensor_assign.cpp</in>
+            <in>cxx11_tensor_broadcast_sycl.cpp</in>
+            <in>cxx11_tensor_broadcasting.cpp</in>
+            <in>cxx11_tensor_casts.cpp</in>
+            <in>cxx11_tensor_chipping.cpp</in>
+            <in>cxx11_tensor_comparisons.cpp</in>
+            <in>cxx11_tensor_concatenation.cpp</in>
+            <in>cxx11_tensor_const.cpp</in>
+            <in>cxx11_tensor_contraction.cpp</in>
+            <in>cxx11_tensor_convolution.cpp</in>
+            <in>cxx11_tensor_custom_index.cpp</in>
+            <in>cxx11_tensor_custom_op.cpp</in>
+            <in>cxx11_tensor_device_sycl.cpp</in>
+            <in>cxx11_tensor_dimension.cpp</in>
+            <in>cxx11_tensor_empty.cpp</in>
+            <in>cxx11_tensor_expr.cpp</in>
+            <in>cxx11_tensor_fft.cpp</in>
+            <in>cxx11_tensor_fixed_size.cpp</in>
+            <in>cxx11_tensor_forced_eval.cpp</in>
+            <in>cxx11_tensor_forced_eval_sycl.cpp</in>
+            <in>cxx11_tensor_generator.cpp</in>
+            <in>cxx11_tensor_ifft.cpp</in>
+            <in>cxx11_tensor_image_patch.cpp</in>
+            <in>cxx11_tensor_index_list.cpp</in>
+            <in>cxx11_tensor_inflation.cpp</in>
+            <in>cxx11_tensor_intdiv.cpp</in>
+            <in>cxx11_tensor_io.cpp</in>
+            <in>cxx11_tensor_layout_swap.cpp</in>
+            <in>cxx11_tensor_lvalue.cpp</in>
+            <in>cxx11_tensor_map.cpp</in>
+            <in>cxx11_tensor_math.cpp</in>
+            <in>cxx11_tensor_mixed_indices.cpp</in>
+            <in>cxx11_tensor_morphing.cpp</in>
+            <in>cxx11_tensor_notification.cpp</in>
+            <in>cxx11_tensor_of_complex.cpp</in>
+            <in>cxx11_tensor_of_const_values.cpp</in>
+            <in>cxx11_tensor_of_strings.cpp</in>
+            <in>cxx11_tensor_padding.cpp</in>
+            <in>cxx11_tensor_patch.cpp</in>
+            <in>cxx11_tensor_random.cpp</in>
+            <in>cxx11_tensor_reduction.cpp</in>
+            <in>cxx11_tensor_reduction_sycl.cpp</in>
+            <in>cxx11_tensor_ref.cpp</in>
+            <in>cxx11_tensor_reverse.cpp</in>
+            <in>cxx11_tensor_roundings.cpp</in>
+            <in>cxx11_tensor_scan.cpp</in>
+            <in>cxx11_tensor_shuffling.cpp</in>
+            <in>cxx11_tensor_simple.cpp</in>
+            <in>cxx11_tensor_striding.cpp</in>
+            <in>cxx11_tensor_sugar.cpp</in>
+            <in>cxx11_tensor_sycl.cpp</in>
+            <in>cxx11_tensor_symmetry.cpp</in>
+            <in>cxx11_tensor_thread_pool.cpp</in>
+            <in>cxx11_tensor_uint128.cpp</in>
+            <in>cxx11_tensor_volume_patch.cpp</in>
+            <in>dgmres.cpp</in>
+            <in>forward_adolc.cpp</in>
+            <in>gmres.cpp</in>
+            <in>kronecker_product.cpp</in>
+            <in>levenberg_marquardt.cpp</in>
+            <in>matrix_exponential.cpp</in>
+            <in>matrix_function.cpp</in>
+            <in>matrix_power.cpp</in>
+            <in>matrix_square_root.cpp</in>
+            <in>minres.cpp</in>
+            <in>mpreal_support.cpp</in>
+            <in>openglsupport.cpp</in>
+            <in>polynomialsolver.cpp</in>
+            <in>polynomialutils.cpp</in>
+            <in>sparse_extra.cpp</in>
+            <in>special_functions.cpp</in>
+            <in>splines.cpp</in>
+          </df>
+        </df>
+      </df>
+      <in>main.cpp</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>nbproject/private/launcher.properties</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>../src</Elem>
+  </sourceRootList>
+  <projectmakefile></projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>../build</buildCommandWorkingDir>
+          <buildCommand>make</buildCommand>
+          <cleanCommand>echo clean</cleanCommand>
+          <executablePath></executablePath>
+        </makeTool>
+        <preBuild>
+          <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
+          <preBuildCommand></preBuildCommand>
+        </preBuild>
+      </makefileType>
+      <item path="../src/Eigen-3.3/bench/analyze-blocking-sizes.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/basicbenchmark.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchBlasGemm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchCholesky.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchEigenSolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchFFT.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchGeometry.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchVecAdd.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/bench_gemm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/bench_norm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/bench_reverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/bench_sum.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchmark-blocking-sizes.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchmark.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchmarkSlice.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchmarkX.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/benchmarkXcwise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/data/mean.cxx"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/data/regularize.cxx"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/data/smooth.cxx"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/BLAS/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/STL/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/blaze/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/blitz/btl_blitz.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/blitz/btl_tiny_blitz.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen2/btl_tiny_eigen2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen2/main_adv.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen2/main_linear.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen2/main_matmat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen2/main_vecmat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen3/btl_tiny_eigen3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen3/main_adv.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen3/main_linear.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen3/main_matmat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/eigen3/main_vecmat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/gmm/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/mtl4/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/tensors/main_linear.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/tensors/main_matmat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/tensors/main_vecmat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/tvmet/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/btl/libs/ublas/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/check_cache_queries.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/dense_solvers.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/eig33.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/geometry.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/perf_monitoring/gemm/gemm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/perf_monitoring/gemm/lazy_gemm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/product_threshold.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/quat_slerp.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/quatmul.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_cholesky.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_dense_product.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_lu.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_product.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_randomsetter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_setter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_transpose.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/sparse_trisolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/spbench/sp_solver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/spbench/spbenchsolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/spbench/test_sparseLU.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/spmv.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/tensors/benchmark_main.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/tensors/contraction_benchmarks_cpu.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/tensors/tensor_benchmarks_cpu.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/tensors/tensor_benchmarks_sycl.cc"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/bench/vdw_new.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/complex_double.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/complex_single.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/double.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/chbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/chpmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/complexdots.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/ctbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/d_cnjg.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/drotm.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/drotmg.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/dsbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/dspmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/dtbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/lsame.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/r_cnjg.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/srotm.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/srotmg.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/ssbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/sspmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/stbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/zhbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/zhpmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/f2c/ztbmv.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/fortran/complexdots.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/single.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/cblat1.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/cblat2.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/cblat3.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/dblat1.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/dblat2.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/dblat3.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/sblat1.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/sblat2.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/sblat3.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/zblat1.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/zblat2.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/testing/zblat3.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/blas/xerbla.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/mandelbrot/mandelbrot.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/mix_eigen_and_c/binary_library.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/mix_eigen_and_c/example.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/opengl/camera.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/opengl/gpuhelper.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/opengl/icosphere.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/opengl/quaternion_demo.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/demos/opengl/trackball.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/CustomizingEigen_Inheritance.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Cwise_erf.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Cwise_erfc.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Cwise_lgamma.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/DenseBase_middleCols_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/DenseBase_middleRows_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/DenseBase_template_int_middleCols.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/DenseBase_template_int_middleRows.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/QuickStart_example.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/QuickStart_example2_dynamic.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/QuickStart_example2_fixed.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TemplateKeyword_flexible.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TemplateKeyword_simple.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialInplaceLU.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgComputeTwice.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgExComputeSolveError.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgExSolveColPivHouseholderQR.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgExSolveLDLT.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgInverseDeterminant.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgRankRevealing.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgSVDSolve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgSelfAdjointEigenSolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/TutorialLinAlgSetThreshold.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ArrayClass_accessors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ArrayClass_addition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ArrayClass_cwise_other.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ArrayClass_interop.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ArrayClass_interop_matrix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ArrayClass_mult.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_BlockOperations_block_assignment.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_BlockOperations_colrow.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_BlockOperations_corner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_BlockOperations_print_block.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_BlockOperations_vector.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_PartialLU_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_broadcast_1nn.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_broadcast_simple.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_broadcast_simple_rowwise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_colwise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_maxnorm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_reductions_bool.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_reductions_norm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_reductions_operatornorm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_rowwise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_ReductionsVisitorsBroadcasting_visitors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_simple_example_dynamic_size.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/Tutorial_simple_example_fixed_size.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/class_Block.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/class_CwiseBinaryOp.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/class_CwiseUnaryOp.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/class_CwiseUnaryOp_ptrfun.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/class_FixedBlock.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/class_FixedVectorBlock.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/class_VectorBlock.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/function_taking_eigenbase.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/function_taking_ref.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/make_circulant.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/make_circulant2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/matrixfree_cg.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/nullary_indexing.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_arithmetic_add_sub.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_arithmetic_dot_cross.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_arithmetic_matrix_mul.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_arithmetic_redux_basic.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_arithmetic_scalar_mul_div.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_matrix_coefficient_accessors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_matrix_resize.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/examples/tut_matrix_resize_fixed_size.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/AngleAxis_mimic_euler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/BiCGSTAB_simple.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/BiCGSTAB_step_by_step.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/ColPivHouseholderQR_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/ComplexEigenSolver_compute.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/ComplexEigenSolver_eigenvalues.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/ComplexEigenSolver_eigenvectors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/ComplexSchur_compute.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/ComplexSchur_matrixT.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/ComplexSchur_matrixU.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_abs.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_abs2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_acos.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_arg.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_array_power_array.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_asin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_atan.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_boolean_and.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_boolean_not.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_boolean_or.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_boolean_xor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_ceil.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_cos.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_cosh.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_cube.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_equal_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_exp.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_floor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_greater.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_greater_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_inverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_isFinite.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_isInf.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_isNaN.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_less.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_less_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_log.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_log10.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_max.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_min.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_minus.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_minus_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_not_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_plus.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_plus_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_pow.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_product.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_quotient.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_round.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_scalar_power_array.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_sign.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_sin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_sinh.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_slash_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_sqrt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_square.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_tan.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_tanh.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Cwise_times_equal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/DenseBase_LinSpaced.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/DenseBase_LinSpacedInt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/DenseBase_LinSpaced_seq.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/DenseBase_setLinSpaced.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/DirectionWise_hnormalized.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/DirectionWise_replicate.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/DirectionWise_replicate_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/EigenSolver_EigenSolver_MatrixType.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/EigenSolver_compute.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/EigenSolver_eigenvalues.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/EigenSolver_eigenvectors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/EigenSolver_pseudoEigenvectors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/FullPivHouseholderQR_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/FullPivLU_image.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/FullPivLU_kernel.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/FullPivLU_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/GeneralizedEigenSolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/HessenbergDecomposition_compute.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/HessenbergDecomposition_matrixH.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/HessenbergDecomposition_packedMatrix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/HouseholderQR_householderQ.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/HouseholderQR_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/HouseholderSequence_HouseholderSequence.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/IOFormat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/JacobiSVD_basic.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Jacobi_makeGivens.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Jacobi_makeJacobi.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/LLT_example.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/LLT_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/LeastSquaresNormalEquations.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/LeastSquaresQR.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Map_general_stride.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Map_inner_stride.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Map_outer_stride.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Map_placement_new.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Map_simple.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_adjoint.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_all.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_applyOnTheLeft.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_applyOnTheRight.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_array.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_array_const.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_asDiagonal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_block_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_block_int_int_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_bottomLeftCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_bottomRightCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_bottomRows_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cast.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_col.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_colwise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_computeInverseAndDetWithCheck.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_computeInverseWithCheck.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseAbs.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseAbs2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseEqual.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseInverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseMax.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseMin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseNotEqual.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseProduct.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseQuotient.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseSign.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_cwiseSqrt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_diagonal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_diagonal_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_diagonal_template_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_eigenvalues.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_end_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_eval.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_fixedBlock_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_hnormalized.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_homogeneous.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_identity.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_identity_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_inverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_isDiagonal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_isIdentity.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_isOnes.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_isOrthogonal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_isUnitary.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_isZero.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_leftCols_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_noalias.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_ones.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_ones_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_ones_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_operatorNorm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_prod.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_random.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_random_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_random_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_replicate.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_replicate_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_reverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_rightCols_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_row.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_rowwise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_segment_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_select.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_selfadjointView.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_set.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_setIdentity.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_setOnes.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_setRandom.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_setZero.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_start_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_bottomRows.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_end.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_block_int_int_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_bottomLeftCorner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_bottomLeftCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_bottomRightCorner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_bottomRightCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_topLeftCorner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_topLeftCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_topRightCorner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_int_topRightCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_leftCols.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_rightCols.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_segment.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_start.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_template_int_topRows.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_topLeftCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_topRightCorner_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_topRows_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_transpose.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_triangularView.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_zero.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_zero_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/MatrixBase_zero_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_resize_NoChange_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_resize_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_resize_int_NoChange.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_resize_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setConstant_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setConstant_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setIdentity_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setOnes_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setOnes_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setRandom_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setRandom_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setZero_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Matrix_setZero_int_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialPivLU_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialRedux_count.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialRedux_maxCoeff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialRedux_minCoeff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialRedux_norm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialRedux_prod.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialRedux_squaredNorm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/PartialRedux_sum.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/RealQZ_compute.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/RealSchur_RealSchur_MatrixType.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/RealSchur_compute.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_SelfAdjointEigenSolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_SelfAdjointEigenSolver_MatrixType.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_SelfAdjointEigenSolver_MatrixType2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_compute_MatrixType.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_compute_MatrixType2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_eigenvalues.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_eigenvectors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_operatorInverseSqrt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointEigenSolver_operatorSqrt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointView_eigenvalues.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SelfAdjointView_operatorNorm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/SparseMatrix_coeffs.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_block.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_block_correct.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_cwise.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_mult1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_mult2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_mult3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_mult4.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicAliasing_mult5.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/TopicStorageOrders_example.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Triangular_solve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tridiagonalization_Tridiagonalization_MatrixType.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tridiagonalization_compute.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tridiagonalization_decomposeInPlace.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tridiagonalization_diagonal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tridiagonalization_householderCoefficients.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tridiagonalization_packedMatrix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_AdvancedInitialization_Block.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_AdvancedInitialization_CommaTemporary.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_AdvancedInitialization_Join.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_AdvancedInitialization_LinSpaced.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_AdvancedInitialization_ThreeWays.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_AdvancedInitialization_Zero.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_Map_rowmajor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_Map_using.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_ReshapeMat2Mat.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_ReshapeMat2Vec.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_SlicingCol.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_SlicingVec.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_commainit_01.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_commainit_01b.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_commainit_02.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_solve_matrix_inverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_solve_multiple_rhs.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_solve_reuse_decomposition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_solve_singular.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_solve_triangular.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Tutorial_solve_triangular_inplace.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/VectorwiseOp_homogeneous.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/Vectorwise_reverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/class_FullPivLU.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/tut_arithmetic_redux_minmax.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/tut_arithmetic_transpose_aliasing.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/tut_arithmetic_transpose_conjugate.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/tut_arithmetic_transpose_inplace.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/snippets/tut_matrix_assignment_resizing.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/special_examples/Tutorial_sparse_example.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/special_examples/Tutorial_sparse_example_details.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/special_examples/random_cpp11.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/doc/tutorial.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/bdcsvd_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/block_nonconst_ctor_on_const_xpr_0.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/block_nonconst_ctor_on_const_xpr_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/block_nonconst_ctor_on_const_xpr_2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/block_on_const_type_actually_const_0.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/block_on_const_type_actually_const_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/colpivqr_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/const_qualified_block_method_retval_0.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/const_qualified_block_method_retval_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/const_qualified_diagonal_method_retval.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/const_qualified_transpose_method_retval.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/cwiseunaryview_nonconst_ctor_on_const_xpr.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/cwiseunaryview_on_const_type_actually_const.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/diagonal_nonconst_ctor_on_const_xpr.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/diagonal_on_const_type_actually_const.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/eigensolver_cplx.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/eigensolver_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/failtest_sanity_check.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/fullpivlu_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/fullpivqr_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/jacobisvd_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ldlt_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/llt_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/map_nonconst_ctor_on_const_ptr_0.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/map_nonconst_ctor_on_const_ptr_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/map_nonconst_ctor_on_const_ptr_2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/map_nonconst_ctor_on_const_ptr_3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/map_nonconst_ctor_on_const_ptr_4.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/map_on_const_type_actually_const_0.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/map_on_const_type_actually_const_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/partialpivlu_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/qr_int.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ref_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ref_2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ref_3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ref_4.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ref_5.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/selfadjointview_nonconst_ctor_on_const_xpr.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/selfadjointview_on_const_type_actually_const.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/sparse_ref_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/sparse_ref_2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/sparse_ref_3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/sparse_ref_4.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/sparse_ref_5.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/sparse_storage_mismatch.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/swap_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/swap_2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ternary_1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/ternary_2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/transpose_nonconst_ctor_on_const_xpr.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/transpose_on_const_type_actually_const.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/triangularview_nonconst_ctor_on_const_xpr.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/failtest/triangularview_on_const_type_actually_const.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/cholesky.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/clacgv.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/cladiv.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/clarf.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/clarfb.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/clarfg.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/clarft.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/complex_double.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/complex_single.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dladiv.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dlamch.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dlapy2.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dlapy3.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dlarf.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dlarfb.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dlarfg.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dlarft.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/double.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/dsecnd_NONE.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/eigenvalues.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/ilaclc.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/ilaclr.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/iladlc.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/iladlr.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/ilaslc.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/ilaslr.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/ilazlc.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/ilazlr.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/lu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/second_NONE.f"
+            ex="false"
+            tool="2"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/single.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/sladiv.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/slamch.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/slapy2.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/slapy3.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/slarf.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/slarfb.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/slarfg.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/slarft.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/svd.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/zlacgv.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/zladiv.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/zlarf.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/zlarfb.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/zlarfg.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/lapack/zlarft.f" ex="false" tool="2" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/scripts/eigen_gen_credits.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/adjoint.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/array.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/array_for_matrix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/array_of_string.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/array_replicate.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/array_reverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/bandmatrix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/basicstuff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/bdcsvd.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/bicgstab.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/block.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/boostmultiprec.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/bug1213.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/bug1213_main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/cholesky.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/cholmod_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/commainitializer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/conjugate_gradient.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/conservative_resize.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/constructor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/corners.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/ctorleak.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/denseLM.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/dense_storage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/determinant.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/diagonal.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/diagonalmatrices.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/dontalign.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/dynalloc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/eigen2support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/eigensolver_complex.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/eigensolver_generalized_real.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/eigensolver_generic.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/eigensolver_selfadjoint.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/evaluators.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/exceptions.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/fastmath.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/first_aligned.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_alignedbox.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_eulerangles.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_homogeneous.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_hyperplane.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_orthomethods.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_parametrizedline.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_quaternion.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/geo_transformations.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/half_float.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/hessenberg.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/householder.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/incomplete_cholesky.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/inplace_decomposition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/integer_types.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/inverse.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/is_same_dense.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/jacobi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/jacobisvd.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/linearstructure.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/lscg.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/lu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/mapped_matrix.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/mapstaticmethods.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/mapstride.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/meta.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/metis_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/miscmatrices.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/mixingtypes.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/mpl2only.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/nesting_ops.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/nomalloc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/nullary.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/packetmath.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/pardiso_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/pastix_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/permutationmatrices.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/prec_inverse_4x4.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_extra.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_large.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_mmtr.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_notemporary.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_selfadjoint.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_small.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_symm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_syrk.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_trmm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_trmv.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/product_trsolve.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/qr.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/qr_colpivoting.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/qr_fullpivoting.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/qtvector.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/rand.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/real_qz.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/redux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/ref.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/resize.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/rvalue_types.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/schur_complex.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/schur_real.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/selfadjoint.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/simplicial_cholesky.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sizeof.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sizeoverflow.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/smallvectors.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparseLM.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparse_basic.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparse_block.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparse_permutations.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparse_product.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparse_ref.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparse_solvers.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparse_vector.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparselu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/sparseqr.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/special_numbers.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/spqr_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/stable_norm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/stddeque.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/stddeque_overload.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/stdlist.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/stdlist_overload.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/stdvector.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/stdvector_overload.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/superlu_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/swap.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/triangular.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/umeyama.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/umfpack_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/unalignedassert.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/unalignedcount.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/upperbidiagonalization.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/vectorization_logic.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/vectorwiseop.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/visitor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/test/zerosized.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/bench/bench_svd.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/BVH_Example.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/EulerAngles.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/FFT.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixExponential.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixFunction.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixLogarithm.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixPower.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixPower_optimal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixSine.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixSinh.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/MatrixSquareRoot.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/PolynomialSolver1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/doc/examples/PolynomialUtils1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/BVH.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/EulerAngles.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/FFT.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/FFTW.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/NonLinearOptimization.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/NumericalDiff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/alignedvector3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/autodiff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/autodiff_scalar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_eventcount.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_meta.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_non_blocking_thread_pool.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_runqueue.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_argmax.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_assign.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_broadcast_sycl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_broadcasting.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_casts.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_chipping.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_comparisons.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_concatenation.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_const.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_contraction.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_convolution.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_custom_index.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_custom_op.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_device_sycl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_dimension.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_empty.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_expr.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_fft.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_fixed_size.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_forced_eval.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_forced_eval_sycl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_generator.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_ifft.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_image_patch.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_index_list.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_inflation.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_intdiv.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_io.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_layout_swap.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_lvalue.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_map.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_math.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_mixed_indices.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_morphing.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_notification.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_of_complex.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_of_const_values.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_of_strings.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_padding.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_patch.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_random.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_reduction.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_reduction_sycl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_ref.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_reverse.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_roundings.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_scan.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_shuffling.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_simple.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_striding.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_sugar.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_sycl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_symmetry.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_thread_pool.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_uint128.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/cxx11_tensor_volume_patch.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/dgmres.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/forward_adolc.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/gmres.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/kronecker_product.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/levenberg_marquardt.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/matrix_exponential.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/matrix_function.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/matrix_power.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/matrix_square_root.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/minres.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/mpreal_support.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/openglsupport.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/polynomialsolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/polynomialutils.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/sparse_extra.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/special_functions.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/Eigen-3.3/unsupported/test/splines.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
