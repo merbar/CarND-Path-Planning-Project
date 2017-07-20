@@ -9,6 +9,8 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 
+#include "polyTrajectoryGenerator.h"
+
 // FOR PLOTTING
 //#include <ctime>
 //#include <sstream>
@@ -26,9 +28,6 @@ double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
 
 // FOR PLOTTING
-clock_t cur_time = clock();
-clock_t last_plot_time = clock();
-int plot_i = 10000;
 bool do_plot = false;
 
 // Checks if the SocketIO event has JSON data.
@@ -174,6 +173,13 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 int main() {
   uWS::Hub h;
   
+  // FOR PLOTTING
+  clock_t cur_time = clock();
+  clock_t last_plot_time = clock();
+  int plot_i = 10000;
+  
+  PolyTrajectoryGenerator PTG;
+  
   // Load up map values for waypoint's x,y,s and d normalized normal vectors
   vector<double> map_waypoints_x;
   vector<double> map_waypoints_y;
@@ -208,7 +214,7 @@ int main() {
   	map_waypoints_dy.push_back(d_y);
   }
 
-  h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,&map_waypoints_dy](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
+  h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,&map_waypoints_dy,&cur_time,&last_plot_time,&plot_i,&PTG](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
