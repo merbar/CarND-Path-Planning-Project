@@ -1,0 +1,34 @@
+Given at timestep t:
+(x, y always in worldspace; s, d always in Frenet)
+
+EGO:
+- car_x
+- car_y
+- car_s
+- car_d
+- car_yaw (in degrees)
+- car_speed
+
+PATH PLANNER:
+// Previous path data given to the Planner
+- previous_path_x (vector<double>)
+- previous_path_y (vector<double>)
+// Previous path's end s and d values 
+- end_path_s
+- end_path_d
+
+TRAFFIC:
+a list of all other cars on the same side of the road.
+- sensor_fusion (data type?)
+
+MAP:
+- map_waypoints_x
+- map_waypoints_y
+- map_waypoints_s
+- map_waypoints_dx
+- map_waypoints_dy
+// The max s value before wrapping around the track back to 0
+- max_s
+#########
+The highway is a total of 6 lanes, where there are 3 lanes on each side. Each lane is 4 m wide
+The d vector has a magnitude of 1 and points perpendicular to the road in the direction of the right hand side of the road. The d vector can be used to reference lane positions, for instance if you want to be in the middle lane at some way point just add the way points (x,y) with the d vector multiplied by 6 = (2+4), since each lane is 4 m.

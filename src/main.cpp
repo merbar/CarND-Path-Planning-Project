@@ -9,6 +9,12 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 
+// FOR PLOTTING
+//#include <ctime>
+//#include <sstream>
+#include "matplotlibcpp.h"
+
+namespace plt = matplotlibcpp;
 using namespace std;
 
 // for convenience
@@ -18,6 +24,12 @@ using json = nlohmann::json;
 constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
+
+// FOR PLOTTING
+clock_t cur_time = clock();
+clock_t last_plot_time = clock();
+int plot_i = 10000;
+bool do_plot = false;
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -161,7 +173,7 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 
 int main() {
   uWS::Hub h;
-
+  
   // Load up map values for waypoint's x,y,s and d normalized normal vectors
   vector<double> map_waypoints_x;
   vector<double> map_waypoints_y;
@@ -214,46 +226,78 @@ int main() {
         
         if (event == "telemetry") {
           // j[1] is the data JSON object
+
+          // Main car's localization Data
+          double car_x = j[1]["x"];
+          double car_y = j[1]["y"];
+          double car_s = j[1]["s"];
+          double car_d = j[1]["d"];
+          double car_yaw = j[1]["yaw"];
+          double car_speed = j[1]["speed"];
+
+          // Previous path data given to the Planner
+          auto previous_path_x = j[1]["previous_path_x"];
+          auto previous_path_y = j[1]["previous_path_y"];
+          // Previous path's end s and d values 
+          double end_path_s = j[1]["end_path_s"];
+          double end_path_d = j[1]["end_path_d"];
+
+          // Sensor Fusion Data, a list of all other cars on the same side of the road.
+          auto sensor_fusion = j[1]["sensor_fusion"];
+
+          json msgJson;
+
+          vector<double> next_x_vals;
+          vector<double> next_y_vals;
           
-        	// Main car's localization Data
-          	double car_x = j[1]["x"];
-          	double car_y = j[1]["y"];
-          	double car_s = j[1]["s"];
-          	double car_d = j[1]["d"];
-          	double car_yaw = j[1]["yaw"];
-          	double car_speed = j[1]["speed"];
+          // TESTS
+          // Just follow the middle of the road
+          double dist_inc = 0.4;
+          for(int i = 0; i < 50; i++) {
+            double new_s = car_s + dist_inc * i;
+            vector<double> new_xy = getXY(new_s, 4, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+            next_x_vals.push_back(new_xy[0]);
+            next_y_vals.push_back(new_xy[1]);
+          }
+          /*
+          // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
+          double dist_inc = 0.5;
+          for(int i = 0; i < 50; i++)
+          {
+            next_x_vals.push_back(car_x+(dist_inc*i)*cos(deg2rad(car_yaw)));
+            next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
+          }
+          */
 
-          	// Previous path data given to the Planner
-          	auto previous_path_x = j[1]["previous_path_x"];
-          	auto previous_path_y = j[1]["previous_path_y"];
-          	// Previous path's end s and d values 
-          	double end_path_s = j[1]["end_path_s"];
-          	double end_path_d = j[1]["end_path_d"];
+          msgJson["next_x"] = next_x_vals;
+          msgJson["next_y"] = next_y_vals;
 
-          	// Sensor Fusion Data, a list of all other cars on the same side of the road.
-          	auto sensor_fusion = j[1]["sensor_fusion"];
+          auto msg = "42[\"control\","+ msgJson.dump()+"]";
 
-          	json msgJson;
-
-          	vector<double> next_x_vals;
-          	vector<double> next_y_vals;
-
-
-          	// TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
-          	msgJson["next_x"] = next_x_vals;
-          	msgJson["next_y"] = next_y_vals;
-
-          	auto msg = "42[\"control\","+ msgJson.dump()+"]";
-
-          	//this_thread::sleep_for(chrono::milliseconds(1000));
-          	ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
+          //this_thread::sleep_for(chrono::milliseconds(1000));
+          ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
           
+          // PLOTTING
+          if (do_plot) {
+            cur_time = clock();
+            if (((cur_time - last_plot_time) / float(CLOCKS_PER_SEC)) > 0.005) {
+              plt::figure();
+              plt::plot(next_x_vals, next_y_vals);
+              //cout << "plot" << endl;
+              std::string filename = "../img/plot_";
+              filename += std::to_string(plot_i);
+              plt::save(filename);
+              plot_i = plot_i + 1;
+              last_plot_time = clock();
+            }
+          }
         }
       } else {
         // Manual driving
         std::string msg = "42[\"manual\",{}]";
         ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
       }
+      
     }
   });
 
