@@ -1577,6 +1577,8 @@
       <in>json.hpp</in>
       <in>main.cpp</in>
       <in>matplotlibcpp.h</in>
+      <in>polyTrajectoryGenerator.cpp</in>
+      <in>polyTrajectoryGenerator.h</in>
     </df>
   </logicalFolder>
   <projectmakefile></projectmakefile>

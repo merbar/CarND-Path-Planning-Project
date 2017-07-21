@@ -31,5 +31,10 @@
 *.out
 *.app
 
+<<<<<<< HEAD
 build
 img
+=======
+img
+build
+>>>>>>> ff1054707a84fcf2d60e2fd3cb02589d7c23f3a5

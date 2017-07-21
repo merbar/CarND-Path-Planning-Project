@@ -19,7 +19,8 @@ PATH PLANNER:
 
 TRAFFIC:
 a list of all other cars on the same side of the road.
-- sensor_fusion (data type?)
+- sensor_fusion (vector<vector<double>>? [id, x, y, vx, vy, s, d])
+-- looks like only 12 cars are ever on our side of the road
 
 MAP:
 - map_waypoints_x
