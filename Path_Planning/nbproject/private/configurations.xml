@@ -6,40 +6,89 @@
         <df name="bench">
           <df name="btl">
             <df name="actions">
+              <in>action_aat_product.hh</in>
+              <in>action_ata_product.hh</in>
+              <in>action_atv_product.hh</in>
+              <in>action_axpby.hh</in>
+              <in>action_axpy.hh</in>
+              <in>action_cholesky.hh</in>
+              <in>action_ger.hh</in>
+              <in>action_hessenberg.hh</in>
+              <in>action_lu_decomp.hh</in>
+              <in>action_lu_solve.hh</in>
+              <in>action_matrix_matrix_product.hh</in>
+              <in>action_matrix_matrix_product_bis.hh</in>
+              <in>action_matrix_vector_product.hh</in>
+              <in>action_partial_lu.hh</in>
+              <in>action_rot.hh</in>
+              <in>action_symv.hh</in>
+              <in>action_syr2.hh</in>
+              <in>action_trisolve.hh</in>
+              <in>action_trisolve_matrix.hh</in>
+              <in>action_trmm.hh</in>
+              <in>basic_actions.hh</in>
             </df>
             <df name="cmake">
             </df>
             <df name="data">
+              <in>gnuplot_common_settings.hh</in>
               <in>mean.cxx</in>
               <in>regularize.cxx</in>
               <in>smooth.cxx</in>
             </df>
             <df name="generic_bench">
               <df name="init">
+                <in>init_function.hh</in>
+                <in>init_matrix.hh</in>
+                <in>init_vector.hh</in>
               </df>
               <df name="static">
+                <in>bench_static.hh</in>
+                <in>intel_bench_fixed_size.hh</in>
+                <in>static_size_generator.hh</in>
               </df>
               <df name="timers">
+                <in>STL_perf_analyzer.hh</in>
+                <in>STL_timer.hh</in>
+                <in>mixed_perf_analyzer.hh</in>
+                <in>portable_perf_analyzer.hh</in>
+                <in>portable_perf_analyzer_old.hh</in>
+                <in>portable_timer.hh</in>
+                <in>x86_perf_analyzer.hh</in>
+                <in>x86_timer.hh</in>
               </df>
               <df name="utils">
+                <in>size_lin_log.hh</in>
+                <in>size_log.hh</in>
                 <in>utilities.h</in>
+                <in>xy_file.hh</in>
               </df>
+              <in>bench.hh</in>
+              <in>bench_parameter.hh</in>
+              <in>btl.hh</in>
             </df>
             <df name="libs">
               <df name="BLAS">
                 <in>blas.h</in>
+                <in>blas_interface.hh</in>
+                <in>blas_interface_impl.hh</in>
                 <in>c_interface_base.h</in>
                 <in>main.cpp</in>
               </df>
               <df name="blaze">
+                <in>blaze_interface.hh</in>
                 <in>main.cpp</in>
               </df>
               <df name="blitz">
+                <in>blitz_LU_solve_interface.hh</in>
+                <in>blitz_interface.hh</in>
                 <in>btl_blitz.cpp</in>
                 <in>btl_tiny_blitz.cpp</in>
+                <in>tiny_blitz_interface.hh</in>
               </df>
               <df name="eigen2">
                 <in>btl_tiny_eigen2.cpp</in>
+                <in>eigen2_interface.hh</in>
                 <in>main_adv.cpp</in>
                 <in>main_linear.cpp</in>
                 <in>main_matmat.cpp</in>
@@ -47,30 +96,40 @@
               </df>
               <df name="eigen3">
                 <in>btl_tiny_eigen3.cpp</in>
+                <in>eigen3_interface.hh</in>
                 <in>main_adv.cpp</in>
                 <in>main_linear.cpp</in>
                 <in>main_matmat.cpp</in>
                 <in>main_vecmat.cpp</in>
               </df>
               <df name="gmm">
+                <in>gmm_LU_solve_interface.hh</in>
+                <in>gmm_interface.hh</in>
                 <in>main.cpp</in>
               </df>
               <df name="mtl4">
+                <in>.kdbgrc.main</in>
                 <in>main.cpp</in>
+                <in>mtl4_LU_solve_interface.hh</in>
+                <in>mtl4_interface.hh</in>
               </df>
               <df name="STL">
+                <in>STL_interface.hh</in>
                 <in>main.cpp</in>
               </df>
               <df name="tensors">
                 <in>main_linear.cpp</in>
                 <in>main_matmat.cpp</in>
                 <in>main_vecmat.cpp</in>
+                <in>tensor_interface.hh</in>
               </df>
               <df name="tvmet">
                 <in>main.cpp</in>
+                <in>tvmet_interface.hh</in>
               </df>
               <df name="ublas">
                 <in>main.cpp</in>
+                <in>ublas_interface.hh</in>
               </df>
             </df>
           </df>
@@ -285,6 +344,12 @@
             <in>function_taking_eigenbase.cpp</in>
             <in>function_taking_ref.cpp</in>
             <in>make_circulant.cpp</in>
+            <in>make_circulant.cpp.entry</in>
+            <in>make_circulant.cpp.evaluator</in>
+            <in>make_circulant.cpp.expression</in>
+            <in>make_circulant.cpp.main</in>
+            <in>make_circulant.cpp.preamble</in>
+            <in>make_circulant.cpp.traits</in>
             <in>make_circulant2.cpp</in>
             <in>matrixfree_cg.cpp</in>
             <in>nullary_indexing.cpp</in>

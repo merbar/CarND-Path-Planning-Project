@@ -6,7 +6,7 @@
             <name>Path_Planning</name>
             <c-extensions>c</c-extensions>
             <cpp-extensions>cc,cpp,cxx</cpp-extensions>
-            <header-extensions>h,hpp</header-extensions>
+            <header-extensions>entry,evaluator,expression,h,hh,hpp,main,preamble,traits</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>

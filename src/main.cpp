@@ -28,7 +28,7 @@ double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
 
 // FOR PLOTTING
-bool do_plot = false;
+bool do_plot = true;
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -177,6 +177,10 @@ int main() {
   clock_t cur_time = clock();
   clock_t last_plot_time = clock();
   int plot_i = 10000;
+  if (do_plot) {
+    plt::figure();
+  }
+  
   
   PolyTrajectoryGenerator PTG;
   
@@ -285,14 +289,40 @@ int main() {
           
           // PLOTTING
           if (do_plot) {
+            int track_s_lookahead = 200;
+            vector<double> track_s = {car_s, car_s + 300};
+            const vector<double> lane_mark_1 = {0, 0};
+            const vector<double> lane_mark_2 = {4, 4};
+            const vector<double> lane_mark_3 = {8, 8};
+            const vector<double> lane_mark_4 = {12, 12};
+            const vector<vector<double>> lane_markings = {lane_mark_1,lane_mark_2,lane_mark_3,lane_mark_4};
+            vector<double> traj_s(next_x_vals.size());
+            vector<double> traj_d(next_x_vals.size());
+            for (int i = 0; i < next_x_vals.size(); i++) {
+                vector<double> s_d = getFrenet(next_x_vals[i], next_y_vals[i], deg2rad(car_yaw), map_waypoints_x, map_waypoints_y);
+                traj_s[i] = s_d[0];
+                traj_d[i] = s_d[1];
+            }
+                    
             cur_time = clock();
             if (((cur_time - last_plot_time) / float(CLOCKS_PER_SEC)) > 0.005) {
-              plt::figure();
-              plt::plot(next_x_vals, next_y_vals);
-              //cout << "plot" << endl;
+              plt::ylim(12, 0);
+              // three lanes in travel direction
+              for (auto marking : lane_markings) {
+                plt::plot(track_s, marking, "r");
+              }
+              // other cars
+              for (auto veh : sensor_fusion) {
+                plt::plot(veh[5], veh[6], "b+");
+              }
+              // current trajectory
+              // this is still buggy, but in the ballpark
+              plt::plot(traj_s, traj_d, "g");
               std::string filename = "../img/plot_";
               filename += std::to_string(plot_i);
+              plt::xlim(car_s-10, car_s+track_s_lookahead+10);
               plt::save(filename);
+              plt::clf();
               plot_i = plot_i + 1;
               last_plot_time = clock();
             }
