@@ -43,3 +43,5 @@ PROCESS:
 - for easier debugging, looked into doing simple data plots straight from C++
 -- matplotlibcpp
 -- plotting sensor fusion data into the environment cleared up where the other cars are located throughout he simulation (make sure they are not distributed all over the track)
+- using linear interpolation between waypoints to map s/d path to x/y coordinates lead to poor driving behavior
+-- spline fit to map s to x/y
