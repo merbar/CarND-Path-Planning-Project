@@ -33,3 +33,13 @@ MAP:
 #########
 The highway is a total of 6 lanes, where there are 3 lanes on each side. Each lane is 4 m wide
 The d vector has a magnitude of 1 and points perpendicular to the road in the direction of the right hand side of the road. The d vector can be used to reference lane positions, for instance if you want to be in the middle lane at some way point just add the way points (x,y) with the d vector multiplied by 6 = (2+4), since each lane is 4 m.
+
+
+PROCESS:
+- figured out given data (above)
+- run small tests to make sure I understand how simulator interprets data
+-- just go straight
+-- follow center lane
+- for easier debugging, looked into doing simple data plots straight from C++
+-- matplotlibcpp
+-- plotting sensor fusion data into the environment cleared up where the other cars are located throughout he simulation (make sure they are not distributed all over the track)

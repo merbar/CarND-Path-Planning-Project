@@ -10,6 +10,7 @@
 #include "json.hpp"
 
 #include "polyTrajectoryGenerator.h"
+#include "spline.h"
 
 // FOR PLOTTING
 //#include <ctime>
@@ -28,7 +29,7 @@ double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
 
 // FOR PLOTTING
-bool do_plot = true;
+bool do_plot = false;
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -151,6 +152,20 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 	{
 		prev_wp++;
 	}
+        
+        double s_spline_start = maps_s[(prev_wp-1)%maps_x.size()];
+        double s_spline_end = maps_s[(prev_wp+2)%maps_x.size()];
+        int next_wp = (prev_wp+1)%maps_x.size();
+        vector<double> wpts_x = {maps_x[(prev_wp-1)%maps_x.size()], maps_x[prev_wp], maps_x[next_wp], maps_x[(prev_wp+2)%maps_x.size()]};
+        vector<double> wpts_y = {maps_y[(prev_wp-1)%maps_y.size()], maps_y[prev_wp], maps_y[next_wp], maps_y[(prev_wp+2)%maps_y.size()]};
+        tk::spline spline_fit_xy;
+        spline_fit_xy.set_points(wpts_x, wpts_y);
+        // call via spline_fit_xy(x)
+        
+        prev_spline_x = maps_x[next_wp] - maps_x[prev_wp];
+        prev_spline_y = ;
+        next_spline_x = ;
+        next_spline_y = ;
 
 	int wp2 = (prev_wp+1)%maps_x.size();
 
@@ -167,8 +182,36 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 	double y = seg_y + d*sin(perp_heading);
 
 	return {x,y};
-
 }
+
+/*
+// Transform from Frenet s,d coordinates to Cartesian x,y
+vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> maps_x, vector<double> maps_y)
+{
+	int prev_wp = -1;
+
+	while(s > maps_s[prev_wp+1] && (prev_wp < (int)(maps_s.size()-1) ))
+	{
+		prev_wp++;
+	}
+
+	int wp2 = (prev_wp+1)%maps_x.size();
+
+	double heading = atan2((maps_y[wp2]-maps_y[prev_wp]),(maps_x[wp2]-maps_x[prev_wp]));
+	// the x,y,s along the segment
+	double seg_s = (s-maps_s[prev_wp]);
+
+	double seg_x = maps_x[prev_wp]+seg_s*cos(heading);
+	double seg_y = maps_y[prev_wp]+seg_s*sin(heading);
+
+	double perp_heading = heading-pi()/2;
+
+	double x = seg_x + d*cos(perp_heading);
+	double y = seg_y + d*sin(perp_heading);
+
+	return {x,y};
+}
+*/
 
 int main() {
   uWS::Hub h;
@@ -260,15 +303,17 @@ int main() {
           vector<double> next_x_vals;
           vector<double> next_y_vals;
           
+          /*
           // TESTS
-          // Just follow the middle of the road
+          // Just follow center lane
           double dist_inc = 0.4;
           for(int i = 0; i < 50; i++) {
             double new_s = car_s + dist_inc * i;
-            vector<double> new_xy = getXY(new_s, 4, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+            vector<double> new_xy = getXY(new_s, 6, map_waypoints_s, map_waypoints_x, map_waypoints_y);
             next_x_vals.push_back(new_xy[0]);
             next_y_vals.push_back(new_xy[1]);
           }
+          */
           /*
           // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
           double dist_inc = 0.5;
@@ -278,7 +323,19 @@ int main() {
             next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
           }
           */
-
+          
+          // plan the path!!
+          cout << endl;
+          cout << "car s: " << car_s << " car speed: " << car_speed << " car d: " << car_d << endl;
+          vector<double> car_state = {car_s, car_speed, 0.0, car_d, 0.0, 0.0};
+          vector<vector<double>> new_path = PTG.generate_trajectory(car_state, 45, 60, sensor_fusion);
+          // new_path is "ideal" path in Frenet coordinates
+          for(int i = 0; i < new_path[0].size(); i++) {
+            vector<double> new_path_xy = getXY(new_path[0][i], new_path[1][i], map_waypoints_s, map_waypoints_x, map_waypoints_y);
+            next_x_vals.push_back(new_path_xy[0]);
+            next_y_vals.push_back(new_path_xy[1]);
+          }
+          
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
 
@@ -287,6 +344,7 @@ int main() {
           //this_thread::sleep_for(chrono::milliseconds(1000));
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
           
+          // #################################################
           // PLOTTING
           if (do_plot) {
             int track_s_lookahead = 200;
@@ -327,6 +385,8 @@ int main() {
               last_plot_time = clock();
             }
           }
+          // END PLOTTING
+          // #################################################
         }
       } else {
         // Manual driving
