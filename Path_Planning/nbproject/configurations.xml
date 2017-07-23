@@ -820,6 +820,8 @@
           </df>
         </df>
       </df>
+      <in>Polynomial.cpp</in>
+      <in>Vehicle.cpp</in>
       <in>main.cpp</in>
       <in>polyTrajectoryGenerator.cpp</in>
     </df>
@@ -4356,6 +4358,22 @@
             ex="false"
             tool="1"
             flavor2="4">
+      </item>
+      <item path="../src/Polynomial.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/python2.7</pElem>
+            <pElem>../build</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/Vehicle.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>/usr/include/python2.7</pElem>
+            <pElem>../build</pElem>
+          </incDir>
+        </ccTool>
       </item>
       <item path="../src/main.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">

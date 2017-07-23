@@ -994,8 +994,24 @@
               <in>UmfPackSupport.h</in>
             </df>
           </df>
+          <in>Cholesky</in>
+          <in>Core</in>
           <in>Dense</in>
           <in>Eigen</in>
+          <in>Eigenvalues</in>
+          <in>Geometry</in>
+          <in>Householder</in>
+          <in>IterativeLinearSolvers</in>
+          <in>Jacobi</in>
+          <in>LU</in>
+          <in>OrderingMethods</in>
+          <in>QR</in>
+          <in>SVD</in>
+          <in>Sparse</in>
+          <in>SparseCholesky</in>
+          <in>SparseCore</in>
+          <in>SparseLU</in>
+          <in>SparseQR</in>
         </df>
         <df name="failtest">
           <in>bdcsvd_int.cpp</in>
@@ -1479,6 +1495,7 @@
                 <in>SplineFwd.h</in>
               </df>
             </df>
+            <in>SpecialFunctions</in>
           </df>
           <df name="test">
             <df name="mpreal">
@@ -1574,6 +1591,10 @@
           </df>
         </df>
       </df>
+      <in>Polynomial.cpp</in>
+      <in>Polynomial.h</in>
+      <in>Vehicle.cpp</in>
+      <in>Vehicle.h</in>
       <in>json.hpp</in>
       <in>main.cpp</in>
       <in>matplotlibcpp.h</in>

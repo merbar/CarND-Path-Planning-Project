@@ -148,12 +148,25 @@ vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
 vector<double> getXY(double s, double d, tk::spline &spline_fit_x, tk::spline &spline_fit_y) {
-    double x = spline_fit_x(s);
-    double y = spline_fit_y(s);
+    // needed to dial this way down to achieve more stable trajectories
+    double seg_length = 0.001;
+    
+    double x_cur = spline_fit_x(s);
+    double y_cur = spline_fit_y(s);
+    double x_next = spline_fit_x(s + seg_length);
+    double y_next = spline_fit_y(s + seg_length);
     // point at center of road. Now need to offset for d
-    //spline_fit_x.deriv
-    vector<double> ret = {x,y};
-    return ret;
+    double heading = atan2((y_next - y_cur),(x_next - x_cur));
+    // the x,y along the segment
+    double seg_x = x_cur + seg_length * cos(heading);
+    double seg_y = y_cur + seg_length * sin(heading);
+
+    double perp_heading = heading - pi() / 2.0;
+
+    double x = seg_x + d * cos(perp_heading);
+    double y = seg_y + d * sin(perp_heading);    
+
+    return {x, y};
 }
 
 
@@ -273,20 +286,31 @@ int main() {
           double car_speed = j[1]["speed"];
 
           // Previous path data given to the Planner
-          auto previous_path_x = j[1]["previous_path_x"];
-          auto previous_path_y = j[1]["previous_path_y"];
+          vector<double> previous_path_x = j[1]["previous_path_x"];
+          vector<double> previous_path_y = j[1]["previous_path_y"];
+          int prev_path_size = previous_path_x.size();
           // Previous path's end s and d values 
           double end_path_s = j[1]["end_path_s"];
           double end_path_d = j[1]["end_path_d"];
+          
+          double car_s_vel = 0;
+          double car_s_acc = 0.0;
+          double car_d_vel = 0.0;
+          double car_d_acc = 0.0;
+          
+          // get ego vel and acc in frenet space
+//          if (prev_path_size > 0) {
+//              double<vector> frenet_0 = getXY(s, d, spline_fit_x, spline_fit_y);
+//          }
 
           // Sensor Fusion Data, a list of all other cars on the same side of the road.
           auto sensor_fusion = j[1]["sensor_fusion"];
 
           json msgJson;
-
+          
           vector<double> next_x_vals;
           vector<double> next_y_vals;
-          
+                    
           /*
           // TESTS
           // Just follow center lane
@@ -309,25 +333,65 @@ int main() {
           */
           
           // plan the path!!
-          cout << endl;
-          cout << "car s: " << car_s << " car x: " << car_x << " car y: " << car_y << " car speed: " << car_speed << " car d: " << car_d << endl;
+          //cout << endl;
+          //cout << "car s: " << car_s << " car x: " << car_x << " car y: " << car_y << " car speed: " << car_speed << " car d: " << car_d << endl;
           //vector<double> bla = getXY_from_wp(6945, 0.0, map_waypoints_s, map_waypoints_x, map_waypoints_y);
           //cout << bla[0] << " " << bla[1] << endl;
+          int horizon = 10;
+          
+//          cout << "prev path:" << endl;
+//          for (int i = 0; i < prev_path_size; i++) {
+//              cout << "x: " << previous_path_x[i] << " :: y: " << previous_path_y[i] << endl;
+//          }
+
           vector<double> car_state = {car_s, car_speed, 0.0, car_d, 0.0, 0.0};
           if (teleport_to_end) {
               cout << "teleporting" << endl;
               car_state[0] = 6500;
               teleport_to_end = false;
           }
-          vector<vector<double>> new_path = PTG.generate_trajectory(car_state, 45, 60, sensor_fusion);
-          // new_path is "ideal" path in Frenet coordinates
-          for (int i = 0; i < new_path[0].size(); i++) {
-            vector<double> new_path_xy = getXY(new_path[0][i], new_path[1][i], spline_fit_x, spline_fit_y);
-            //vector<double> new_path_xy = getXY_from_wp(new_path[0][i], new_path[1][i], map_waypoints_s, map_waypoints_x, map_waypoints_y);
-            next_x_vals.push_back(new_path_xy[0]);
-            next_y_vals.push_back(new_path_xy[1]);
+//          vector<vector<double>> new_path = PTG.generate_trajectory(car_state, 45, horizon, sensor_fusion);
+//          // new_path is "ideal" path in Frenet coordinates. Skip first element because it pops.
+//          for (int i = 1; i < new_path[0].size(); i++) {
+//            vector<double> new_path_xy = getXY(new_path[0][i], new_path[1][i], spline_fit_x, spline_fit_y);
+//            //vector<double> new_path_xy = getXY_from_wp(new_path[0][i], new_path[1][i], map_waypoints_s, map_waypoints_x, map_waypoints_y);
+//            
+//            // smooth over next 10(?) samples with prev path
+//            double smooth_range = 0.0;
+//            if ((prev_path_size > 0) && (i < smooth_range)) {
+//                double scaleFac = i / smooth_range;
+//                new_path_xy[0] = scaleFac * new_path_xy[0] + (1 - scaleFac) * double(previous_path_x[i-1]);
+//                new_path_xy[1] = scaleFac * new_path_xy[1] + (1 - scaleFac) * double(previous_path_y[i-1]);
+//            }
+//            
+//            next_x_vals.push_back(new_path_xy[0]);
+//            next_y_vals.push_back(new_path_xy[1]);
+//          }
+          
+          
+          
+          if (previous_path_x.size() < 3) {
+              //cout << "update" << endl;
+            double dist_inc = 0.4;
+            for(int i = 1; i < horizon; i++) {
+              double s = car_s + dist_inc*i;
+              double d = 10.0;
+              vector<double> xy = getXY(s, d, spline_fit_x, spline_fit_y);
+              //vector<double> xy = getXY_from_wp(s, d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+              next_x_vals.push_back(xy[0]);
+              next_y_vals.push_back(xy[1]);
+//              if (i < 5)
+//                  cout << xy[0] << " : " << xy[1] << endl;
+            }
+          } else {
+              for(int i = 0; i < previous_path_x.size(); i++) {
+                next_x_vals.push_back(previous_path_x[i]);
+                next_y_vals.push_back(previous_path_y[i]);
+              }
           }
           
+         
+          cout << "s: " << car_s << " d: " << car_d << " x: " << car_x << " y: " << car_y << " speed " << car_speed << endl;
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
 

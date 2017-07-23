@@ -20,6 +20,7 @@ PATH PLANNER:
 TRAFFIC:
 a list of all other cars on the same side of the road.
 - sensor_fusion (vector<vector<double>>? [id, x, y, vx, vy, s, d])
+-- vx/vd in m/sec
 -- looks like only 12 cars are ever on our side of the road
 
 MAP:
@@ -45,3 +46,8 @@ PROCESS:
 -- plotting sensor fusion data into the environment cleared up where the other cars are located throughout he simulation (make sure they are not distributed all over the track)
 - using linear interpolation between waypoints to map s/d path to x/y coordinates lead to poor driving behavior
 -- spline fit to map s to x/y
+- Still getting extreme acceleration forces throughout visually smooth trajectory
+-- back to simple test case of following lane:
+   only update new path when the old path is almost exhausted
+   -> smooth driving, pop when path is updated and takes over. Pop was distinct since velocity dropped close to zero.
+      LAG ISSUE! First processed waypoint after trajectory update was still the old one, second was first of new trajectory and almost identical... the documentation for the simulator made it seem like it was able to deal with a situation like this internally?!

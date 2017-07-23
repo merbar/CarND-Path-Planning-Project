@@ -41,33 +41,60 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   // change lane left
   // change lange right 
   
-  /*
-  vector<pair<vector<double>, vector<double>>> trajectory_coefficients;
+  //cout << endl;
+  vector<pair<Polynomial, Polynomial>> trajectory_coefficients;
   for (vector<double> goal : goal_points) {
-    cout << "s goal: " << goal[0] << " " << goal[1] << " " << goal[2] << endl;
-    cout << "d goal: " << goal[3] << " " << goal[4] << " " << goal[5] << endl;
+    //cout << "s goal: " << goal[0] << " " << goal[1] << " " << goal[2] << endl;
+    //cout << "d goal: " << goal[3] << " " << goal[4] << " " << goal[5] << endl;
     vector<double> goal_s = {goal[0], goal[1], goal[2]};
     vector<double> goal_d = {goal[3], goal[4], goal[5]};
-    // ignore goal points that are out of bounds or exceed speed limit
-    if ((goal[3] > 0.0) && (goal[3] < 12.0)) {      
-      vector<double> traj_s = jmt(start, goal_s, horizon);
-      vector<double> traj_d = jmt(start_d, goal, horizon);
+    // ignore goal points that are out of bounds
+    if ((goal[3] > 1.0) && (goal[3] < 11.0)) {      
+      Polynomial traj_s = jmt(start_s, goal_s, horizon);
+      Polynomial traj_d = jmt(start_d, goal_d, horizon);
       trajectory_coefficients.push_back(std::make_pair(traj_s, traj_d));
-    }
+    }     
   }
+  
+  // DEBUG
+  vector<double> deb_goal = goal_points[0];
+  Polynomial deb_traj_s = trajectory_coefficients[0].first;
+  Polynomial deb_traj_d = trajectory_coefficients[0].second;
+  /*
+  cout << endl;
+  cout << "start s: " << start[0] << " " << start[1] << " " << start[2] << endl;
+  cout << "start d: " << start[3] << " " << start[4] << " " << start[5] << endl;
+  cout << "goal s: " << deb_goal[0] << " " << deb_goal[1] << " " << deb_goal[2] << endl;
+  cout << "goal d: " << deb_goal[3] << " " << deb_goal[4] << " " << deb_goal[5] << endl;
+  cout << "poly s: " << endl;
+  deb_traj_s.print();
+  cout << "poly d: " << endl;
+  deb_traj_d.print();
+  */
   // compute cost for each trajectory
   
-  // choose least-cost trajectory and compute values for time horizon
-  */
+  // choose least-cost trajectory
   
+  // compute values for time horizon
+  pair<Polynomial, Polynomial> rand_traj = trajectory_coefficients[0];
   vector<double> traj_s(horizon);
   vector<double> traj_d(horizon);
+  for(int t = 0; t < horizon; t++) {
+      traj_s[t] = rand_traj.first.eval(t);
+      traj_d[t] = rand_traj.second.eval(t);
+  }
+  
+  
+  // NAIVE LANE FOLLOW
+  //vector<double> traj_s(horizon);
+  //vector<double> traj_d(horizon);
   // Just follow center lane
   for(int i = 0; i < horizon; i++) {
     //vector<double> new_xy = getXY(new_s, 6, map_waypoints_s, map_waypoints_x, map_waypoints_y);
     traj_s.at(i) = start_s[0] + dist_per_timestep * i;
-    traj_d.at(i) = 6;
+    traj_d.at(i) = 10;
   }
+  
   vector<vector<double>> new_traj(2);
   new_traj[0] = traj_s;
   new_traj[1] = traj_d;
@@ -75,14 +102,21 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   return new_traj;
 }
 
+double PolyTrajectoryGenerator::evaluate_poly(vector<double> coeff, double x) {
+    double result = 0.0;
+    for (int i = 0; i < coeff.size(); i++)
+        result += coeff[i] * pow(x, i);
+    return result;
+}
+
 
 void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<double>> &goal_points) {
-  std::normal_distribution<double> distribution_s_pos(goal[0], delta_s_maxspeed / col_buf_length);
-  std::normal_distribution<double> distribution_s_vel(goal[1], delta_s_maxspeed / col_buf_length / 3);
-  std::normal_distribution<double> distribution_s_acc(goal[2], delta_s_maxspeed / col_buf_length / 6);
-  std::normal_distribution<double> distribution_d_pos(goal[3], 0.5);
+  std::normal_distribution<double> distribution_s_pos(goal[0], delta_s_maxspeed / 5.0);
+  std::normal_distribution<double> distribution_s_vel(goal[1], delta_s_maxspeed / 10.0);
+  std::normal_distribution<double> distribution_s_acc(goal[2], delta_s_maxspeed / 20.0);
+  std::normal_distribution<double> distribution_d_pos(goal[3], 1.0);
   std::normal_distribution<double> distribution_d_vel(goal[4], 0.5);
-  std::normal_distribution<double> distribution_d_acc(goal[5], 0.5);
+  std::normal_distribution<double> distribution_d_acc(goal[5], 0.25);
   vector<double> pert_goal(6);
   for (int i = 0; i < goal_perturb_samples; i++) {
     pert_goal.at(0) = distribution_s_pos(rand_generator);
@@ -96,18 +130,25 @@ void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<do
 }
 
 
-vector<double> jmt(double start, double goal, int t) {
-  /*
-  double a_0 = 
-  double a_1 = 
-  double a_2 = start[0], start[1], start[2] / 2.0
-    c_0 = a_0 + a_1 * T + 0.5 * a_2 * T**2
-    c_1 = a_1 + a_2 * T
-    c_2 = a_2
-  Vector3d b(5.0, 6.0, 7.0);
-  */
-  vector<double> coeff(3);
-  return coeff;
+Polynomial PolyTrajectoryGenerator::jmt(vector<double> const &start, vector<double> const &goal, int t) {
+  double T = double(t);
+  double t_2 = pow(T, 2);
+  double t_3 = pow(T, 3);
+  double t_4 = pow(T, 4);
+  double t_5 = pow(T, 5);
+  Eigen::Matrix3d A;
+  A << t_3,   t_4,    t_5,
+       3*t_2, 4*t_3,  5*t_4,
+       6*t,   12*t_2, 20*t_3;
+  
+  double b_0 = start[0] + start[1] * t + 0.5 * start[2] * t_2;
+  double b_1 = start[1] + start[2] * t;
+  double b_2 = start[2];
+  Eigen::Vector3d b(goal[0] - b_0, goal[1] - b_1, goal[2] - b_2);
+  
+  Eigen::Vector3d c = A.colPivHouseholderQr().solve(b);
+  vector<double> coeff = {start[0], start[1], 0.5*start[2], c(0), c(1), c(2)};
+  Polynomial result(coeff);
+  return result;
 }
-
 
