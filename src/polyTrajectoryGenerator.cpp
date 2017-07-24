@@ -17,7 +17,7 @@ PolyTrajectoryGenerator::~PolyTrajectoryGenerator() {
 vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<double> const &start, double max_speed, double horizon, vector<vector<double>> const &sensor_fusion) {
   const vector<double> start_s = {start[0], start[1], start[2]};
   const vector<double> start_d = {start[3], start[4], start[5]};
-  const double dist_per_timestep = 0.0086 * max_speed;
+  const double dist_per_timestep = 0.00894 * max_speed;
   delta_s_maxspeed = horizon * dist_per_timestep;
   
   // figure out current lane
@@ -30,7 +30,7 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   vector<vector<double>> goal_points;
   // go straight  
   double goal_s_pos = start_s[0] + delta_s_maxspeed;
-  double goal_s_vel = dist_per_timestep * 50;
+  double goal_s_vel = dist_per_timestep;
   double goal_s_acc = 0.0;
   double goal_d_pos = 2 + 4 * cur_lane_i;
   double goal_d_vel = 0.0;
@@ -44,8 +44,8 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   //cout << endl;
   vector<pair<Polynomial, Polynomial>> trajectory_coefficients;
   for (vector<double> goal : goal_points) {
-    //cout << "s goal: " << goal[0] << " " << goal[1] << " " << goal[2] << endl;
-    //cout << "d goal: " << goal[3] << " " << goal[4] << " " << goal[5] << endl;
+    cout << "s goal: " << goal[0] << " " << goal[1] << " " << goal[2] << endl;
+    cout << "d goal: " << goal[3] << " " << goal[4] << " " << goal[5] << endl;
     vector<double> goal_s = {goal[0], goal[1], goal[2]};
     vector<double> goal_d = {goal[3], goal[4], goal[5]};
     // ignore goal points that are out of bounds
@@ -57,9 +57,9 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   }
   
   // DEBUG
-  vector<double> deb_goal = goal_points[0];
-  Polynomial deb_traj_s = trajectory_coefficients[0].first;
-  Polynomial deb_traj_d = trajectory_coefficients[0].second;
+//  vector<double> deb_goal = goal_points[0];
+//  Polynomial deb_traj_s = trajectory_coefficients[0].first;
+//  Polynomial deb_traj_d = trajectory_coefficients[0].second;
   /*
   cout << endl;
   cout << "start s: " << start[0] << " " << start[1] << " " << start[2] << endl;
@@ -86,14 +86,14 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   
   
   // NAIVE LANE FOLLOW
-  //vector<double> traj_s(horizon);
-  //vector<double> traj_d(horizon);
-  // Just follow center lane
-  for(int i = 0; i < horizon; i++) {
-    //vector<double> new_xy = getXY(new_s, 6, map_waypoints_s, map_waypoints_x, map_waypoints_y);
-    traj_s.at(i) = start_s[0] + dist_per_timestep * i;
-    traj_d.at(i) = 10;
-  }
+//  vector<double> traj_s(horizon);
+//  vector<double> traj_d(horizon);
+//  // Just follow center lane
+//  for(int i = 0; i < horizon; i++) {
+//    //vector<double> new_xy = getXY(new_s, 6, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+//    traj_s.at(i) = start_s[0] + dist_per_timestep * i;
+//    traj_d.at(i) = 10;
+//  }
   
   vector<vector<double>> new_traj(2);
   new_traj[0] = traj_s;

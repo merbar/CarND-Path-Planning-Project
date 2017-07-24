@@ -11,6 +11,7 @@
 
 #include "polyTrajectoryGenerator.h"
 #include "spline.h"
+#include <cassert>
 
 // FOR PLOTTING
 //#include <ctime>
@@ -98,7 +99,7 @@ int NextWaypoint(double x, double y, double theta, vector<double> maps_x, vector
 }
 
 // Transform from Cartesian x,y coordinates to Frenet s,d coordinates
-vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x, vector<double> maps_y)
+vector<double> getFrenet(double x, double y, double theta, vector<double> const &maps_x, vector<double> const &maps_y)
 {
 	int next_wp = NextWaypoint(x,y, theta, maps_x,maps_y);
 
@@ -146,32 +147,32 @@ vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x
 
 }
 
+//// Transform from Frenet s,d coordinates to Cartesian x,y
+//vector<double> getXY(double s, double d, tk::spline &spline_fit_x, tk::spline &spline_fit_y) {
+//    // needed to dial this way down to achieve more stable trajectories
+//    double seg_length = 0.001;
+//    
+//    double x_cur = spline_fit_x(s);
+//    double y_cur = spline_fit_y(s);
+//    double x_next = spline_fit_x(s + seg_length);
+//    double y_next = spline_fit_y(s + seg_length);
+//    // point at center of road. Now need to offset for d
+//    double heading = atan2((y_next - y_cur),(x_next - x_cur));
+//    // the x,y along the segment
+//    double seg_x = x_cur + seg_length * cos(heading);
+//    double seg_y = y_cur + seg_length * sin(heading);
+//
+//    double perp_heading = heading - pi() / 2.0;
+//
+//    double x = seg_x + d * cos(perp_heading);
+//    double y = seg_y + d * sin(perp_heading);    
+//
+//    return {x, y};
+//}
+
+
 // Transform from Frenet s,d coordinates to Cartesian x,y
-vector<double> getXY(double s, double d, tk::spline &spline_fit_x, tk::spline &spline_fit_y) {
-    // needed to dial this way down to achieve more stable trajectories
-    double seg_length = 0.001;
-    
-    double x_cur = spline_fit_x(s);
-    double y_cur = spline_fit_y(s);
-    double x_next = spline_fit_x(s + seg_length);
-    double y_next = spline_fit_y(s + seg_length);
-    // point at center of road. Now need to offset for d
-    double heading = atan2((y_next - y_cur),(x_next - x_cur));
-    // the x,y along the segment
-    double seg_x = x_cur + seg_length * cos(heading);
-    double seg_y = y_cur + seg_length * sin(heading);
-
-    double perp_heading = heading - pi() / 2.0;
-
-    double x = seg_x + d * cos(perp_heading);
-    double y = seg_y + d * sin(perp_heading);    
-
-    return {x, y};
-}
-
-
-// Transform from Frenet s,d coordinates to Cartesian x,y
-vector<double> getXY_from_wp(double s, double d, vector<double> maps_s, vector<double> maps_x, vector<double> maps_y)
+vector<double> getXY(double s, double d, vector<double> const &maps_s, vector<double> const &maps_x, vector<double> const &maps_y)
 {
 	int prev_wp = -1;
 
@@ -195,6 +196,41 @@ vector<double> getXY_from_wp(double s, double d, vector<double> maps_s, vector<d
 	double y = seg_y + d*sin(perp_heading);
 
 	return {x,y};
+}
+
+vector<double> get_frenet_state_from_path(vector<double> const &previous_path_x, vector<double> const &previous_path_y, vector<double> const &maps_x, vector<double> const &maps_y) {
+  assert(previous_path_x.size() >= 4);
+  // get angle from 0 to 1
+  double x_diff = previous_path_x[1] - previous_path_x[0];
+  double y_diff = previous_path_y[1] - previous_path_y[0];
+  double angle = atan2(y_diff, x_diff);
+  vector<double> frenet_0 = getFrenet(previous_path_x[0], previous_path_y[0], angle, maps_x, maps_y);
+  
+  if (pow(x_diff,2) + pow(y_diff,2) < 0.001)
+    return {0.0, 0.0, 0.0, 0.0};
+  
+  x_diff = previous_path_x[2] - previous_path_x[1];
+  y_diff = previous_path_y[2] - previous_path_y[1];
+  angle = atan2(y_diff, x_diff);
+  vector<double> frenet_1 = getFrenet(previous_path_x[1], previous_path_y[1], angle, maps_x, maps_y);
+
+  x_diff = previous_path_x[3] - previous_path_x[2];
+  y_diff = previous_path_y[3] - previous_path_y[2];
+  angle = atan2(y_diff, x_diff);
+  vector<double> frenet_2 = getFrenet(previous_path_x[2], previous_path_y[2], angle, maps_x, maps_y);
+  
+  double s_vel_1 = frenet_1[0] - frenet_0[0];
+  double s_vel_2 = frenet_2[0] - frenet_1[0];
+  double s_acc = s_vel_2 - s_vel_1;
+  double d_vel_1 = frenet_1[1] - frenet_0[1];
+  double d_vel_2 = frenet_2[1] - frenet_1[1];
+  double d_acc = d_vel_2 - d_vel_1;
+  
+  cout << "x0: " << previous_path_x[0] << " x1: " << previous_path_x[1] << " x2: " << previous_path_x[2] << endl;
+  cout << "y0: " << previous_path_y[0] << " y1: " << previous_path_y[1] << " y2: " << previous_path_y[2] << endl;
+  cout << "s0: " << frenet_0[0] << " s1: " << frenet_1[0] << " s2: " << frenet_2[0] << " s_vel: " << s_vel_1 << " s_acc: " << s_acc << " d_vel: " << d_vel_1 << " d_acc: " << d_acc << endl;
+  
+  return {s_vel_1, s_acc, d_vel_1, d_acc};
 }
 
 
@@ -256,8 +292,18 @@ int main() {
   map_waypoints_y.push_back(1135.56);
   spline_fit_x.set_points(map_waypoints_s, map_waypoints_x);
   spline_fit_y.set_points(map_waypoints_s, map_waypoints_y);
+  
+  // resample map waypoints themselves. one point per meter.
+  vector<double> map_waypoints_x_upsampled(6945);
+  vector<double> map_waypoints_y_upsampled(6945);
+  vector<double> map_waypoints_s_upsampled(6945);
+  for (int i = 0; i < 6945; i++) {
+    map_waypoints_x_upsampled[i] = spline_fit_x(i);
+    map_waypoints_y_upsampled[i] = spline_fit_y(i);
+    map_waypoints_s_upsampled[i] = i;
+  }
 
-  h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,
+  h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_x_upsampled,&map_waypoints_y_upsampled,&map_waypoints_s_upsampled,&map_waypoints_s,&map_waypoints_dx,
             &map_waypoints_dy,&cur_time,&last_plot_time,&plot_i,&PTG,&spline_fit_x,&spline_fit_y]
             (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -293,10 +339,18 @@ int main() {
           double end_path_s = j[1]["end_path_s"];
           double end_path_d = j[1]["end_path_d"];
           
-          double car_s_vel = 0;
+          double car_s_vel = 0.0;
           double car_s_acc = 0.0;
           double car_d_vel = 0.0;
           double car_d_acc = 0.0;
+          
+//          if (prev_path_size > 3) {
+//            vector<double> frenet_state = get_frenet_state_from_path(previous_path_x, previous_path_y, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+//            car_s_vel = frenet_state[0];
+//            car_s_acc = frenet_state[1];
+//            car_d_vel = frenet_state[2];
+//            car_d_acc = frenet_state[3];
+//          }
           
           // get ego vel and acc in frenet space
 //          if (prev_path_size > 0) {
@@ -317,7 +371,7 @@ int main() {
           double dist_inc = 0.4;
           for(int i = 0; i < 50; i++) {
             double new_s = car_s + dist_inc * i;
-            vector<double> new_xy = getXY(new_s, 6, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+            vector<double> new_xy = getXY(new_s, 6, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
             next_x_vals.push_back(new_xy[0]);
             next_y_vals.push_back(new_xy[1]);
           }
@@ -335,38 +389,46 @@ int main() {
           // plan the path!!
           //cout << endl;
           //cout << "car s: " << car_s << " car x: " << car_x << " car y: " << car_y << " car speed: " << car_speed << " car d: " << car_d << endl;
-          //vector<double> bla = getXY_from_wp(6945, 0.0, map_waypoints_s, map_waypoints_x, map_waypoints_y);
-          //cout << bla[0] << " " << bla[1] << endl;
-          int horizon = 10;
+          int horizon = 200;
           
 //          cout << "prev path:" << endl;
 //          for (int i = 0; i < prev_path_size; i++) {
 //              cout << "x: " << previous_path_x[i] << " :: y: " << previous_path_y[i] << endl;
 //          }
-
-          vector<double> car_state = {car_s, car_speed, 0.0, car_d, 0.0, 0.0};
-          if (teleport_to_end) {
-              cout << "teleporting" << endl;
-              car_state[0] = 6500;
-              teleport_to_end = false;
-          }
-//          vector<vector<double>> new_path = PTG.generate_trajectory(car_state, 45, horizon, sensor_fusion);
-//          // new_path is "ideal" path in Frenet coordinates. Skip first element because it pops.
-//          for (int i = 1; i < new_path[0].size(); i++) {
-//            vector<double> new_path_xy = getXY(new_path[0][i], new_path[1][i], spline_fit_x, spline_fit_y);
-//            //vector<double> new_path_xy = getXY_from_wp(new_path[0][i], new_path[1][i], map_waypoints_s, map_waypoints_x, map_waypoints_y);
-//            
-//            // smooth over next 10(?) samples with prev path
-//            double smooth_range = 0.0;
-//            if ((prev_path_size > 0) && (i < smooth_range)) {
-//                double scaleFac = i / smooth_range;
-//                new_path_xy[0] = scaleFac * new_path_xy[0] + (1 - scaleFac) * double(previous_path_x[i-1]);
-//                new_path_xy[1] = scaleFac * new_path_xy[1] + (1 - scaleFac) * double(previous_path_y[i-1]);
-//            }
-//            
-//            next_x_vals.push_back(new_path_xy[0]);
-//            next_y_vals.push_back(new_path_xy[1]);
+          
+//          double car_speed_per_timestep = car_speed * 0.00894; // 0.44704 * 0.02;
+//          vector<double> car_state = {car_s, car_speed_per_timestep, 0.0, car_d, 0.0, 0.0};
+//          if (teleport_to_end) {
+//              cout << "teleporting" << endl;
+//              car_state[0] = 6500;
+//              teleport_to_end = false;
 //          }
+//          
+//          if (previous_path_x.size() < 10) {
+//            vector<vector<double>> new_path = PTG.generate_trajectory(car_state, 45, horizon, sensor_fusion);
+//            // new_path is "ideal" path in Frenet coordinates. Skip first element because it pops.
+//            for (int i = 0; i < new_path[0].size(); i++) {
+//              vector<double> new_path_xy = getXY_from_wp(new_path[0][i], new_path[1][i], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+//              cout << "s: " << new_path[0][i] << " d: " << new_path[1][i] << endl;
+//              // smooth over next 100(?) samples with prev path
+//              double smooth_range = 100;
+//              if ((prev_path_size >= smooth_range) && (i < smooth_range)) {
+//                  double scaleFac = i / smooth_range;
+//                  new_path_xy[0] = scaleFac * new_path_xy[0] + (1 - scaleFac) * double(previous_path_x[i-1]);
+//                  new_path_xy[1] = scaleFac * new_path_xy[1] + (1 - scaleFac) * double(previous_path_y[i-1]);
+//              }
+//
+//              next_x_vals.push_back(new_path_xy[0]);
+//              next_y_vals.push_back(new_path_xy[1]);
+//            }
+//          } else {
+//            for(int i = 0; i < previous_path_x.size(); i++) {
+//                next_x_vals.push_back(previous_path_x[i]);
+//                next_y_vals.push_back(previous_path_y[i]);
+//              }
+//          }
+//          cout << endl;
+
           
           
           
@@ -376,8 +438,8 @@ int main() {
             for(int i = 1; i < horizon; i++) {
               double s = car_s + dist_inc*i;
               double d = 10.0;
-              vector<double> xy = getXY(s, d, spline_fit_x, spline_fit_y);
-              //vector<double> xy = getXY_from_wp(s, d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+              //vector<double> xy = getXY(s, d, spline_fit_x, spline_fit_y);
+              vector<double> xy = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
               next_x_vals.push_back(xy[0]);
               next_y_vals.push_back(xy[1]);
 //              if (i < 5)
@@ -413,7 +475,7 @@ int main() {
             vector<double> traj_s(next_x_vals.size());
             vector<double> traj_d(next_x_vals.size());
             for (int i = 0; i < next_x_vals.size(); i++) {
-                vector<double> s_d = getFrenet(next_x_vals[i], next_y_vals[i], deg2rad(car_yaw), map_waypoints_x, map_waypoints_y);
+                vector<double> s_d = getFrenet(next_x_vals[i], next_y_vals[i], deg2rad(car_yaw), map_waypoints_x_upsampled, map_waypoints_y_upsampled);
                 traj_s[i] = s_d[0];
                 traj_d[i] = s_d[1];
             }
