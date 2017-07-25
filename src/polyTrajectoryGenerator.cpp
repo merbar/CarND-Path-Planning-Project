@@ -83,9 +83,10 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
       traj_s[t] = rand_traj.first.eval(t);
       traj_d[t] = rand_traj.second.eval(t);
   }
-  
-  
-  // NAIVE LANE FOLLOW
+
+// ###################################################  
+// TEST - NAIVE LANE FOLLOW
+// ###################################################
 //  vector<double> traj_s(horizon);
 //  vector<double> traj_d(horizon);
 //  // Just follow center lane
@@ -94,6 +95,9 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
 //    traj_s.at(i) = start_s[0] + dist_per_timestep * i;
 //    traj_d.at(i) = 10;
 //  }
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// END - NAIVE LANE FOLLOW
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
   vector<vector<double>> new_traj(2);
   new_traj[0] = traj_s;
@@ -144,10 +148,12 @@ Polynomial PolyTrajectoryGenerator::jmt(vector<double> const &start, vector<doub
   double b_0 = start[0] + start[1] * t + 0.5 * start[2] * t_2;
   double b_1 = start[1] + start[2] * t;
   double b_2 = start[2];
-  Eigen::Vector3d b(goal[0] - b_0, goal[1] - b_1, goal[2] - b_2);
+  Eigen::MatrixXd b(3,1);
+  b << goal[0] - b_0, goal[1] - b_1, goal[2] - b_2;
   
-  Eigen::Vector3d c = A.colPivHouseholderQr().solve(b);
-  vector<double> coeff = {start[0], start[1], 0.5*start[2], c(0), c(1), c(2)};
+  Eigen::MatrixXd c = A.inverse() * b;
+  //Eigen::Vector3d c = A.colPivHouseholderQr().solve(b);
+  vector<double> coeff = {start[0], start[1], 0.5*start[2], c.data()[0], c.data()[1], c.data()[2]};
   Polynomial result(coeff);
   return result;
 }

@@ -13,6 +13,7 @@
 #include <math.h>
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
+#include "Eigen-3.3/Eigen/LU"
 #include <random>
 #include "Polynomial.h"
 

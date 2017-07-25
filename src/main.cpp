@@ -203,21 +203,21 @@ vector<double> get_frenet_state_from_path(vector<double> const &previous_path_x,
   // get angle from 0 to 1
   double x_diff = previous_path_x[1] - previous_path_x[0];
   double y_diff = previous_path_y[1] - previous_path_y[0];
-  double angle = atan2(y_diff, x_diff);
-  vector<double> frenet_0 = getFrenet(previous_path_x[0], previous_path_y[0], angle, maps_x, maps_y);
+  double angle0 = atan2(y_diff, x_diff);
+  vector<double> frenet_0 = getFrenet(previous_path_x[0], previous_path_y[0], angle0, maps_x, maps_y);
   
   if (pow(x_diff,2) + pow(y_diff,2) < 0.001)
     return {0.0, 0.0, 0.0, 0.0};
   
   x_diff = previous_path_x[2] - previous_path_x[1];
   y_diff = previous_path_y[2] - previous_path_y[1];
-  angle = atan2(y_diff, x_diff);
-  vector<double> frenet_1 = getFrenet(previous_path_x[1], previous_path_y[1], angle, maps_x, maps_y);
+  double angle1 = atan2(y_diff, x_diff);
+  vector<double> frenet_1 = getFrenet(previous_path_x[1], previous_path_y[1], angle1, maps_x, maps_y);
 
   x_diff = previous_path_x[3] - previous_path_x[2];
   y_diff = previous_path_y[3] - previous_path_y[2];
-  angle = atan2(y_diff, x_diff);
-  vector<double> frenet_2 = getFrenet(previous_path_x[2], previous_path_y[2], angle, maps_x, maps_y);
+  double angle2 = atan2(y_diff, x_diff);
+  vector<double> frenet_2 = getFrenet(previous_path_x[2], previous_path_y[2], angle2, maps_x, maps_y);
   
   double s_vel_1 = frenet_1[0] - frenet_0[0];
   double s_vel_2 = frenet_2[0] - frenet_1[0];
@@ -226,10 +226,15 @@ vector<double> get_frenet_state_from_path(vector<double> const &previous_path_x,
   double d_vel_2 = frenet_2[1] - frenet_1[1];
   double d_acc = d_vel_2 - d_vel_1;
   
+  
+  cout << endl;
   cout << "x0: " << previous_path_x[0] << " x1: " << previous_path_x[1] << " x2: " << previous_path_x[2] << endl;
   cout << "y0: " << previous_path_y[0] << " y1: " << previous_path_y[1] << " y2: " << previous_path_y[2] << endl;
-  cout << "s0: " << frenet_0[0] << " s1: " << frenet_1[0] << " s2: " << frenet_2[0] << " s_vel: " << s_vel_1 << " s_acc: " << s_acc << " d_vel: " << d_vel_1 << " d_acc: " << d_acc << endl;
-  
+  cout << "a0: " << angle0 << " a1: " << angle1 << " a2: " << angle2 << endl;
+  cout << "s0: " << frenet_0[0] << " s1: " << frenet_1[0] << " s2: " << frenet_2[0] << endl;
+  cout << "d0: " << frenet_0[1] << " d1: " << frenet_1[1] << " d2: " << frenet_2[1] << endl;
+  cout << " s_vel: " << s_vel_1 << " s_acc: " << s_acc << " d_vel: " << d_vel_1 << " d_acc: " << d_acc << endl;
+  cout << endl;
   return {s_vel_1, s_acc, d_vel_1, d_acc};
 }
 
@@ -294,10 +299,11 @@ int main() {
   spline_fit_y.set_points(map_waypoints_s, map_waypoints_y);
   
   // resample map waypoints themselves. one point per meter.
-  vector<double> map_waypoints_x_upsampled(6945);
-  vector<double> map_waypoints_y_upsampled(6945);
-  vector<double> map_waypoints_s_upsampled(6945);
-  for (int i = 0; i < 6945; i++) {
+  const int samples = 6945;
+  vector<double> map_waypoints_x_upsampled(samples);
+  vector<double> map_waypoints_y_upsampled(samples);
+  vector<double> map_waypoints_s_upsampled(samples);
+  for (int i = 0; i < samples; i++) {
     map_waypoints_x_upsampled[i] = spline_fit_x(i);
     map_waypoints_y_upsampled[i] = spline_fit_y(i);
     map_waypoints_s_upsampled[i] = i;
@@ -330,6 +336,8 @@ int main() {
           double car_d = j[1]["d"];
           double car_yaw = j[1]["yaw"];
           double car_speed = j[1]["speed"];
+          
+          cout << "s: " << car_s << " d: " << car_d << " x: " << car_x << " y: " << car_y << " speed " << car_speed << endl;
 
           // Previous path data given to the Planner
           vector<double> previous_path_x = j[1]["previous_path_x"];
@@ -344,16 +352,17 @@ int main() {
           double car_d_vel = 0.0;
           double car_d_acc = 0.0;
           
-//          if (prev_path_size > 3) {
-//            vector<double> frenet_state = get_frenet_state_from_path(previous_path_x, previous_path_y, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-//            car_s_vel = frenet_state[0];
-//            car_s_acc = frenet_state[1];
-//            car_d_vel = frenet_state[2];
-//            car_d_acc = frenet_state[3];
-//          }
+          
+          if (prev_path_size > 3) {
+            vector<double> frenet_state = get_frenet_state_from_path(previous_path_x, previous_path_y, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+            car_s_vel = frenet_state[0];
+            car_s_acc = frenet_state[1];
+            car_d_vel = frenet_state[2];
+            car_d_acc = frenet_state[3];
+          }
           
           // get ego vel and acc in frenet space
-//          if (prev_path_size > 0) {
+//          if (prev_path_size > 3) {
 //              double<vector> frenet_0 = getXY(s, d, spline_fit_x, spline_fit_y);
 //          }
 
@@ -365,37 +374,134 @@ int main() {
           vector<double> next_x_vals;
           vector<double> next_y_vals;
                     
-          /*
-          // TESTS
-          // Just follow center lane
-          double dist_inc = 0.4;
-          for(int i = 0; i < 50; i++) {
-            double new_s = car_s + dist_inc * i;
-            vector<double> new_xy = getXY(new_s, 6, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-            next_x_vals.push_back(new_xy[0]);
-            next_y_vals.push_back(new_xy[1]);
-          }
-          */
-          /*
-          // TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
-          double dist_inc = 0.5;
-          for(int i = 0; i < 50; i++)
-          {
-            next_x_vals.push_back(car_x+(dist_inc*i)*cos(deg2rad(car_yaw)));
-            next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
-          }
-          */
+          // ###################################################  
+          // TEST - Just follow given lane and smooth paths
+          // ###################################################
+//          double d = 10.0;
+//          int horizon = 250;
+//          int update_interval = 100; // update every two seconds
+////          cout << "elapsed timesteps: " << horizon - previous_path_x.size() << endl;
+//          if (previous_path_x.size() < horizon - update_interval) {
+//            cout << "update" << endl;
+//            
+//            double dist_inc = 0.4;
+//            for(int i = 0; i < horizon; i++) {
+//              double s = car_s + dist_inc*i;
+//              //vector<double> xy = getXY(s, d, spline_fit_x, spline_fit_y);
+//              vector<double> xy = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+//
+//              // SMOOTHING
+//              double smooth_range = 100;
+//              if ((prev_path_size >= smooth_range) && (i < smooth_range)) {
+////                  if (i < smooth_range) {     
+////                    cout << xy[0] << " :ps: " << xy[1] << endl;
+////                    cout << previous_path_x[i] << " :pp: " << previous_path_y[i] << endl;
+////                  }
+//                  double scaleFac = i / smooth_range;
+//                  xy[0] = scaleFac * xy[0] + (1 - scaleFac) * double(previous_path_x[i]);
+//                  xy[1] = scaleFac * xy[1] + (1 - scaleFac) * double(previous_path_y[i]);
+//              }
+//              
+//              next_x_vals.push_back(xy[0]);
+//              next_y_vals.push_back(xy[1]);
+//            }
+////            cout << "smoothed:" << endl;
+////            for (int i = 0; i < 10; i++)                
+////                cout << next_x_vals[i] << " : " << next_y_vals[i] << endl;
+//          } else {
+//              for(int i = 0; i < previous_path_x.size(); i++) {
+//                next_x_vals.push_back(previous_path_x[i]);
+//                next_y_vals.push_back(previous_path_y[i]);
+//              }
+//          }
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // END - Just follow center lane and smooth paths
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           
-          // plan the path!!
+          
+          // ###################################################  
+          // TEST - Just follow given lane and use new path as offset to previous
+          // ###################################################
+          double d = 10.0;
+          int horizon = 250;
+          int update_interval = 100; // update every two seconds
+          double dist_inc = 0.4;
+//          cout << "elapsed timesteps: " << horizon - previous_path_x.size() << endl;
+          bool smooth_path = previous_path_x.size() > 0;
+          if (previous_path_x.size() < horizon - update_interval) {      
+            cout << "update" << endl;    
+            double prev_new_x, prev_new_y;
+            double s = car_s;
+            vector<double> prev_xy_planned = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+            if (smooth_path) {
+              // re-use first point of previous path
+              next_x_vals.push_back(previous_path_x[0]);
+              next_y_vals.push_back(previous_path_y[0]);
+              prev_new_x = previous_path_x[0];
+              prev_new_y = previous_path_y[0];
+            } else {
+              next_x_vals.push_back(prev_xy_planned[0]);
+              next_y_vals.push_back(prev_xy_planned[1]);
+            }
+            for(int i = 1; i < horizon; i++) {
+              s = car_s + dist_inc*i;
+              vector<double> xy_planned = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+              if (smooth_path) {
+                double x_dif_planned =  xy_planned[0] - prev_xy_planned[0];
+                double y_dif_planned =  xy_planned[1] - prev_xy_planned[1];
+                prev_new_x = prev_new_x + x_dif_planned;
+                prev_new_y = prev_new_y + y_dif_planned;
+                next_x_vals.push_back(prev_new_x);
+                next_y_vals.push_back(prev_new_y);
+                prev_xy_planned = xy_planned;
+                
+              } else {
+                next_x_vals.push_back(xy_planned[0]);
+                next_y_vals.push_back(xy_planned[1]);
+              }
+            }
+
+          } else {
+              for(int i = 0; i < previous_path_x.size(); i++) {
+                next_x_vals.push_back(previous_path_x[i]);
+                next_y_vals.push_back(previous_path_y[i]);
+              }
+          }
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // END - Just follow given lane and use new path as offset to previous
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          
+
+          // ###################################################  
+          // TEST - Just go straight
+          // ###################################################
+//          double dist_inc = 0.5;
+//          for(int i = 0; i < 50; i++)
+//          {
+//            next_x_vals.push_back(car_x+(dist_inc*i)*cos(deg2rad(car_yaw)));
+//            next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
+//          }
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // END - Just go straight
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          
+          
+          // ###################################################  
+          // PATH PLANNING
+          // ###################################################
+          
+          // TODO: PROVIDE TWO MODES TO ADD NEW PATH. CLEAN IT UP!
+          
           //cout << endl;
           //cout << "car s: " << car_s << " car x: " << car_x << " car y: " << car_y << " car speed: " << car_speed << " car d: " << car_d << endl;
-          int horizon = 200;
-          
-//          cout << "prev path:" << endl;
-//          for (int i = 0; i < prev_path_size; i++) {
-//              cout << "x: " << previous_path_x[i] << " :: y: " << previous_path_y[i] << endl;
-//          }
-          
+//          int horizon = 250;
+//          double smooth_range = 100;
+//          int update_interval = 100; // update every two seconds
+////          cout << "prev path:" << endl;
+////          for (int i = 0; i < prev_path_size; i++) {
+////              cout << "x: " << previous_path_x[i] << " :: y: " << previous_path_y[i] << endl;
+////          }
+//          
 //          double car_speed_per_timestep = car_speed * 0.00894; // 0.44704 * 0.02;
 //          vector<double> car_state = {car_s, car_speed_per_timestep, 0.0, car_d, 0.0, 0.0};
 //          if (teleport_to_end) {
@@ -404,14 +510,14 @@ int main() {
 //              teleport_to_end = false;
 //          }
 //          
-//          if (previous_path_x.size() < 10) {
+//          if (previous_path_x.size() < horizon - update_interval) {
+//            cout << "updating path" << endl;
 //            vector<vector<double>> new_path = PTG.generate_trajectory(car_state, 45, horizon, sensor_fusion);
 //            // new_path is "ideal" path in Frenet coordinates. Skip first element because it pops.
 //            for (int i = 0; i < new_path[0].size(); i++) {
-//              vector<double> new_path_xy = getXY_from_wp(new_path[0][i], new_path[1][i], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-//              cout << "s: " << new_path[0][i] << " d: " << new_path[1][i] << endl;
-//              // smooth over next 100(?) samples with prev path
-//              double smooth_range = 100;
+//              vector<double> new_path_xy = getXY(new_path[0][i], new_path[1][i], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+////              cout << "s: " << new_path[0][i] << " d: " << new_path[1][i] << endl;
+//              // smoothing
 //              if ((prev_path_size >= smooth_range) && (i < smooth_range)) {
 //                  double scaleFac = i / smooth_range;
 //                  new_path_xy[0] = scaleFac * new_path_xy[0] + (1 - scaleFac) * double(previous_path_x[i-1]);
@@ -428,32 +534,10 @@ int main() {
 //              }
 //          }
 //          cout << endl;
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // END - PATH PLANNING
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-          
-          
-          
-          if (previous_path_x.size() < 3) {
-              //cout << "update" << endl;
-            double dist_inc = 0.4;
-            for(int i = 1; i < horizon; i++) {
-              double s = car_s + dist_inc*i;
-              double d = 10.0;
-              //vector<double> xy = getXY(s, d, spline_fit_x, spline_fit_y);
-              vector<double> xy = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-              next_x_vals.push_back(xy[0]);
-              next_y_vals.push_back(xy[1]);
-//              if (i < 5)
-//                  cout << xy[0] << " : " << xy[1] << endl;
-            }
-          } else {
-              for(int i = 0; i < previous_path_x.size(); i++) {
-                next_x_vals.push_back(previous_path_x[i]);
-                next_y_vals.push_back(previous_path_y[i]);
-              }
-          }
-          
-         
-          cout << "s: " << car_s << " d: " << car_d << " x: " << car_x << " y: " << car_y << " speed " << car_speed << endl;
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
 
