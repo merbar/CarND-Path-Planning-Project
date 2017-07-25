@@ -288,29 +288,33 @@ int main() {
   
   // smooth out waypoints
   // fit splines to x and y in relation to s
-  tk::spline spline_fit_x;
-  tk::spline spline_fit_y;
+//  tk::spline spline_fit_x;
+//  tk::spline spline_fit_y;
   // spline boundaries are linear, so we need to join the two ends
   // add point close to end of lap to hook up smoothly with beginning of new lap
-  map_waypoints_s.push_back(6945.554);
-  map_waypoints_x.push_back(784.55);
-  map_waypoints_y.push_back(1135.56);
-  spline_fit_x.set_points(map_waypoints_s, map_waypoints_x);
-  spline_fit_y.set_points(map_waypoints_s, map_waypoints_y);
+//  map_waypoints_s.push_back(6945.554);
+//  map_waypoints_x.push_back(784.6001);
+//  map_waypoints_y.push_back(1135.571);
+//  map_waypoints_s.push_back(6976.228478531);
+//  map_waypoints_x.push_back(815.2679);
+//  map_waypoints_y.push_back(1134.93);
+  
+//  spline_fit_x.set_points(map_waypoints_s, map_waypoints_x);
+//  spline_fit_y.set_points(map_waypoints_s, map_waypoints_y);
   
   // resample map waypoints themselves. one point per meter.
-  const int samples = 6945;
-  vector<double> map_waypoints_x_upsampled(samples);
-  vector<double> map_waypoints_y_upsampled(samples);
-  vector<double> map_waypoints_s_upsampled(samples);
-  for (int i = 0; i < samples; i++) {
-    map_waypoints_x_upsampled[i] = spline_fit_x(i);
-    map_waypoints_y_upsampled[i] = spline_fit_y(i);
-    map_waypoints_s_upsampled[i] = i;
-  }
+//  const int samples = 6945;
+//  vector<double> map_waypoints_x_upsampled(samples);
+//  vector<double> map_waypoints_y_upsampled(samples);
+//  vector<double> map_waypoints_s_upsampled(samples);
+//  for (int i = 0; i < samples; i++) {
+//    map_waypoints_x_upsampled[i] = spline_fit_x(i);
+//    map_waypoints_y_upsampled[i] = spline_fit_y(i);
+//    map_waypoints_s_upsampled[i] = i;
+//  }
 
-  h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_x_upsampled,&map_waypoints_y_upsampled,&map_waypoints_s_upsampled,&map_waypoints_s,&map_waypoints_dx,
-            &map_waypoints_dy,&cur_time,&last_plot_time,&plot_i,&PTG,&spline_fit_x,&spline_fit_y]
+  h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,
+            &map_waypoints_dy,&cur_time,&last_plot_time,&plot_i,&PTG]
             (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -347,32 +351,116 @@ int main() {
           double end_path_s = j[1]["end_path_s"];
           double end_path_d = j[1]["end_path_d"];
           
+          // Sensor Fusion Data, a list of all other cars on the same side of the road.
+          auto sensor_fusion = j[1]["sensor_fusion"];
+
+          json msgJson;
+          
+          // ###################################################  
+          // Get path segments and fit splines
+          // ###################################################
+          // get 10 previous and 15 next waypoints
+          vector<int> wp_indeces;
+          const int lower_wp_i = 9;
+          const int upper_wp_i = 15;
+          int prev_wp = -1;
+          while(car_s > map_waypoints_s[prev_wp+1] && (prev_wp < (int)(map_waypoints_s.size()-1) ))
+                  prev_wp++;
+          for (int i = lower_wp_i; i > 0; i--) {
+            int index = (prev_wp - i) % map_waypoints_s.size();
+            cout << (prev_wp - i) << " : " << map_waypoints_s.size() << " : " << index << endl;
+            wp_indeces.push_back((prev_wp - i) % map_waypoints_s.size());
+          }
+          wp_indeces.push_back(prev_wp);
+          for (int i = 1; i < upper_wp_i; i++)
+            wp_indeces.push_back((prev_wp + i) % map_waypoints_s.size());
+          
+          cout << endl << "prev wp: " << prev_wp+1 << endl;
+          cout << "waypoint indeces" << endl;
+          for (int i = 0; i < wp_indeces.size(); i++) {
+            cout << wp_indeces[i] << ", ";
+          }
+          
+          vector<double> waypoints_segment_x;
+          vector<double> waypoints_segment_y;
+          vector<double> waypoints_segment_s;
+          const double max_s = 6945.554;
+          bool crossed_through_zero = false;
+          double seg_start_s = map_waypoints_s[wp_indeces[0]];
+          for (auto i : wp_indeces) {
+            waypoints_segment_x.push_back(map_waypoints_x[i]);
+            waypoints_segment_y.push_back(map_waypoints_y[i]);
+            // need special treatment of segments that cross over the end/beginning of lap
+            if (i > 0) {
+              if (map_waypoints_s[i] < map_waypoints_s[i-1])
+                crossed_through_zero = true;
+            }
+            if (crossed_through_zero)
+              waypoints_segment_s.push_back(abs(seg_start_s - max_s) + map_waypoints_s[i]);
+            else
+              waypoints_segment_s.push_back(map_waypoints_s[i] - seg_start_s);
+          }
+          tk::spline spline_fit_x;
+          tk::spline spline_fit_y;
+          cout << endl << "waypoints x" << endl;
+          for (int i = 0; i < waypoints_segment_y.size(); i++) {
+            cout << waypoints_segment_x[i] << ", ";
+          }
+          cout << endl << "waypoints y" << endl;
+          for (int i = 0; i < waypoints_segment_y.size(); i++) {
+            cout << waypoints_segment_y[i] << ", ";
+          }
+          cout << endl << "waypoints s" << endl;
+          for (int i = 0; i < waypoints_segment_y.size(); i++) {
+            cout << waypoints_segment_s[i] << ", ";
+          }
+          cout << endl;
+          
+          spline_fit_x.set_points(waypoints_segment_s, waypoints_segment_x);
+          spline_fit_y.set_points(waypoints_segment_s, waypoints_segment_y);
+          
+          // upsample - 1 meter per sample
+          const int samples = int(waypoints_segment_s[waypoints_segment_s.size()-1]);
+          vector<double> map_waypoints_x_upsampled(samples);
+          vector<double> map_waypoints_y_upsampled(samples);
+          vector<double> map_waypoints_s_upsampled(samples);
+          for (int i = 0; i < samples; i++) {
+            map_waypoints_x_upsampled[i] = spline_fit_x(i);
+            map_waypoints_y_upsampled[i] = spline_fit_y(i);
+            map_waypoints_s_upsampled[i] = i;
+          }          
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // END - Get path segment and fit splines
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          
+          
+          // ###################################################  
+          // Get ego vehicle velocity and acceleration in s and d
+          // ###################################################
           double car_s_vel = 0.0;
           double car_s_acc = 0.0;
           double car_d_vel = 0.0;
           double car_d_acc = 0.0;
           
           
-          if (prev_path_size > 3) {
-            vector<double> frenet_state = get_frenet_state_from_path(previous_path_x, previous_path_y, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-            car_s_vel = frenet_state[0];
-            car_s_acc = frenet_state[1];
-            car_d_vel = frenet_state[2];
-            car_d_acc = frenet_state[3];
-          }
+//          if (prev_path_size > 3) {
+//            vector<double> frenet_state = get_frenet_state_from_path(previous_path_x, previous_path_y, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+//            car_s_vel = frenet_state[0];
+//            car_s_acc = frenet_state[1];
+//            car_d_vel = frenet_state[2];
+//            car_d_acc = frenet_state[3];
+//          }
           
           // get ego vel and acc in frenet space
 //          if (prev_path_size > 3) {
 //              double<vector> frenet_0 = getXY(s, d, spline_fit_x, spline_fit_y);
-//          }
-
-          // Sensor Fusion Data, a list of all other cars on the same side of the road.
-          auto sensor_fusion = j[1]["sensor_fusion"];
-
-          json msgJson;
+//          }  
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          // END - Get ego vehicle velocity and acceleration in s and d
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           
           vector<double> next_x_vals;
-          vector<double> next_y_vals;
+          vector<double> next_y_vals; 
                     
           // ###################################################  
           // TEST - Just follow given lane and smooth paths
@@ -444,7 +532,10 @@ int main() {
               next_y_vals.push_back(prev_xy_planned[1]);
             }
             for(int i = 1; i < horizon; i++) {
-              s = car_s + dist_inc*i;
+              s = (car_s + dist_inc*i);
+              int lap_count = floor(s / 6945.554);
+              s = s - (lap_count * 6945.554);
+              // TODO: Stopgap... smooth the hell out of a path that goes through 0!
               vector<double> xy_planned = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
               if (smooth_path) {
                 double x_dif_planned =  xy_planned[0] - prev_xy_planned[0];

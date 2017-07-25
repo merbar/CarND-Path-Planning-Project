@@ -48,8 +48,12 @@ PROCESS:
 -- resample map waypoints x/y/s at a frequency of one wp per meter (conveniently lines up with s)
 - Still getting extreme acceleration forces throughout visually smooth trajectory
 -- back to simple test case of following lane:
-   -> smooth driving, pop when path is updated and takes over. Pop was distinct since velocity dropped close to zero.
-      LAG ISSUE! First processed waypoint after trajectory update was still the old one, second was first of new trajectory and almost identical... the documentation for the simulator made it seem like it was able to deal with a situation like this internally?!
+   -> smooth driving, pop when path is updated and takes over. Pop was distinct with velocity dropping by 20+mph.
+      LAG ISSUE! Newly created path is picked up the simulator at least one timestep after sending it. With the path not matching the current position of the car anymore, the car then just snaps to the closest available waypoint, causing a jerk.
+-- Tested two approaches to smoothly transition into new trajectories
+--- blend old into new path smoothly over a given period. Greatly improved driving behavior with higher smoothing timesteps (went up to 100 / 2 seconds)
+--- re-use first waypoint of previous path, then compute x/y deltas from new path and add them iteratively. Perfectly smooth transitions! This does introduce a small margin of error over the course of the path which is at most slightly less than the distance the vehicle travels within 0.02 seconds.
 
+- Now to figure out how to get accurate velocity and acceleration in S and D for trajectory planning
+-- tried using first three values of previous path x/y. With the angle-based projection and tiny value changes per time step, using the provided function to convert to Frenet space becomes less exact the further out in the road the vehicle is. Not useful.
 
--- missing vel and acc
