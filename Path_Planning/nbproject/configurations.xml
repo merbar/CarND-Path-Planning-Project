@@ -856,7 +856,7 @@
           <buildCommandWorkingDir>../build</buildCommandWorkingDir>
           <buildCommand>make</buildCommand>
           <cleanCommand>echo clean</cleanCommand>
-          <executablePath></executablePath>
+          <executablePath>../build/path_planning</executablePath>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>

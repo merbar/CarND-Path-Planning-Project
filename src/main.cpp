@@ -646,12 +646,9 @@ int main() {
           // ###################################################  
           // PATH PLANNING
           // ###################################################
-          
-          // TODO: PROVIDE TWO MODES TO ADD NEW PATH. CLEAN IT UP!
-          
-          //cout << endl;
-          //cout << "car s: " << car_s << " car x: " << car_x << " car y: " << car_y << " car speed: " << car_speed << " car d: " << car_d << endl;
-          
+                   
+          cout << "prev path size: " << previous_path_x.size() << endl;
+
           // get last known car state
           vector<double> prev_car_s = ego_veh.get_s();
           vector<double> prev_car_d = ego_veh.get_d();
@@ -672,8 +669,8 @@ int main() {
 //              teleport_to_end = false;
 //          }
 
-          if (previous_path_x.size() < horizon - update_interval) {      
-            cout << "update" << endl;
+          if (previous_path_x.size() < horizon - update_interval) {
+            cout << "PATH UPDATE" << endl;
             
             // extract surrounding waypoints and fit a spline
             vector<double> waypoints_segment_x, waypoints_segment_y, waypoints_segment_s;
@@ -689,6 +686,7 @@ int main() {
             }
             
             // PLAN NEW PATH
+            cout << "planning path" << endl;
             double speed_limit = 45;
             vector<vector<double>> new_path = PTG.generate_trajectory(car_state, speed_limit, horizon, sensor_fusion);
             
@@ -696,12 +694,14 @@ int main() {
             // store ego vehicle velocity and acceleration in s and d for next cycle
             // ###################################################
             // make a bold prediction into the future
-            double s0 = new_path[update_interval + 2][0];
-            double s1 = new_path[update_interval + 3][0];
-            double s2 = new_path[update_interval + 4][0];
-            double d0 = new_path[update_interval + 2][1];
-            double d1 = new_path[update_interval + 3][1];
-            double d2 = new_path[update_interval + 4][1];
+            cout << "new path sizes: "  << new_path.size() << " - " << new_path[0].size() << " : " << new_path[1].size() << endl;
+
+            double s0 = new_path[0][update_interval + 2];
+            double s1 = new_path[0][update_interval + 3];
+            double s2 = new_path[0][update_interval + 4];
+            double d0 = new_path[1][update_interval + 2];
+            double d1 = new_path[1][update_interval + 3];
+            double d2 = new_path[1][update_interval + 4];
             double s_v1 = s1 - s0;
             double s_v2 = s2 - s1;
             double s_v = (s_v1 + s_v2) * 0.5;
@@ -716,9 +716,13 @@ int main() {
             // END - store ego vehicle velocity and acceleration in s and d for next cycle
             // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             
+            cout << "first 5 of planned path in Frenet: " << endl;
+            for (int i = 0; i < 5; i++)
+              cout << new_path[0][i] << " : " << new_path[1][i] << endl;
+            
             double new_x, new_y;
             // start with current car position in x/y
-            vector<double> prev_xy_planned = getXY(new_path[0][0], new_path[0][1], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+            vector<double> prev_xy_planned = getXY(new_path[0][0], new_path[1][0], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
             if (smooth_path) {
               // re-use first point of previous path
               new_x = previous_path_x[0];
@@ -730,8 +734,9 @@ int main() {
               next_x_vals.push_back(prev_xy_planned[0]);
               next_y_vals.push_back(prev_xy_planned[1]);
             }
+
             for(int i = 1; i < horizon; i++) {
-              vector<double> xy_planned = getXY(new_path[i][0], new_path[i][1], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+              vector<double> xy_planned = getXY(new_path[0][i], new_path[1][i], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
               if (smooth_path) {
                 double x_dif_planned =  xy_planned[0] - prev_xy_planned[0];
                 double y_dif_planned =  xy_planned[1] - prev_xy_planned[1];
@@ -748,10 +753,11 @@ int main() {
             }
 
           } else {
-              for(int i = 0; i < previous_path_x.size(); i++) {
-                next_x_vals.push_back(previous_path_x[i]);
-                next_y_vals.push_back(previous_path_y[i]);
-              }
+            cout << "PATH REUSE" << endl;
+            for(int i = 0; i < previous_path_x.size(); i++) {
+              next_x_vals.push_back(previous_path_x[i]);
+              next_y_vals.push_back(previous_path_y[i]);
+            }
           }
 
           
@@ -782,7 +788,11 @@ int main() {
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           // END - PATH PLANNING
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-          
+          cout << "first 5 of sent path in x/y: " << endl;
+            for (int i = 0; i < 5; i++)
+              cout << next_x_vals[i] << " : " << next_y_vals[i] << endl;
+          cout << "sent path sizes: " << next_x_vals.size() << " : " << next_y_vals.size() << endl;
+          cout << endl;
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
