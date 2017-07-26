@@ -10,6 +10,7 @@
 #include "json.hpp"
 
 #include "polyTrajectoryGenerator.h"
+#include "Vehicle.h"
 #include "spline.h"
 #include <cassert>
 
@@ -33,7 +34,7 @@ double rad2deg(double x) { return x * 180 / pi(); }
 bool do_plot = false;
 
 // start position at end of lap to test transitions
-bool teleport_to_end = false;
+//bool teleport_to_end = false;
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -148,14 +149,14 @@ vector<double> getFrenet(double x, double y, double theta, vector<double> const 
 }
 
 //// Transform from Frenet s,d coordinates to Cartesian x,y
-//vector<double> getXY(double s, double d, tk::spline &spline_fit_x, tk::spline &spline_fit_y) {
+//vector<double> getXY(double s, double d, tk::spline &spline_fit_s_to_x, tk::spline &spline_fit_s_to_y) {
 //    // needed to dial this way down to achieve more stable trajectories
 //    double seg_length = 0.001;
 //    
-//    double x_cur = spline_fit_x(s);
-//    double y_cur = spline_fit_y(s);
-//    double x_next = spline_fit_x(s + seg_length);
-//    double y_next = spline_fit_y(s + seg_length);
+//    double x_cur = spline_fit_s_to_x(s);
+//    double y_cur = spline_fit_s_to_y(s);
+//    double x_next = spline_fit_s_to_x(s + seg_length);
+//    double y_next = spline_fit_s_to_y(s + seg_length);
 //    // point at center of road. Now need to offset for d
 //    double heading = atan2((y_next - y_cur),(x_next - x_cur));
 //    // the x,y along the segment
@@ -238,7 +239,145 @@ vector<double> get_frenet_state_from_path(vector<double> const &previous_path_x,
   return {s_vel_1, s_acc, d_vel_1, d_acc};
 }
 
+void fit_spline_segment(double car_s, vector<double> const &map_waypoints_s, vector<double> const &map_waypoints_x, vector<double> const &map_waypoints_y, vector<double> &waypoints_segment_x, vector<double> &waypoints_segment_y, vector<double> &waypoints_segment_s, vector<double> &waypoints_segment_s_worldSpace, vector<double> &map_waypoints_x_upsampled, vector<double> &map_waypoints_y_upsampled, vector<double> &map_waypoints_s_upsampled) {
+  // get 10 previous and 15 next waypoints
+  vector<int> wp_indeces;
+  const int lower_wp_i = 9;
+  const int upper_wp_i = 15;
+  int prev_wp = -1;
+  while(car_s > map_waypoints_s[prev_wp+1] && (prev_wp < (int)(map_waypoints_s.size()-1) ))
+          prev_wp++;
+  for (int i = lower_wp_i; i > 0; i--) {
+    if (prev_wp - i < 0)
+      wp_indeces.push_back(map_waypoints_s.size() + (prev_wp - i));
+    else
+      wp_indeces.push_back((prev_wp - i) % map_waypoints_s.size());
+  }
+  wp_indeces.push_back(prev_wp);
+  for (int i = 1; i < upper_wp_i; i++)
+    wp_indeces.push_back((prev_wp + i) % map_waypoints_s.size());
 
+  // FILL NEW SEGMENT WAYPOINTS
+  const double max_s = 6945.554;
+  bool crossed_through_zero = false;
+  double seg_start_s = map_waypoints_s[wp_indeces[0]];
+  for (int i = 0; i < wp_indeces.size(); i++) {
+    int cur_wp_i = wp_indeces[i];
+    waypoints_segment_x.push_back(map_waypoints_x[cur_wp_i]);
+    waypoints_segment_y.push_back(map_waypoints_y[cur_wp_i]);
+    // need special treatment of segments that cross over the end/beginning of lap
+    if (i > 0) {
+      if (cur_wp_i < wp_indeces[i-1])
+        crossed_through_zero = true;
+    }
+    waypoints_segment_s_worldSpace.push_back(map_waypoints_s[cur_wp_i]);
+    if (crossed_through_zero)
+      waypoints_segment_s.push_back(abs(seg_start_s - max_s) + map_waypoints_s[cur_wp_i]);
+    else
+      waypoints_segment_s.push_back(map_waypoints_s[cur_wp_i] - seg_start_s);
+  }
+
+  //          cout << endl << "waypoints x" << endl;
+  //          for (int i = 0; i < waypoints_segment_y.size(); i++) {
+  //            cout << waypoints_segment_x[i] << ", ";
+  //          }
+  //          cout << endl << "waypoints y" << endl;
+  //          for (int i = 0; i < waypoints_segment_y.size(); i++) {
+  //            cout << waypoints_segment_y[i] << ", ";
+  //          }
+  //          cout << endl << "waypoints s : world s" << endl;
+  //          for (int i = 0; i < waypoints_segment_y.size(); i++) {
+  //            cout << waypoints_segment_s[i] << " : " << waypoints_segment_s_worldSpace[i] << endl;
+  //          }
+  //          cout << endl;
+  
+//  cout << "wp indeces:" << endl;
+//  for (auto val : wp_indeces)
+//    cout << val << ", ";
+//  cout << endl << endl;
+//  
+//  cout << "wp world s:" << endl;
+//  for (auto val : waypoints_segment_s_worldSpace)
+//    cout << val << ", ";
+//  cout << endl << endl;
+//  
+//  cout << "wp segment s:" << endl;
+//  for (auto val : waypoints_segment_s)
+//    cout << val << ", ";
+//  cout << endl << endl;
+  
+  // UPSAMPLING - 1 meter per sample
+  // need to fit splines first to smooth out the path
+  tk::spline spline_fit_s_to_x;
+  tk::spline spline_fit_s_to_y;
+  spline_fit_s_to_x.set_points(waypoints_segment_s, waypoints_segment_x);
+  spline_fit_s_to_y.set_points(waypoints_segment_s, waypoints_segment_y);
+
+  const int samples = int(waypoints_segment_s[waypoints_segment_s.size()-1]);
+  map_waypoints_x_upsampled.reserve(samples);
+  map_waypoints_y_upsampled.reserve(samples);
+  map_waypoints_s_upsampled.reserve(samples);
+  for (int i = 0; i < samples; i++) {
+    map_waypoints_x_upsampled.push_back(spline_fit_s_to_x(i));
+    map_waypoints_y_upsampled.push_back(spline_fit_s_to_y(i));
+    map_waypoints_s_upsampled.push_back(i);
+  }
+}
+
+
+  // converts world space s coordinate to local space based on provided mapping
+double get_local_s(double world_s, vector<double> const &waypoints_segment_s_worldSpace, vector<double> const &waypoints_segment_s) {
+  int prev_wp = 0;
+  // special case: first wp in list is larger than s. Meaning we are crossing over 0 somewhere.
+  // go to index with value zero first and search from there.
+  if (waypoints_segment_s_worldSpace[0] > world_s) {
+      while (waypoints_segment_s_worldSpace[prev_wp] != 0.0)
+          prev_wp += 1;
+  }
+  while ((waypoints_segment_s_worldSpace[prev_wp+1] < world_s) && (waypoints_segment_s_worldSpace[prev_wp+1] != 0))
+      prev_wp += 1;
+  double diff_world = world_s - waypoints_segment_s_worldSpace[prev_wp];
+  double s_local = waypoints_segment_s[prev_wp] + diff_world;
+  return s_local;
+}
+
+
+void plot(double car_s, double car_yaw, vector<double> const &next_x_vals, vector<double> const &next_y_vals, vector<double> const &map_waypoints_x_upsampled, vector<double> const &map_waypoints_y_upsampled, vector<vector<double>> const &sensor_fusion) {
+  int track_s_lookahead = 200;
+  vector<double> track_s = {car_s, car_s + 300};
+  const vector<double> lane_mark_1 = {0, 0};
+  const vector<double> lane_mark_2 = {4, 4};
+  const vector<double> lane_mark_3 = {8, 8};
+  const vector<double> lane_mark_4 = {12, 12};
+  const vector<vector<double>> lane_markings = {lane_mark_1,lane_mark_2,lane_mark_3,lane_mark_4};
+  vector<double> traj_s(next_x_vals.size());
+  vector<double> traj_d(next_x_vals.size());
+  for (int i = 0; i < next_x_vals.size(); i++) {
+      vector<double> s_d = getFrenet(next_x_vals[i], next_y_vals[i], deg2rad(car_yaw), map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+      traj_s[i] = s_d[0];
+      traj_d[i] = s_d[1];
+  }
+
+  plt::ylim(12, 0);
+  // three lanes in travel direction
+  for (auto marking : lane_markings) {
+    plt::plot(track_s, marking, "r");
+  }
+  // other cars
+  for (auto veh : sensor_fusion) {
+    plt::plot({veh[5]}, {veh[6]}, "b+");
+  }
+  // current trajectory
+  // this is still buggy, but in the ballpark
+  plt::plot(traj_s, traj_d, "g");
+  std::string filename = "../img/plot_";
+  filename += std::to_string(100);
+  plt::xlim(car_s-10, car_s+track_s_lookahead+10);
+  plt::save(filename);
+  plt::clf();
+}
+
+            
 int main() {
   uWS::Hub h;
   
@@ -286,10 +425,13 @@ int main() {
   	map_waypoints_dy.push_back(d_y);
   }
   
+  // create object for ego vehicle;
+  Vehicle ego_veh;
+  
   // smooth out waypoints
   // fit splines to x and y in relation to s
-//  tk::spline spline_fit_x;
-//  tk::spline spline_fit_y;
+//  tk::spline spline_fit_s_to_x;
+//  tk::spline spline_fit_s_to_y;
   // spline boundaries are linear, so we need to join the two ends
   // add point close to end of lap to hook up smoothly with beginning of new lap
 //  map_waypoints_s.push_back(6945.554);
@@ -299,8 +441,8 @@ int main() {
 //  map_waypoints_x.push_back(815.2679);
 //  map_waypoints_y.push_back(1134.93);
   
-//  spline_fit_x.set_points(map_waypoints_s, map_waypoints_x);
-//  spline_fit_y.set_points(map_waypoints_s, map_waypoints_y);
+//  spline_fit_s_to_x.set_points(map_waypoints_s, map_waypoints_x);
+//  spline_fit_s_to_y.set_points(map_waypoints_s, map_waypoints_y);
   
   // resample map waypoints themselves. one point per meter.
 //  const int samples = 6945;
@@ -308,13 +450,14 @@ int main() {
 //  vector<double> map_waypoints_y_upsampled(samples);
 //  vector<double> map_waypoints_s_upsampled(samples);
 //  for (int i = 0; i < samples; i++) {
-//    map_waypoints_x_upsampled[i] = spline_fit_x(i);
-//    map_waypoints_y_upsampled[i] = spline_fit_y(i);
+//    map_waypoints_x_upsampled[i] = spline_fit_s_to_x(i);
+//    map_waypoints_y_upsampled[i] = spline_fit_s_to_y(i);
 //    map_waypoints_s_upsampled[i] = i;
 //  }
+    
 
   h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,
-            &map_waypoints_dy,&cur_time,&last_plot_time,&plot_i,&PTG]
+            &map_waypoints_dy,&cur_time,&last_plot_time,&plot_i,&PTG,&ego_veh]
             (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -342,6 +485,9 @@ int main() {
           double car_speed = j[1]["speed"];
           
           cout << "s: " << car_s << " d: " << car_d << " x: " << car_x << " y: " << car_y << " speed " << car_speed << endl;
+          
+          // update actual position
+          ego_veh.set_frenet_pos(car_s, car_d);
 
           // Previous path data given to the Planner
           vector<double> previous_path_x = j[1]["previous_path_x"];
@@ -356,92 +502,6 @@ int main() {
 
           json msgJson;
           
-          // ###################################################  
-          // Get path segments and fit splines
-          // ###################################################
-          // get 10 previous and 15 next waypoints
-          vector<int> wp_indeces;
-          const int lower_wp_i = 9;
-          const int upper_wp_i = 15;
-          int prev_wp = -1;
-          while(car_s > map_waypoints_s[prev_wp+1] && (prev_wp < (int)(map_waypoints_s.size()-1) ))
-                  prev_wp++;
-          for (int i = lower_wp_i; i > 0; i--) {
-            int index = (prev_wp - i) % map_waypoints_s.size();
-            cout << (prev_wp - i) << " : " << map_waypoints_s.size() << " : " << index << endl;
-            wp_indeces.push_back((prev_wp - i) % map_waypoints_s.size());
-          }
-          wp_indeces.push_back(prev_wp);
-          for (int i = 1; i < upper_wp_i; i++)
-            wp_indeces.push_back((prev_wp + i) % map_waypoints_s.size());
-          
-          cout << endl << "prev wp: " << prev_wp+1 << endl;
-          cout << "waypoint indeces" << endl;
-          for (int i = 0; i < wp_indeces.size(); i++) {
-            cout << wp_indeces[i] << ", ";
-          }
-          
-          vector<double> waypoints_segment_x;
-          vector<double> waypoints_segment_y;
-          vector<double> waypoints_segment_s;
-          const double max_s = 6945.554;
-          bool crossed_through_zero = false;
-          double seg_start_s = map_waypoints_s[wp_indeces[0]];
-          for (auto i : wp_indeces) {
-            waypoints_segment_x.push_back(map_waypoints_x[i]);
-            waypoints_segment_y.push_back(map_waypoints_y[i]);
-            // need special treatment of segments that cross over the end/beginning of lap
-            if (i > 0) {
-              if (map_waypoints_s[i] < map_waypoints_s[i-1])
-                crossed_through_zero = true;
-            }
-            if (crossed_through_zero)
-              waypoints_segment_s.push_back(abs(seg_start_s - max_s) + map_waypoints_s[i]);
-            else
-              waypoints_segment_s.push_back(map_waypoints_s[i] - seg_start_s);
-          }
-          tk::spline spline_fit_x;
-          tk::spline spline_fit_y;
-          cout << endl << "waypoints x" << endl;
-          for (int i = 0; i < waypoints_segment_y.size(); i++) {
-            cout << waypoints_segment_x[i] << ", ";
-          }
-          cout << endl << "waypoints y" << endl;
-          for (int i = 0; i < waypoints_segment_y.size(); i++) {
-            cout << waypoints_segment_y[i] << ", ";
-          }
-          cout << endl << "waypoints s" << endl;
-          for (int i = 0; i < waypoints_segment_y.size(); i++) {
-            cout << waypoints_segment_s[i] << ", ";
-          }
-          cout << endl;
-          
-          spline_fit_x.set_points(waypoints_segment_s, waypoints_segment_x);
-          spline_fit_y.set_points(waypoints_segment_s, waypoints_segment_y);
-          
-          // upsample - 1 meter per sample
-          const int samples = int(waypoints_segment_s[waypoints_segment_s.size()-1]);
-          vector<double> map_waypoints_x_upsampled(samples);
-          vector<double> map_waypoints_y_upsampled(samples);
-          vector<double> map_waypoints_s_upsampled(samples);
-          for (int i = 0; i < samples; i++) {
-            map_waypoints_x_upsampled[i] = spline_fit_x(i);
-            map_waypoints_y_upsampled[i] = spline_fit_y(i);
-            map_waypoints_s_upsampled[i] = i;
-          }          
-          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-          // END - Get path segment and fit splines
-          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-          
-          
-          // ###################################################  
-          // Get ego vehicle velocity and acceleration in s and d
-          // ###################################################
-          double car_s_vel = 0.0;
-          double car_s_acc = 0.0;
-          double car_d_vel = 0.0;
-          double car_d_acc = 0.0;
-          
           
 //          if (prev_path_size > 3) {
 //            vector<double> frenet_state = get_frenet_state_from_path(previous_path_x, previous_path_y, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
@@ -453,7 +513,7 @@ int main() {
           
           // get ego vel and acc in frenet space
 //          if (prev_path_size > 3) {
-//              double<vector> frenet_0 = getXY(s, d, spline_fit_x, spline_fit_y);
+//              double<vector> frenet_0 = getXY(s, d, spline_fit_s_to_x, spline_fit_s_to_y);
 //          }  
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           // END - Get ego vehicle velocity and acceleration in s and d
@@ -475,7 +535,7 @@ int main() {
 //            double dist_inc = 0.4;
 //            for(int i = 0; i < horizon; i++) {
 //              double s = car_s + dist_inc*i;
-//              //vector<double> xy = getXY(s, d, spline_fit_x, spline_fit_y);
+//              //vector<double> xy = getXY(s, d, spline_fit_s_to_x, spline_fit_s_to_y);
 //              vector<double> xy = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
 //
 //              // SMOOTHING
@@ -510,54 +570,60 @@ int main() {
           // ###################################################  
           // TEST - Just follow given lane and use new path as offset to previous
           // ###################################################
-          double d = 10.0;
-          int horizon = 250;
-          int update_interval = 100; // update every two seconds
-          double dist_inc = 0.4;
-//          cout << "elapsed timesteps: " << horizon - previous_path_x.size() << endl;
-          bool smooth_path = previous_path_x.size() > 0;
-          if (previous_path_x.size() < horizon - update_interval) {      
-            cout << "update" << endl;    
-            double prev_new_x, prev_new_y;
-            double s = car_s;
-            vector<double> prev_xy_planned = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-            if (smooth_path) {
-              // re-use first point of previous path
-              next_x_vals.push_back(previous_path_x[0]);
-              next_y_vals.push_back(previous_path_y[0]);
-              prev_new_x = previous_path_x[0];
-              prev_new_y = previous_path_y[0];
-            } else {
-              next_x_vals.push_back(prev_xy_planned[0]);
-              next_y_vals.push_back(prev_xy_planned[1]);
-            }
-            for(int i = 1; i < horizon; i++) {
-              s = (car_s + dist_inc*i);
-              int lap_count = floor(s / 6945.554);
-              s = s - (lap_count * 6945.554);
-              // TODO: Stopgap... smooth the hell out of a path that goes through 0!
-              vector<double> xy_planned = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-              if (smooth_path) {
-                double x_dif_planned =  xy_planned[0] - prev_xy_planned[0];
-                double y_dif_planned =  xy_planned[1] - prev_xy_planned[1];
-                prev_new_x = prev_new_x + x_dif_planned;
-                prev_new_y = prev_new_y + y_dif_planned;
-                next_x_vals.push_back(prev_new_x);
-                next_y_vals.push_back(prev_new_y);
-                prev_xy_planned = xy_planned;
-                
-              } else {
-                next_x_vals.push_back(xy_planned[0]);
-                next_y_vals.push_back(xy_planned[1]);
-              }
-            }
-
-          } else {
-              for(int i = 0; i < previous_path_x.size(); i++) {
-                next_x_vals.push_back(previous_path_x[i]);
-                next_y_vals.push_back(previous_path_y[i]);
-              }
-          }
+//          double d = 10.0;
+//          int horizon = 200;
+//          int update_interval = 100; // update every two seconds
+//          double dist_inc = 0.4;
+////          cout << "elapsed timesteps: " << horizon - previous_path_x.size() << endl;
+//          bool smooth_path = previous_path_x.size() > 0;
+//          if (previous_path_x.size() < horizon - update_interval) {      
+//            cout << "update" << endl;
+//            
+//            // extract surrounding waypoints and fit a spline
+//            vector<double> waypoints_segment_x, waypoints_segment_y, waypoints_segment_s;
+//            vector<double> waypoints_segment_s_worldSpace;
+//            vector<double> map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled;
+//            fit_spline_segment(car_s, map_waypoints_s, map_waypoints_x, map_waypoints_y, waypoints_segment_x, waypoints_segment_y, waypoints_segment_s, waypoints_segment_s_worldSpace, map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled);
+//            
+//            double prev_new_x, prev_new_y;
+//            // TODO: convert current car_s into our local Frenet space
+//            double local_s = get_local_s(car_s, waypoints_segment_s_worldSpace, waypoints_segment_s);
+//            // start with current car position in x/y
+//            vector<double> prev_xy_planned = getXY(local_s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+//            if (smooth_path) {
+//              // re-use first point of previous path
+//              next_x_vals.push_back(previous_path_x[0]);
+//              next_y_vals.push_back(previous_path_y[0]);
+//              prev_new_x = previous_path_x[0];
+//              prev_new_y = previous_path_y[0];
+//            } else {
+//              next_x_vals.push_back(prev_xy_planned[0]);
+//              next_y_vals.push_back(prev_xy_planned[1]);
+//            }
+//            for(int i = 1; i < horizon; i++) {
+//              double s = local_s + dist_inc * i;
+//              vector<double> xy_planned = getXY(s, d, map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+//              if (smooth_path) {
+//                double x_dif_planned =  xy_planned[0] - prev_xy_planned[0];
+//                double y_dif_planned =  xy_planned[1] - prev_xy_planned[1];
+//                prev_new_x = prev_new_x + x_dif_planned;
+//                prev_new_y = prev_new_y + y_dif_planned;
+//                next_x_vals.push_back(prev_new_x);
+//                next_y_vals.push_back(prev_new_y);
+//                prev_xy_planned = xy_planned;
+//                
+//              } else {
+//                next_x_vals.push_back(xy_planned[0]);
+//                next_y_vals.push_back(xy_planned[1]);
+//              }
+//            }
+//
+//          } else {
+//              for(int i = 0; i < previous_path_x.size(); i++) {
+//                next_x_vals.push_back(previous_path_x[i]);
+//                next_y_vals.push_back(previous_path_y[i]);
+//              }
+//          }
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           // END - Just follow given lane and use new path as offset to previous
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -585,22 +651,110 @@ int main() {
           
           //cout << endl;
           //cout << "car s: " << car_s << " car x: " << car_x << " car y: " << car_y << " car speed: " << car_speed << " car d: " << car_d << endl;
-//          int horizon = 250;
+          
+          // get last known car state
+          vector<double> prev_car_s = ego_veh.get_s();
+          vector<double> prev_car_d = ego_veh.get_d();
+          int horizon = 200;
+          bool smooth_path = previous_path_x.size() > 0;
 //          double smooth_range = 100;
-//          int update_interval = 100; // update every two seconds
-////          cout << "prev path:" << endl;
-////          for (int i = 0; i < prev_path_size; i++) {
-////              cout << "x: " << previous_path_x[i] << " :: y: " << previous_path_y[i] << endl;
-////          }
-//          
+          int update_interval = 100; // update every two seconds
+//          cout << "prev path:" << endl;
+//          for (int i = 0; i < prev_path_size; i++) {
+//              cout << "x: " << previous_path_x[i] << " :: y: " << previous_path_y[i] << endl;
+//          }
+          
 //          double car_speed_per_timestep = car_speed * 0.00894; // 0.44704 * 0.02;
-//          vector<double> car_state = {car_s, car_speed_per_timestep, 0.0, car_d, 0.0, 0.0};
+          vector<double> car_state = {car_s, prev_car_s[1], prev_car_s[2], car_d, prev_car_d[1], prev_car_d[2]};
 //          if (teleport_to_end) {
 //              cout << "teleporting" << endl;
 //              car_state[0] = 6500;
 //              teleport_to_end = false;
 //          }
-//          
+
+          if (previous_path_x.size() < horizon - update_interval) {      
+            cout << "update" << endl;
+            
+            // extract surrounding waypoints and fit a spline
+            vector<double> waypoints_segment_x, waypoints_segment_y, waypoints_segment_s;
+            vector<double> waypoints_segment_s_worldSpace;
+            vector<double> map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled;
+            fit_spline_segment(car_s, map_waypoints_s, map_waypoints_x, map_waypoints_y, waypoints_segment_x, waypoints_segment_y, waypoints_segment_s, waypoints_segment_s_worldSpace, map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled);
+            
+            // convert current car_s into our local Frenet space
+            double local_s = get_local_s(car_s, waypoints_segment_s_worldSpace, waypoints_segment_s);
+            // convert sensor fusion data into local Frenet space
+            for (int i = 0; i < sensor_fusion.size(); i++) {
+              sensor_fusion[i][5] = get_local_s(sensor_fusion[i][5], waypoints_segment_s_worldSpace, waypoints_segment_s);
+            }
+            
+            // PLAN NEW PATH
+            double speed_limit = 45;
+            vector<vector<double>> new_path = PTG.generate_trajectory(car_state, speed_limit, horizon, sensor_fusion);
+            
+            // ###################################################  
+            // store ego vehicle velocity and acceleration in s and d for next cycle
+            // ###################################################
+            // make a bold prediction into the future
+            double s0 = new_path[update_interval + 2][0];
+            double s1 = new_path[update_interval + 3][0];
+            double s2 = new_path[update_interval + 4][0];
+            double d0 = new_path[update_interval + 2][1];
+            double d1 = new_path[update_interval + 3][1];
+            double d2 = new_path[update_interval + 4][1];
+            double s_v1 = s1 - s0;
+            double s_v2 = s2 - s1;
+            double s_v = (s_v1 + s_v2) * 0.5;
+            double s_a = s_v2 - s_v1;
+            double d_v1 = d1 - d0;
+            double d_v2 = d2 - d1;
+            double d_v = (d_v1 + d_v2) * 0.5;
+            double d_a = d_v2 - d_v1;          
+            ego_veh.set_frenet_motion(s_v, s_a, d_v, d_a);
+            cout << "pred: " << s_v << " : " << s_a << " -- " << d_v << " : " << d_a << endl;
+            // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+            // END - store ego vehicle velocity and acceleration in s and d for next cycle
+            // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            
+            double new_x, new_y;
+            // start with current car position in x/y
+            vector<double> prev_xy_planned = getXY(new_path[0][0], new_path[0][1], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+            if (smooth_path) {
+              // re-use first point of previous path
+              new_x = previous_path_x[0];
+              new_y = previous_path_y[0];
+              next_x_vals.push_back(new_x);
+              next_y_vals.push_back(new_y);
+              
+            } else {
+              next_x_vals.push_back(prev_xy_planned[0]);
+              next_y_vals.push_back(prev_xy_planned[1]);
+            }
+            for(int i = 1; i < horizon; i++) {
+              vector<double> xy_planned = getXY(new_path[i][0], new_path[i][1], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+              if (smooth_path) {
+                double x_dif_planned =  xy_planned[0] - prev_xy_planned[0];
+                double y_dif_planned =  xy_planned[1] - prev_xy_planned[1];
+                new_x = new_x + x_dif_planned;
+                new_y = new_y + y_dif_planned;
+                next_x_vals.push_back(new_x);
+                next_y_vals.push_back(new_y);
+                prev_xy_planned = xy_planned;
+                
+              } else {
+                next_x_vals.push_back(xy_planned[0]);
+                next_y_vals.push_back(xy_planned[1]);
+              }
+            }
+
+          } else {
+              for(int i = 0; i < previous_path_x.size(); i++) {
+                next_x_vals.push_back(previous_path_x[i]);
+                next_y_vals.push_back(previous_path_y[i]);
+              }
+          }
+
+          
 //          if (previous_path_x.size() < horizon - update_interval) {
 //            cout << "updating path" << endl;
 //            vector<vector<double>> new_path = PTG.generate_trajectory(car_state, 45, horizon, sensor_fusion);
@@ -628,6 +782,7 @@ int main() {
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           // END - PATH PLANNING
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
@@ -636,50 +791,6 @@ int main() {
 
           //this_thread::sleep_for(chrono::milliseconds(1000));
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
-
-          // #################################################
-          // PLOTTING
-          if (do_plot) {
-            int track_s_lookahead = 200;
-            vector<double> track_s = {car_s, car_s + 300};
-            const vector<double> lane_mark_1 = {0, 0};
-            const vector<double> lane_mark_2 = {4, 4};
-            const vector<double> lane_mark_3 = {8, 8};
-            const vector<double> lane_mark_4 = {12, 12};
-            const vector<vector<double>> lane_markings = {lane_mark_1,lane_mark_2,lane_mark_3,lane_mark_4};
-            vector<double> traj_s(next_x_vals.size());
-            vector<double> traj_d(next_x_vals.size());
-            for (int i = 0; i < next_x_vals.size(); i++) {
-                vector<double> s_d = getFrenet(next_x_vals[i], next_y_vals[i], deg2rad(car_yaw), map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-                traj_s[i] = s_d[0];
-                traj_d[i] = s_d[1];
-            }
-                    
-            cur_time = clock();
-            if (((cur_time - last_plot_time) / float(CLOCKS_PER_SEC)) > 0.005) {
-              plt::ylim(12, 0);
-              // three lanes in travel direction
-              for (auto marking : lane_markings) {
-                plt::plot(track_s, marking, "r");
-              }
-              // other cars
-              for (auto veh : sensor_fusion) {
-                plt::plot(veh[5], veh[6], "b+");
-              }
-              // current trajectory
-              // this is still buggy, but in the ballpark
-              plt::plot(traj_s, traj_d, "g");
-              std::string filename = "../img/plot_";
-              filename += std::to_string(plot_i);
-              plt::xlim(car_s-10, car_s+track_s_lookahead+10);
-              plt::save(filename);
-              plt::clf();
-              plot_i = plot_i + 1;
-              last_plot_time = clock();
-            }
-          }
-          // END PLOTTING
-          // #################################################
         }
       } else {
         // Manual driving

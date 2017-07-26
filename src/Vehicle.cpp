@@ -14,6 +14,12 @@
 #include "Vehicle.h"
 
 Vehicle::Vehicle() {
+  _pos_s = 0.0;
+  _vel_s = 0.0;
+  _acc_s = 0.0;
+  _pos_d = 0.0;
+  _vel_d = 0.0;
+  _acc_d = 0.0;
 }
 
 Vehicle::Vehicle(const Vehicle& orig) {
@@ -22,3 +28,22 @@ Vehicle::Vehicle(const Vehicle& orig) {
 Vehicle::~Vehicle() {
 }
 
+void Vehicle::set_frenet_pos(double pos_s, double pos_d) {
+  _pos_s = pos_s;
+  _pos_d = pos_d;
+}
+
+void Vehicle::set_frenet_motion(double vel_s, double acc_s, double vel_d, double acc_d) {
+  _vel_s = vel_s;
+  _acc_s = acc_s;
+  _vel_d = vel_d;
+  _acc_d = acc_d;
+}
+
+vector<double> Vehicle::get_s() {
+  return {_pos_s, _vel_s, _acc_s};
+}
+
+vector<double> Vehicle::get_d() {
+  return {_pos_d, _vel_d, _acc_d};
+}
