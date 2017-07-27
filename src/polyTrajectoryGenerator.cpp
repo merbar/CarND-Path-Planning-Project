@@ -13,12 +13,61 @@ PolyTrajectoryGenerator::PolyTrajectoryGenerator() {
 PolyTrajectoryGenerator::~PolyTrajectoryGenerator() {
 }
 
+float PolyTrajectoryGenerator::exceeds_speed_limit_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
+  double cost = 0.0;
+  for (int i = 0; i < _horizon; i++) {
+    if (traj.first.eval_d(i) + traj.second.eval_d(i) > _hard_max_vel_per_timestep)
+      cost = 1.0;
+  }
+  return cost;
+}
+
+float PolyTrajectoryGenerator::exceeds_accel_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
+  double cost = 0.0;
+  for (int i = 0; i < _horizon; i++) {
+    if (traj.first.eval_double_d(i) + traj.second.eval_double_d(i) > _hard_max_acc_per_timestep)
+      cost = 1.0;
+  }
+  return cost;
+}
+
+float PolyTrajectoryGenerator::exceeds_jerk_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
+  double cost = 0.0;
+  for (int i = 0; i < _horizon; i++) {
+    if (traj.first.eval_triple_d(i) + traj.second.eval_triple_d(i) > _hard_max_jerk_per_timestep)
+      cost = 1.0;
+  }
+  return cost;
+}
+
+float PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
+  Polynomial s = traj.first;
+  Polynomial d = traj.second;
+  double cost = 0.0;
+  double ex_sp_lim_cost = exceeds_speed_limit_cost(traj, goal, sensor_fusion);
+  double ex_acc_lim_cost = exceeds_accel_cost(traj, goal, sensor_fusion);
+  double ex_jerk_lim_cost = exceeds_jerk_cost(traj, goal, sensor_fusion);
+  cout << "COST FUNCTIONS" << endl;
+  cout << "exceed speed limit: " << ex_sp_lim_cost << endl; 
+  cout << "exceed acc limit: " << ex_acc_lim_cost << endl;
+  cout << "exceed jerk limit: " << ex_jerk_lim_cost << endl;
+  cost = ex_sp_lim_cost;
+  return cost;
+}
+
 // returns: trajectory for given number of timesteps (horizon) in Frenet coordinates
 vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<double> const &start, double max_speed, double horizon, vector<vector<double>> const &sensor_fusion) {
   const vector<double> start_s = {start[0], start[1], start[2]};
   const vector<double> start_d = {start[3], start[4], start[5]};
-  const double dist_per_timestep = 0.00894 * max_speed;
-  delta_s_maxspeed = horizon * dist_per_timestep;
+  _horizon = horizon;
+  _max_dist_per_timestep = 0.00894 * max_speed;
+  
+  _delta_s_maxspeed = horizon * _max_dist_per_timestep;
+  // rough way to make the car accelerate more smoothly from a complete stop
+  if (start_s[1] < _max_dist_per_timestep / 2.5) {
+    _delta_s_maxspeed /= 2.0;
+    _max_dist_per_timestep /= 2.0;
+  }
   
   // figure out current lane
   // 0: left, 1: middle, 2: right
@@ -26,11 +75,21 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   if (start_d[0] > 8) cur_lane_i = 2;
   else if (start_d[0] > 4) cur_lane_i = 1;
   
-  // generate goal points
+  // #########################################
+  // check which states make sense next
+  // #########################################
+  
+  
+
   vector<vector<double>> goal_points;
-  // go straight  
-  double goal_s_pos = start_s[0] + delta_s_maxspeed;
-  double goal_s_vel = dist_per_timestep;
+  vector<vector<double>> traj_goals; // s, s_dot, s_double_dot, d, d_dot, d_double_dot
+  vector<double> traj_costs;
+  
+  // #########################################
+  // GENERATE GOALPOINTS: GO STRAIGHT
+  // #########################################
+  double goal_s_pos = start_s[0] + _delta_s_maxspeed;
+  double goal_s_vel = _max_dist_per_timestep;
   double goal_s_acc = 0.0;
   double goal_d_pos = 2 + 4 * cur_lane_i;
   double goal_d_vel = 0.0;
@@ -38,10 +97,20 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
   goal_points.push_back(goal_vec);
   //perturb_goal(goal_vec, goal_points);
-  // change lane left
-  // change lange right 
   
-  //cout << endl;
+  // #########################################
+  // GENERATE GOALPOINTS: FOLLOW OTHER VEHICLE
+  // #########################################
+  
+  // #########################################
+  // GENERATE GOALPOINTS: CHANGE LANE LEFT
+  // #########################################
+  
+  // #########################################
+  // GENERATE GOALPOINTS: CHANGE LANE RIGHT
+  // #########################################
+  
+  
   vector<pair<Polynomial, Polynomial>> trajectory_coefficients;
   for (vector<double> goal : goal_points) {
     cout << "s goal: " << goal[0] << " " << goal[1] << " " << goal[2] << endl;
@@ -50,9 +119,10 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     vector<double> goal_d = {goal[3], goal[4], goal[5]};
     // ignore goal points that are out of bounds
     if ((goal[3] > 1.0) && (goal[3] < 11.0)) {      
-      Polynomial traj_s = jmt(start_s, goal_s, horizon);
-      Polynomial traj_d = jmt(start_d, goal_d, horizon);
-      trajectory_coefficients.push_back(std::make_pair(traj_s, traj_d));
+      Polynomial traj_s_poly = jmt(start_s, goal_s, horizon);
+      Polynomial traj_d_poly = jmt(start_d, goal_d, horizon);
+      trajectory_coefficients.push_back(std::make_pair(traj_s_poly, traj_d_poly));
+      traj_goals.push_back({goal[0], goal[1], goal[2], goal[3], goal[4], goal[5]});
     }     
   }
   
@@ -71,7 +141,14 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   cout << "poly d: " << endl;
   deb_traj_d.print();
   */
-  // compute cost for each trajectory
+  
+  // ################################
+  // COMPUTE COST FOR EACH TRAJECTORY
+  // ################################
+  for (int i = 0; i < trajectory_coefficients.size(); i++) {
+    double cost = calculate_cost(trajectory_coefficients[i], traj_goals[i], sensor_fusion);
+    traj_costs.push_back(cost);
+  }
   
   // choose least-cost trajectory
   
@@ -105,24 +182,24 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   
   return new_traj;
 }
-
-double PolyTrajectoryGenerator::evaluate_poly(vector<double> coeff, double x) {
-    double result = 0.0;
-    for (int i = 0; i < coeff.size(); i++)
-        result += coeff[i] * pow(x, i);
-    return result;
-}
+//
+//double PolyTrajectoryGenerator::evaluate_poly(vector<double> coeff, double x) {
+//    double result = 0.0;
+//    for (int i = 0; i < coeff.size(); i++)
+//        result += coeff[i] * pow(x, i);
+//    return result;
+//}
 
 
 void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<double>> &goal_points) {
-  std::normal_distribution<double> distribution_s_pos(goal[0], delta_s_maxspeed / 5.0);
-  std::normal_distribution<double> distribution_s_vel(goal[1], delta_s_maxspeed / 10.0);
-  std::normal_distribution<double> distribution_s_acc(goal[2], delta_s_maxspeed / 20.0);
+  std::normal_distribution<double> distribution_s_pos(goal[0], _delta_s_maxspeed / 5.0);
+  std::normal_distribution<double> distribution_s_vel(goal[1], _delta_s_maxspeed / 10.0);
+  std::normal_distribution<double> distribution_s_acc(goal[2], _delta_s_maxspeed / 20.0);
   std::normal_distribution<double> distribution_d_pos(goal[3], 1.0);
   std::normal_distribution<double> distribution_d_vel(goal[4], 0.5);
   std::normal_distribution<double> distribution_d_acc(goal[5], 0.25);
   vector<double> pert_goal(6);
-  for (int i = 0; i < goal_perturb_samples; i++) {
+  for (int i = 0; i < _goal_perturb_samples; i++) {
     pert_goal.at(0) = distribution_s_pos(rand_generator);
     pert_goal.at(1) = distribution_s_vel(rand_generator);
     pert_goal.at(2) = distribution_s_acc(rand_generator);

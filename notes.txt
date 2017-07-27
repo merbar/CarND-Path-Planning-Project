@@ -59,4 +59,4 @@ PROCESS:
 
 - Now to figure out how to get accurate velocity and acceleration in S and D for trajectory planning
 -- tried using first three values of previous path x/y. With the angle-based projection and tiny value changes per time step, using the provided function to convert to Frenet space becomes less exact the further out in the road the vehicle is. Not useful.
-
+-- good success with using predicted value for vel/acc from predicted path. Eyeballing the latency at update frequency (100 steps) + lag (2). All in clean Frenets, so no need for problematic conversions.

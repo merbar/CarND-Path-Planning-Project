@@ -647,11 +647,8 @@ int main() {
           // PATH PLANNING
           // ###################################################
                    
-          cout << "prev path size: " << previous_path_x.size() << endl;
+//          cout << "prev path size: " << previous_path_x.size() << endl;
 
-          // get last known car state
-          vector<double> prev_car_s = ego_veh.get_s();
-          vector<double> prev_car_d = ego_veh.get_d();
           int horizon = 200;
           bool smooth_path = previous_path_x.size() > 0;
 //          double smooth_range = 100;
@@ -662,7 +659,7 @@ int main() {
 //          }
           
 //          double car_speed_per_timestep = car_speed * 0.00894; // 0.44704 * 0.02;
-          vector<double> car_state = {car_s, prev_car_s[1], prev_car_s[2], car_d, prev_car_d[1], prev_car_d[2]};
+          
 //          if (teleport_to_end) {
 //              cout << "teleporting" << endl;
 //              car_state[0] = 6500;
@@ -679,14 +676,21 @@ int main() {
             fit_spline_segment(car_s, map_waypoints_s, map_waypoints_x, map_waypoints_y, waypoints_segment_x, waypoints_segment_y, waypoints_segment_s, waypoints_segment_s_worldSpace, map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled);
             
             // convert current car_s into our local Frenet space
-            double local_s = get_local_s(car_s, waypoints_segment_s_worldSpace, waypoints_segment_s);
+            double car_local_s = get_local_s(car_s, waypoints_segment_s_worldSpace, waypoints_segment_s);
             // convert sensor fusion data into local Frenet space
             for (int i = 0; i < sensor_fusion.size(); i++) {
               sensor_fusion[i][5] = get_local_s(sensor_fusion[i][5], waypoints_segment_s_worldSpace, waypoints_segment_s);
             }
             
+            // get last known car state
+            vector<double> prev_car_s = ego_veh.get_s();
+            vector<double> prev_car_d = ego_veh.get_d();            
+            // collect best guess at current car state. S position in local segment space
+            vector<double> car_state = {car_local_s, prev_car_s[1], prev_car_s[2], car_d, prev_car_d[1], prev_car_d[2]};
+            
             // PLAN NEW PATH
-            cout << "planning path" << endl;
+//            cout << "planning path" << endl;
+//            cout << "LOCAL car state - s: " << car_state[0] << " : " << car_state[1] << " : " << car_state[2] << " # d: " << car_state[3] << " : " << car_state[4] << " : " << car_state[5] << endl;
             double speed_limit = 45;
             vector<vector<double>> new_path = PTG.generate_trajectory(car_state, speed_limit, horizon, sensor_fusion);
             
@@ -694,7 +698,7 @@ int main() {
             // store ego vehicle velocity and acceleration in s and d for next cycle
             // ###################################################
             // make a bold prediction into the future
-            cout << "new path sizes: "  << new_path.size() << " - " << new_path[0].size() << " : " << new_path[1].size() << endl;
+//            cout << "new path sizes: "  << new_path.size() << " - " << new_path[0].size() << " : " << new_path[1].size() << endl;
 
             double s0 = new_path[0][update_interval + 2];
             double s1 = new_path[0][update_interval + 3];
@@ -711,14 +715,14 @@ int main() {
             double d_v = (d_v1 + d_v2) * 0.5;
             double d_a = d_v2 - d_v1;          
             ego_veh.set_frenet_motion(s_v, s_a, d_v, d_a);
-            cout << "pred: " << s_v << " : " << s_a << " -- " << d_v << " : " << d_a << endl;
+//            cout << "pred: " << s_v << " : " << s_a << " -- " << d_v << " : " << d_a << endl;
             // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
             // END - store ego vehicle velocity and acceleration in s and d for next cycle
             // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             
-            cout << "first 5 of planned path in Frenet: " << endl;
-            for (int i = 0; i < 5; i++)
-              cout << new_path[0][i] << " : " << new_path[1][i] << endl;
+//            cout << "first 5 of planned path in Frenet: " << endl;
+//            for (int i = 0; i < 5; i++)
+//              cout << new_path[0][i] << " : " << new_path[1][i] << endl;
             
             double new_x, new_y;
             // start with current car position in x/y
@@ -753,7 +757,7 @@ int main() {
             }
 
           } else {
-            cout << "PATH REUSE" << endl;
+//            cout << "PATH REUSE" << endl;
             for(int i = 0; i < previous_path_x.size(); i++) {
               next_x_vals.push_back(previous_path_x[i]);
               next_y_vals.push_back(previous_path_y[i]);
@@ -788,11 +792,11 @@ int main() {
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
           // END - PATH PLANNING
           // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-          cout << "first 5 of sent path in x/y: " << endl;
-            for (int i = 0; i < 5; i++)
-              cout << next_x_vals[i] << " : " << next_y_vals[i] << endl;
-          cout << "sent path sizes: " << next_x_vals.size() << " : " << next_y_vals.size() << endl;
-          cout << endl;
+//          cout << "first 5 of sent path in x/y: " << endl;
+//            for (int i = 0; i < 5; i++)
+//              cout << next_x_vals[i] << " : " << next_y_vals[i] << endl;
+//          cout << "sent path sizes: " << next_x_vals.size() << " : " << next_y_vals.size() << endl;
+//          cout << endl;
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;

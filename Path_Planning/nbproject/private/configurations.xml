@@ -1585,6 +1585,502 @@
       <in>polyTrajectoryGenerator.h</in>
       <in>spline.h</in>
     </df>
+    <df root="../src" name="1">
+      <df name="Eigen-3.3">
+        <df name="bench">
+          <df name="btl">
+            <df name="actions">
+            </df>
+            <df name="cmake">
+            </df>
+            <df name="data">
+            </df>
+            <df name="generic_bench">
+              <df name="init">
+              </df>
+              <df name="static">
+              </df>
+              <df name="timers">
+              </df>
+              <df name="utils">
+              </df>
+            </df>
+            <df name="libs">
+              <df name="BLAS">
+              </df>
+              <df name="blaze">
+              </df>
+              <df name="blitz">
+              </df>
+              <df name="eigen2">
+              </df>
+              <df name="eigen3">
+              </df>
+              <df name="gmm">
+              </df>
+              <df name="mtl4">
+              </df>
+              <df name="STL">
+              </df>
+              <df name="tensors">
+              </df>
+              <df name="tvmet">
+              </df>
+              <df name="ublas">
+              </df>
+            </df>
+          </df>
+          <df name="perf_monitoring">
+            <df name="gemm">
+            </df>
+          </df>
+          <df name="spbench">
+          </df>
+          <df name="tensors">
+          </df>
+        </df>
+        <df name="blas">
+          <df name="f2c">
+          </df>
+          <df name="fortran">
+          </df>
+          <df name="testing">
+          </df>
+        </df>
+        <df name="cmake">
+        </df>
+        <df name="debug">
+          <df name="gdb">
+          </df>
+          <df name="msvc">
+          </df>
+        </df>
+        <df name="demos">
+          <df name="mandelbrot">
+          </df>
+          <df name="mix_eigen_and_c">
+          </df>
+          <df name="opengl">
+          </df>
+        </df>
+        <df name="doc">
+          <df name="examples">
+          </df>
+          <df name="snippets">
+          </df>
+          <df name="special_examples">
+          </df>
+        </df>
+        <df name="Eigen">
+          <df name="src">
+            <df name="Cholesky">
+            </df>
+            <df name="CholmodSupport">
+            </df>
+            <df name="Core">
+              <df name="arch">
+                <df name="AltiVec">
+                </df>
+                <df name="AVX">
+                </df>
+                <df name="AVX512">
+                </df>
+                <df name="CUDA">
+                </df>
+                <df name="Default">
+                </df>
+                <df name="NEON">
+                </df>
+                <df name="SSE">
+                </df>
+                <df name="ZVector">
+                </df>
+              </df>
+              <df name="functors">
+              </df>
+              <df name="products">
+              </df>
+              <df name="util">
+              </df>
+            </df>
+            <df name="Eigenvalues">
+            </df>
+            <df name="Geometry">
+              <df name="arch">
+              </df>
+            </df>
+            <df name="Householder">
+            </df>
+            <df name="IterativeLinearSolvers">
+            </df>
+            <df name="Jacobi">
+            </df>
+            <df name="LU">
+              <df name="arch">
+              </df>
+            </df>
+            <df name="MetisSupport">
+            </df>
+            <df name="misc">
+            </df>
+            <df name="OrderingMethods">
+            </df>
+            <df name="PardisoSupport">
+            </df>
+            <df name="PaStiXSupport">
+            </df>
+            <df name="plugins">
+            </df>
+            <df name="QR">
+            </df>
+            <df name="SparseCholesky">
+            </df>
+            <df name="SparseCore">
+            </df>
+            <df name="SparseLU">
+            </df>
+            <df name="SparseQR">
+            </df>
+            <df name="SPQRSupport">
+            </df>
+            <df name="StlSupport">
+            </df>
+            <df name="SuperLUSupport">
+            </df>
+            <df name="SVD">
+            </df>
+            <df name="UmfPackSupport">
+            </df>
+          </df>
+        </df>
+        <df name="failtest">
+        </df>
+        <df name="lapack">
+        </df>
+        <df name="scripts">
+        </df>
+        <df name="test">
+        </df>
+        <df name="unsupported">
+          <df name="bench">
+          </df>
+          <df name="doc">
+            <df name="examples">
+            </df>
+            <df name="snippets">
+            </df>
+          </df>
+          <df name="Eigen">
+            <df name="CXX11">
+              <df name="src">
+                <df name="Tensor">
+                </df>
+                <df name="TensorSymmetry">
+                  <df name="util">
+                  </df>
+                </df>
+                <df name="ThreadPool">
+                </df>
+                <df name="util">
+                </df>
+              </df>
+            </df>
+            <df name="src">
+              <df name="AutoDiff">
+              </df>
+              <df name="BVH">
+              </df>
+              <df name="Eigenvalues">
+              </df>
+              <df name="EulerAngles">
+              </df>
+              <df name="FFT">
+              </df>
+              <df name="IterativeSolvers">
+              </df>
+              <df name="KroneckerProduct">
+              </df>
+              <df name="LevenbergMarquardt">
+              </df>
+              <df name="MatrixFunctions">
+              </df>
+              <df name="MoreVectorization">
+              </df>
+              <df name="NonLinearOptimization">
+              </df>
+              <df name="NumericalDiff">
+              </df>
+              <df name="Polynomials">
+              </df>
+              <df name="Skyline">
+              </df>
+              <df name="SparseExtra">
+              </df>
+              <df name="SpecialFunctions">
+                <df name="arch">
+                  <df name="CUDA">
+                  </df>
+                </df>
+              </df>
+              <df name="Splines">
+              </df>
+            </df>
+          </df>
+          <df name="test">
+            <df name="mpreal">
+            </df>
+          </df>
+        </df>
+      </df>
+    </df>
+    <df root="../src" name="2">
+      <df name="Eigen-3.3">
+        <df name="bench">
+          <df name="btl">
+            <df name="actions">
+            </df>
+            <df name="cmake">
+            </df>
+            <df name="data">
+            </df>
+            <df name="generic_bench">
+              <df name="init">
+              </df>
+              <df name="static">
+              </df>
+              <df name="timers">
+              </df>
+              <df name="utils">
+              </df>
+            </df>
+            <df name="libs">
+              <df name="BLAS">
+              </df>
+              <df name="blaze">
+              </df>
+              <df name="blitz">
+              </df>
+              <df name="eigen2">
+              </df>
+              <df name="eigen3">
+              </df>
+              <df name="gmm">
+              </df>
+              <df name="mtl4">
+              </df>
+              <df name="STL">
+              </df>
+              <df name="tensors">
+              </df>
+              <df name="tvmet">
+              </df>
+              <df name="ublas">
+              </df>
+            </df>
+          </df>
+          <df name="perf_monitoring">
+            <df name="gemm">
+            </df>
+          </df>
+          <df name="spbench">
+          </df>
+          <df name="tensors">
+          </df>
+        </df>
+        <df name="blas">
+          <df name="f2c">
+          </df>
+          <df name="fortran">
+          </df>
+          <df name="testing">
+          </df>
+        </df>
+        <df name="cmake">
+        </df>
+        <df name="debug">
+          <df name="gdb">
+          </df>
+          <df name="msvc">
+          </df>
+        </df>
+        <df name="demos">
+          <df name="mandelbrot">
+          </df>
+          <df name="mix_eigen_and_c">
+          </df>
+          <df name="opengl">
+          </df>
+        </df>
+        <df name="doc">
+          <df name="examples">
+          </df>
+          <df name="snippets">
+          </df>
+          <df name="special_examples">
+          </df>
+        </df>
+        <df name="Eigen">
+          <df name="src">
+            <df name="Cholesky">
+            </df>
+            <df name="CholmodSupport">
+            </df>
+            <df name="Core">
+              <df name="arch">
+                <df name="AltiVec">
+                </df>
+                <df name="AVX">
+                </df>
+                <df name="AVX512">
+                </df>
+                <df name="CUDA">
+                </df>
+                <df name="Default">
+                </df>
+                <df name="NEON">
+                </df>
+                <df name="SSE">
+                </df>
+                <df name="ZVector">
+                </df>
+              </df>
+              <df name="functors">
+              </df>
+              <df name="products">
+              </df>
+              <df name="util">
+              </df>
+            </df>
+            <df name="Eigenvalues">
+            </df>
+            <df name="Geometry">
+              <df name="arch">
+              </df>
+            </df>
+            <df name="Householder">
+            </df>
+            <df name="IterativeLinearSolvers">
+            </df>
+            <df name="Jacobi">
+            </df>
+            <df name="LU">
+              <df name="arch">
+              </df>
+            </df>
+            <df name="MetisSupport">
+            </df>
+            <df name="misc">
+            </df>
+            <df name="OrderingMethods">
+            </df>
+            <df name="PardisoSupport">
+            </df>
+            <df name="PaStiXSupport">
+            </df>
+            <df name="plugins">
+            </df>
+            <df name="QR">
+            </df>
+            <df name="SparseCholesky">
+            </df>
+            <df name="SparseCore">
+            </df>
+            <df name="SparseLU">
+            </df>
+            <df name="SparseQR">
+            </df>
+            <df name="SPQRSupport">
+            </df>
+            <df name="StlSupport">
+            </df>
+            <df name="SuperLUSupport">
+            </df>
+            <df name="SVD">
+            </df>
+            <df name="UmfPackSupport">
+            </df>
+          </df>
+        </df>
+        <df name="failtest">
+        </df>
+        <df name="lapack">
+        </df>
+        <df name="scripts">
+        </df>
+        <df name="test">
+        </df>
+        <df name="unsupported">
+          <df name="bench">
+          </df>
+          <df name="doc">
+            <df name="examples">
+            </df>
+            <df name="snippets">
+            </df>
+          </df>
+          <df name="Eigen">
+            <df name="CXX11">
+              <df name="src">
+                <df name="Tensor">
+                </df>
+                <df name="TensorSymmetry">
+                  <df name="util">
+                  </df>
+                </df>
+                <df name="ThreadPool">
+                </df>
+                <df name="util">
+                </df>
+              </df>
+            </df>
+            <df name="src">
+              <df name="AutoDiff">
+              </df>
+              <df name="BVH">
+              </df>
+              <df name="Eigenvalues">
+              </df>
+              <df name="EulerAngles">
+              </df>
+              <df name="FFT">
+              </df>
+              <df name="IterativeSolvers">
+              </df>
+              <df name="KroneckerProduct">
+              </df>
+              <df name="LevenbergMarquardt">
+              </df>
+              <df name="MatrixFunctions">
+              </df>
+              <df name="MoreVectorization">
+              </df>
+              <df name="NonLinearOptimization">
+              </df>
+              <df name="NumericalDiff">
+              </df>
+              <df name="Polynomials">
+              </df>
+              <df name="Skyline">
+              </df>
+              <df name="SparseExtra">
+              </df>
+              <df name="SpecialFunctions">
+                <df name="arch">
+                  <df name="CUDA">
+                  </df>
+                </df>
+              </df>
+              <df name="Splines">
+              </df>
+            </df>
+          </df>
+          <df name="test">
+            <df name="mpreal">
+            </df>
+          </df>
+        </df>
+      </df>
+    </df>
   </logicalFolder>
   <projectmakefile></projectmakefile>
   <confs>
@@ -1611,8 +2107,6 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
-        <gdb_signals>
-        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>

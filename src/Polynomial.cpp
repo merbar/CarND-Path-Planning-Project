@@ -33,13 +33,16 @@ Polynomial::Polynomial(vector<double> const &coefficients) {
         _coeff_d.push_back(d);
         if (i > 1) {
           _coeff_double_d.push_back((i - 1) * d);
+          if (i > 2) {
+            _coeff_triple_d.push_back((i - 2) * d);  
+          }
         }
       }
     }
     
 }
 
-double Polynomial::eval(double x) {
+double Polynomial::eval(double x) const {
     double result = 0;
     for (int i = 0; i < _coeff.size(); i++) {
        result += _coeff[i] * pow(x, i);
@@ -47,7 +50,7 @@ double Polynomial::eval(double x) {
     return result;
 }
 
-double Polynomial::eval_d(double x) {
+double Polynomial::eval_d(double x) const {
     double result = 0;
     for (int i = 0; i < _coeff_d.size(); i++) {
        result += _coeff_d[i] * pow(x, i);
@@ -55,7 +58,7 @@ double Polynomial::eval_d(double x) {
     return result;
 }
 
-double Polynomial::eval_double_d(double x) {
+double Polynomial::eval_double_d(double x) const {
     double result = 0;
     for (int i = 0; i < _coeff_double_d.size(); i++) {
        result += _coeff_double_d[i] * pow(x, i);
@@ -63,7 +66,15 @@ double Polynomial::eval_double_d(double x) {
     return result;
 }
 
-void Polynomial::print() {
+double Polynomial::eval_triple_d(double x) const {
+    double result = 0;
+    for (int i = 0; i < _coeff_triple_d.size(); i++) {
+       result += _coeff_triple_d[i] * pow(x, i);
+    }
+    return result;
+}
+
+void Polynomial::print() const {
     cout << "Polynomial Coefficients: "<< endl;
     for (double x : _coeff)
         cout << x << " :: ";
@@ -74,6 +85,10 @@ void Polynomial::print() {
     cout << endl;
     cout << "Polynomial Double-D Coefficients:" << endl;
     for (double x : _coeff_double_d)
+        cout << x << " :: ";
+    cout << endl;
+    cout << "Polynomial Triple-D Coefficients:" << endl;
+    for (double x : _coeff_triple_d)
         cout << x << " :: ";
     cout << endl;
 }

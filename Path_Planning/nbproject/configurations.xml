@@ -825,6 +825,26 @@
       <in>main.cpp</in>
       <in>polyTrajectoryGenerator.cpp</in>
     </df>
+    <df root="../src" name="1">
+    </df>
+    <df root="../src" name="2">
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>../data/highway_map.csv</itemPath>
+      <itemPath>nbproject/private/launcher.properties</itemPath>
+      <itemPath>../notes.txt</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>../data/highway_map.csv</itemPath>
+      <itemPath>nbproject/private/launcher.properties</itemPath>
+      <itemPath>../notes.txt</itemPath>
+    </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
@@ -836,6 +856,8 @@
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
   <sourceRootList>
+    <Elem>../src</Elem>
+    <Elem>../src</Elem>
     <Elem>../src</Elem>
   </sourceRootList>
   <projectmakefile></projectmakefile>
