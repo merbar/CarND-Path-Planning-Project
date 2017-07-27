@@ -40,10 +40,19 @@ void Vehicle::set_frenet_motion(double vel_s, double acc_s, double vel_d, double
   _acc_d = acc_d;
 }
 
-vector<double> Vehicle::get_s() {
+vector<double> Vehicle::get_s() const {
   return {_pos_s, _vel_s, _acc_s};
 }
 
-vector<double> Vehicle::get_d() {
+vector<double> Vehicle::get_d() const {
   return {_pos_d, _vel_d, _acc_d};
+}
+
+// returns frenet coordinates of predicted position at time t
+// simplified assumption in line with project constraints
+// - vehicle stays in lane
+// - vehicle has constant speed
+vector<double> Vehicle::state_at(double t) const {
+  double new_s = _pos_s + t * _vel_s;
+  return {new_s, _pos_d};
 }

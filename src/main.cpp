@@ -484,7 +484,7 @@ int main() {
           double car_yaw = j[1]["yaw"];
           double car_speed = j[1]["speed"];
           
-          cout << "s: " << car_s << " d: " << car_d << " x: " << car_x << " y: " << car_y << " speed " << car_speed << endl;
+//          cout << "s: " << car_s << " d: " << car_d << " x: " << car_x << " y: " << car_y << " speed " << car_speed << endl;
           
           // update actual position
           ego_veh.set_frenet_pos(car_s, car_d);
@@ -667,6 +667,7 @@ int main() {
 //          }
 
           if (previous_path_x.size() < horizon - update_interval) {
+            cout << endl;
             cout << "PATH UPDATE" << endl;
             
             // extract surrounding waypoints and fit a spline
@@ -681,6 +682,15 @@ int main() {
             for (int i = 0; i < sensor_fusion.size(); i++) {
               sensor_fusion[i][5] = get_local_s(sensor_fusion[i][5], waypoints_segment_s_worldSpace, waypoints_segment_s);
             }
+            // turn sensor fusion data into Vehicle objects
+            vector<Vehicle> envir_vehicles(sensor_fusion.size());
+            for (int i = 0; i < sensor_fusion.size(); i++) {
+              envir_vehicles[i].set_frenet_pos(sensor_fusion[i][5], sensor_fusion[i][6]);
+              double vx = sensor_fusion[i][3];
+              double vy = sensor_fusion[i][4];
+              double velocity_per_timestep = sqrt(pow(vx, 2) + pow(vy, 2)) / 50.0;
+              envir_vehicles[i].set_frenet_motion(velocity_per_timestep, 0.0, 0.0, 0.0);
+            }
             
             // get last known car state
             vector<double> prev_car_s = ego_veh.get_s();
@@ -692,7 +702,7 @@ int main() {
 //            cout << "planning path" << endl;
 //            cout << "LOCAL car state - s: " << car_state[0] << " : " << car_state[1] << " : " << car_state[2] << " # d: " << car_state[3] << " : " << car_state[4] << " : " << car_state[5] << endl;
             double speed_limit = 45;
-            vector<vector<double>> new_path = PTG.generate_trajectory(car_state, speed_limit, horizon, sensor_fusion);
+            vector<vector<double>> new_path = PTG.generate_trajectory(car_state, speed_limit, horizon, envir_vehicles);
             
             // ###################################################  
             // store ego vehicle velocity and acceleration in s and d for next cycle
@@ -800,7 +810,7 @@ int main() {
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
-
+          
           auto msg = "42[\"control\","+ msgJson.dump()+"]";
 
           //this_thread::sleep_for(chrono::milliseconds(1000));

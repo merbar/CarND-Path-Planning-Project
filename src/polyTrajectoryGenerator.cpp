@@ -13,50 +13,95 @@ PolyTrajectoryGenerator::PolyTrajectoryGenerator() {
 PolyTrajectoryGenerator::~PolyTrajectoryGenerator() {
 }
 
-float PolyTrajectoryGenerator::exceeds_speed_limit_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
-  double cost = 0.0;
+float PolyTrajectoryGenerator::exceeds_speed_limit_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   for (int i = 0; i < _horizon; i++) {
     if (traj.first.eval_d(i) + traj.second.eval_d(i) > _hard_max_vel_per_timestep)
-      cost = 1.0;
+      return 1.0;
   }
-  return cost;
+  return 0.0;
 }
 
-float PolyTrajectoryGenerator::exceeds_accel_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
-  double cost = 0.0;
+float PolyTrajectoryGenerator::exceeds_accel_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   for (int i = 0; i < _horizon; i++) {
     if (traj.first.eval_double_d(i) + traj.second.eval_double_d(i) > _hard_max_acc_per_timestep)
-      cost = 1.0;
+      return 1.0;
   }
-  return cost;
+  return 0.0;
 }
 
-float PolyTrajectoryGenerator::exceeds_jerk_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
-  double cost = 0.0;
+float PolyTrajectoryGenerator::exceeds_jerk_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   for (int i = 0; i < _horizon; i++) {
     if (traj.first.eval_triple_d(i) + traj.second.eval_triple_d(i) > _hard_max_jerk_per_timestep)
-      cost = 1.0;
+      return 1.0;
   }
-  return cost;
+  return 0.0;
 }
 
-float PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<vector<double>> const &sensor_fusion) {
+float PolyTrajectoryGenerator::collision_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+  for (int t = 0; t < _horizon; t++) {
+    for (int i = 0; i < vehicles.size(); i++) {
+      double ego_s = traj.first.eval(t);
+      double ego_d = traj.second.eval(t);
+      vector<double> traffic_state = vehicles[i].state_at(t); // {s,d}
+
+      double dif_s = abs(traffic_state[0] - ego_s);
+      double dif_d = abs(traffic_state[1] - ego_d);
+
+      if ((dif_s <= _car_col_length) && (dif_d <= _car_col_width))
+        return 1.0;
+    }
+  }
+  return 0.0;
+}
+
+float PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   Polynomial s = traj.first;
   Polynomial d = traj.second;
+    
   double cost = 0.0;
-  double ex_sp_lim_cost = exceeds_speed_limit_cost(traj, goal, sensor_fusion);
-  double ex_acc_lim_cost = exceeds_accel_cost(traj, goal, sensor_fusion);
-  double ex_jerk_lim_cost = exceeds_jerk_cost(traj, goal, sensor_fusion);
+  // first situations that immediately make a trajectory infeasible
+  double ex_sp_lim_cost = exceeds_speed_limit_cost(traj, goal, vehicles);
+  double ex_acc_lim_cost = exceeds_accel_cost(traj, goal, vehicles);
+  double ex_jerk_lim_cost = exceeds_jerk_cost(traj, goal, vehicles);
+  double col_cost = collision_cost(traj, goal, vehicles);
   cout << "COST FUNCTIONS" << endl;
   cout << "exceed speed limit: " << ex_sp_lim_cost << endl; 
   cout << "exceed acc limit: " << ex_acc_lim_cost << endl;
   cout << "exceed jerk limit: " << ex_jerk_lim_cost << endl;
-  cost = ex_sp_lim_cost;
+  cout << "collision cost: " << col_cost << endl;
+  
+  double infeasible_costs = ex_sp_lim_cost + ex_acc_lim_cost + ex_jerk_lim_cost + col_cost;
+  if (infeasible_costs > 0.0)
+    return 9999;
+  
   return cost;
 }
 
+// searches for closest vehicle in current travel lane. Returns index and s-distance.
+int PolyTrajectoryGenerator::closest_vehicle_in_lane(vector<double> const &start, int ego_lane_i, vector<Vehicle> const &vehicles) {
+  int closest_i = -1;
+  float min_s_dif = 999;
+  for (int i = 0; i < vehicles.size(); i++) {
+    vector<double> traffic_d = vehicles[i].get_d();
+    int traffic_lane_i = 0;
+    if (traffic_d[0] > 8) traffic_lane_i = 2;
+    else if (traffic_d[0] > 4) traffic_lane_i = 1;
+    
+    if (ego_lane_i == traffic_lane_i) {
+      vector<double> traffic_s = vehicles[i].get_s();
+      float dif_s = traffic_s[0] - start[0];
+      if ((dif_s > 0.0) && (dif_s < min_s_dif)) {
+        closest_i = i;
+        min_s_dif = dif_s;
+      }        
+    }
+  }
+  cout << "closest vehicle s dif: " << min_s_dif  << " - index: " << closest_i << " - s value: " << vehicles[closest_i].get_s()[0] << endl;
+  return closest_i;
+}
+
 // returns: trajectory for given number of timesteps (horizon) in Frenet coordinates
-vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<double> const &start, double max_speed, double horizon, vector<vector<double>> const &sensor_fusion) {
+vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<double> const &start, double max_speed, double horizon, vector<Vehicle> const &vehicles) {
   const vector<double> start_s = {start[0], start[1], start[2]};
   const vector<double> start_d = {start[3], start[4], start[5]};
   _horizon = horizon;
@@ -75,40 +120,93 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   if (start_d[0] > 8) cur_lane_i = 2;
   else if (start_d[0] > 4) cur_lane_i = 1;
   
-  // #########################################
-  // check which states make sense next
-  // #########################################
+  cout << "ego local s: " << start_s[0] << " d: " << start_d[0] << endl;
   
-  
-
   vector<vector<double>> goal_points;
   vector<vector<double>> traj_goals; // s, s_dot, s_double_dot, d, d_dot, d_double_dot
   vector<double> traj_costs;
   
   // #########################################
-  // GENERATE GOALPOINTS: GO STRAIGHT
+  // FIND FEASIBLE NEXT STATES FROM:
+  // - go straight
+  // - go straight following leading vehicle
+  // - lane change left
+  // - lane change right
   // #########################################
-  double goal_s_pos = start_s[0] + _delta_s_maxspeed;
-  double goal_s_vel = _max_dist_per_timestep;
-  double goal_s_acc = 0.0;
-  double goal_d_pos = 2 + 4 * cur_lane_i;
-  double goal_d_vel = 0.0;
-  double goal_d_acc = 0.0;
-  vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
-  goal_points.push_back(goal_vec);
-  //perturb_goal(goal_vec, goal_points);
+  bool go_straight = true;
+  bool go_straight_follow_lead = false;
+  bool change_left = false;
+  bool change_right = false;
+  // find closest vehicle in current travel lane
+  int closest_veh_i = closest_vehicle_in_lane(start, cur_lane_i, vehicles);
+  if (closest_veh_i != -1) {
+    // predict if a collision will occur
+    bool col_occurs_with_closest_veh = false;
+    for (int t = 0; t < _horizon; t++) {
+      double ego_s = start_s[0] + start_s[1] * t;
+      vector<double> traffic_state = vehicles[closest_veh_i].state_at(t); // {s,d}
+      double dif_s = abs(traffic_state[0] - ego_s);
+      if (dif_s <= _car_col_length) {
+        col_occurs_with_closest_veh = true;
+        break;
+      }
+    }
+    cout << "closest veh i " << closest_veh_i << " - position s: " << vehicles[closest_veh_i].get_s()[0] << " - position d: " << vehicles[closest_veh_i].get_d()[0] << endl;
+    if (col_occurs_with_closest_veh) {
+      bool go_straight = false;
+      bool go_straight_follow_lead = true;
+  //    bool change_left = false;
+  //    bool change_right = false;
+    }
+  }
+    
+
+  cout << "PLAN: ";
+  if (go_straight)
+    cout << "GO STRAIGHT ";
+  if (go_straight_follow_lead)
+    cout << "- FOLLOW LEAD";
+  cout << endl;
   
   // #########################################
-  // GENERATE GOALPOINTS: FOLLOW OTHER VEHICLE
+  // GENERATE GOALPOINTS
   // #########################################
+  // GO STRAIGHT
+  if (go_straight) {
+    double goal_s_pos = start_s[0] + _delta_s_maxspeed;
+    double goal_s_vel = _max_dist_per_timestep;
+    double goal_s_acc = 0.0;
+    double goal_d_pos = 2 + 4 * cur_lane_i;
+    double goal_d_vel = 0.0;
+    double goal_d_acc = 0.0;
+    vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
+    goal_points.push_back(goal_vec);
+    //perturb_goal(goal_vec, goal_points);
+  }
   
-  // #########################################
-  // GENERATE GOALPOINTS: CHANGE LANE LEFT
-  // #########################################
+  // FOLLOW OTHER VEHICLE
+  if (go_straight_follow_lead) {
+    vector<double> lead_s = vehicles[closest_veh_i].get_s();
+    
+    double goal_s_pos = start_s[0] + lead_s[1] * _horizon;
+    double goal_s_vel = lead_s[1];
+    double goal_s_acc = 0.0;
+    double goal_d_pos = 2 + 4 * cur_lane_i;
+    double goal_d_vel = 0.0;
+    double goal_d_acc = 0.0;
+    vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
+    goal_points.push_back(goal_vec);
+    //perturb_goal(goal_vec, goal_points);
+  }
   
-  // #########################################
-  // GENERATE GOALPOINTS: CHANGE LANE RIGHT
-  // #########################################
+  // CHANGE LANE LEFT
+  
+  // CHANGE LANE RIGHT
+  
+  
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  // END - GENERATE GOALPOINTS
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
   
   vector<pair<Polynomial, Polynomial>> trajectory_coefficients;
@@ -146,7 +244,7 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   // COMPUTE COST FOR EACH TRAJECTORY
   // ################################
   for (int i = 0; i < trajectory_coefficients.size(); i++) {
-    double cost = calculate_cost(trajectory_coefficients[i], traj_goals[i], sensor_fusion);
+    double cost = calculate_cost(trajectory_coefficients[i], traj_goals[i], vehicles);
     traj_costs.push_back(cost);
   }
   
