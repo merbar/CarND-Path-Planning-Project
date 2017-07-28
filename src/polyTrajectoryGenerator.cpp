@@ -106,7 +106,7 @@ double PolyTrajectoryGenerator::lane_depart_cost(pair<Polynomial, Polynomial> co
     double lane_marking_proximity = fmod(ego_d, 4);
     if (lane_marking_proximity > 2.0)
       lane_marking_proximity = abs(lane_marking_proximity - 4);
-    if (lane_marking_proximity <= _car_col_width)
+    if (lane_marking_proximity <= _car_col_width) // car touches middle lane
       cost += 1 - logistic(lane_marking_proximity);
   }
   return cost;
@@ -136,7 +136,7 @@ double PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> cons
   
   double infeasible_costs = ex_sp_lim_cost + ex_acc_lim_cost + ex_jerk_lim_cost + col_cost;
   if (infeasible_costs > 0.0)
-    return 9999;
+    return 999999;
   
   double tr_buf_cost   = traffic_buffer_cost(traj, goal, vehicles) * _cost_weights["tr_buf_cost"];
   double eff_cost      = efficiency_cost(traj, goal, vehicles) * _cost_weights["eff_cost"];
@@ -243,8 +243,8 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     if (traffic_is_close) {
       go_straight = false;
       go_straight_follow_lead = true;
-  //    bool change_left = false;
-  //    bool change_right = false;
+      change_left = true;
+      change_right = true;
     }
   }
     
@@ -254,6 +254,10 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     cout << " :GO STRAIGHT: ";
   if (go_straight_follow_lead)
     cout << " :FOLLOW LEAD: ";
+  if (change_left)
+    cout << " :CHANGE LEFT: ";
+  if (change_right)
+    cout << " :CHANGE RIGHT: ";
   cout << endl;
   
   // #########################################
@@ -294,8 +298,36 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   }
   
   // CHANGE LANE LEFT
+  if (change_left) {
+    double goal_s_pos = start_s[0] + _delta_s_maxspeed;
+    double goal_s_vel = _max_dist_per_timestep;
+    double goal_s_acc = 0.0;
+    double goal_d_pos = (2 + 4 * cur_lane_i) - 4;
+    double goal_d_vel = 0.0;
+    double goal_d_acc = 0.0;
+    vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
+    vector<vector<double>> goal_points_straight = {goal_vec};
+    perturb_goal(goal_vec, goal_points_straight);
+    // add to goal points
+    goal_points.reserve(goal_points.size() + goal_points_straight.size());
+    goal_points.insert(goal_points.end(),goal_points_straight.begin(),goal_points_straight.end());
+  }
   
   // CHANGE LANE RIGHT
+  if (change_right) {
+    double goal_s_pos = start_s[0] + _delta_s_maxspeed;
+    double goal_s_vel = _max_dist_per_timestep;
+    double goal_s_acc = 0.0;
+    double goal_d_pos = (2 + 4 * cur_lane_i) + 4;
+    double goal_d_vel = 0.0;
+    double goal_d_acc = 0.0;
+    vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
+    vector<vector<double>> goal_points_straight = {goal_vec};
+    perturb_goal(goal_vec, goal_points_straight);
+    // add to goal points
+    goal_points.reserve(goal_points.size() + goal_points_straight.size());
+    goal_points.insert(goal_points.end(),goal_points_straight.begin(),goal_points_straight.end());
+  }
   
   
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -393,22 +425,36 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
 //}
 
 
+// creates randomly generated variations of goal point
+// it is not fully random: if we decrease distance in s, then velocity must also
+// go down in order to create more feasible goals
 void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<double>> &goal_points) {
-  std::normal_distribution<double> distribution_s_pos(goal[0], _delta_s_maxspeed / 10.0);
-  std::normal_distribution<double> distribution_s_vel(goal[1], 0.05);
-  std::normal_distribution<double> distribution_s_acc(goal[2], 0.02);
-  std::normal_distribution<double> distribution_d_pos(goal[3], 0.3);
-  std::normal_distribution<double> distribution_d_vel(goal[4], 0.01);
-  std::normal_distribution<double> distribution_d_acc(goal[5], 0.005);
+  double percentage_std_deviation = 0.1;
+  std::normal_distribution<double> _distribution_10_percent(0.0, percentage_std_deviation);
+//  std::normal_distribution<double> distribution_s_pos(goal[0], _delta_s_maxspeed / 10.0);
+//  std::normal_distribution<double> distribution_s_vel(goal[1], 0.05);
+//  std::normal_distribution<double> distribution_s_acc(goal[2], 0.02);
+//  std::normal_distribution<double> distribution_d_pos(goal[3], 0.3);
+//  std::normal_distribution<double> distribution_d_vel(goal[4], 0.01);
+//  std::normal_distribution<double> distribution_d_acc(goal[5], 0.005);
   vector<double> pert_goal(6);
   cout << "perturbed: " << endl;
   for (int i = 0; i < _goal_perturb_samples; i++) {
-    pert_goal.at(0) = distribution_s_pos(_rand_generator);
-    pert_goal.at(1) = distribution_s_vel(_rand_generator);
-    pert_goal.at(2) = distribution_s_acc(_rand_generator);
-    pert_goal.at(3) = distribution_d_pos(_rand_generator);
-    pert_goal.at(4) = distribution_d_vel(_rand_generator);
-    pert_goal.at(5) = distribution_d_acc(_rand_generator);
+    double multiplier = _distribution_10_percent(_rand_generator);
+    pert_goal.at(0) = goal[0] + (_delta_s_maxspeed * multiplier);
+    pert_goal.at(1) = goal[1] + (_max_dist_per_timestep * multiplier);
+    pert_goal.at(2) = goal[2] * (1 + multiplier);
+    
+    multiplier = _distribution_10_percent(_rand_generator) * 0.25;
+    pert_goal.at(3) = goal[3] + (2 * multiplier);
+    pert_goal.at(4) = goal[4] * (1 + multiplier);
+    pert_goal.at(5) = goal[5] * (1 + multiplier);;
+//    pert_goal.at(0) = distribution_s_pos(_rand_generator);
+//    pert_goal.at(1) = distribution_s_vel(_rand_generator);
+//    pert_goal.at(2) = distribution_s_acc(_rand_generator);
+//    pert_goal.at(3) = distribution_d_pos(_rand_generator);
+//    pert_goal.at(4) = distribution_d_vel(_rand_generator);
+//    pert_goal.at(5) = distribution_d_acc(_rand_generator);
     cout << pert_goal[0] << " : " <<  pert_goal[1] << " : " <<  pert_goal[2] << " : " <<  pert_goal[3] << " : " <<  pert_goal[4] << " : " <<  pert_goal[5] << endl;
     goal_points.push_back(pert_goal);
   }

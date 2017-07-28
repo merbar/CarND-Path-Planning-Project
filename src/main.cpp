@@ -652,7 +652,7 @@ int main() {
           int horizon = 200;
           bool smooth_path = previous_path_x.size() > 0;
 //          double smooth_range = 100;
-          int update_interval = 100; // update every two seconds
+          int update_interval = 50; // update every second
 //          cout << "prev path:" << endl;
 //          for (int i = 0; i < prev_path_size; i++) {
 //              cout << "x: " << previous_path_x[i] << " :: y: " << previous_path_y[i] << endl;
