@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
+#include <string>
 #include <math.h>
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
@@ -48,15 +50,23 @@ private:
     const double _car_col_length = 0.5 * _car_length;
     const double _col_buf_width = 2 * _car_width;
     const double _col_buf_length = 5 * _car_length;
-    const int _goal_perturb_samples = 30;
+    const int _goal_perturb_samples = 20;
     int _horizon = 0;
     const double _hard_max_vel_per_timestep = 0.00894 * 50.0; // 50 mp/h
     const double _hard_max_acc_per_timestep = 10.0 / 50.0; // 10 m/s
     const double _hard_max_jerk_per_timestep = 10.0 / 50.0; // 10 m/s
     double _max_dist_per_timestep = 0.0;
     double _delta_s_maxspeed = 0.0;
-    std::default_random_engine rand_generator;
+    std::default_random_engine _rand_generator;
+    std::map<std::string, double> _cost_weights = {
+                                            {"tr_buf_cost", 100.0},
+                                            {"eff_cost", 1.0},
+                                            {"acc_cost", 1.0},
+                                            {"jerk_cost", 1.0},
+                                            {"lane_dep_cost", 1.0},
+                                            };
 };
 
 #endif /* POLYTRAJECTORYGENERATOR_H */
+
 

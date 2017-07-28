@@ -66,7 +66,7 @@ double PolyTrajectoryGenerator::traffic_buffer_cost(pair<Polynomial, Polynomial>
       double dif_s = abs(traffic_state[0] - ego_s);
       double dif_d = abs(traffic_state[1] - ego_d);
       
-      // if in the same lane and to close
+      // if in the same lane and too close
       if ((dif_s <= _col_buf_length) && (dif_d <= 2.0))
         cost += 1 - logistic(dif_s);
     }
@@ -118,33 +118,39 @@ double PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> cons
   Polynomial d = traj.second;
     
   double cost = 0.0;
+//  cout << "s poly:" << endl;
+//  traj.first.print();
+//  cout << "d poly:" << endl;
+//  traj.second.print();
+
   // first situations that immediately make a trajectory infeasible
   double ex_sp_lim_cost = exceeds_speed_limit_cost(traj, goal, vehicles);
   double ex_acc_lim_cost = exceeds_accel_cost(traj, goal, vehicles);
   double ex_jerk_lim_cost = exceeds_jerk_cost(traj, goal, vehicles);
   double col_cost = collision_cost(traj, goal, vehicles);
-  cout << "COST FUNCTIONS" << endl;
-  cout << "exceed speed limit: " << ex_sp_lim_cost << endl; 
-  cout << "exceed acc limit: " << ex_acc_lim_cost << endl;
-  cout << "exceed jerk limit: " << ex_jerk_lim_cost << endl;
-  cout << "collision cost: " << col_cost << endl;
+//  cout << "COST FUNCTIONS" << endl;
+//  cout << "exceed speed limit: " << ex_sp_lim_cost << endl; 
+//  cout << "exceed acc limit: " << ex_acc_lim_cost << endl;
+//  cout << "exceed jerk limit: " << ex_jerk_lim_cost << endl;
+//  cout << "collision cost: " << col_cost << endl;
   
   double infeasible_costs = ex_sp_lim_cost + ex_acc_lim_cost + ex_jerk_lim_cost + col_cost;
   if (infeasible_costs > 0.0)
     return 9999;
   
-  double tr_buf_cost = traffic_buffer_cost(traj, goal, vehicles);
-  double eff_cost = efficiency_cost(traj, goal, vehicles);
-  double acc_cost = total_accel_cost(traj, goal, vehicles);
-  double jerk_cost = total_jerk_cost(traj, goal, vehicles);
-  double lane_dep_cost = lane_depart_cost(traj, goal, vehicles);
-  cout << "traffic buffer cost: " << tr_buf_cost << endl;
-  cout << "efficiency cost: " << eff_cost << endl;
-  cout << "acceleration cost: " << acc_cost << endl;
-  cout << "jerk cost: " << jerk_cost << endl;
-  cout << "lane depart cost: " << lane_dep_cost << endl;
+  double tr_buf_cost   = traffic_buffer_cost(traj, goal, vehicles) * _cost_weights["tr_buf_cost"];
+  double eff_cost      = efficiency_cost(traj, goal, vehicles) * _cost_weights["eff_cost"];
+  double acc_cost      = total_accel_cost(traj, goal, vehicles) * _cost_weights["acc_cost"];
+  double jerk_cost     = total_jerk_cost(traj, goal, vehicles) * _cost_weights["jerk_cost"];
+  double lane_dep_cost = lane_depart_cost(traj, goal, vehicles) * _cost_weights["lane_dep_cost"];
   
-  cost = tr_buf_cost + eff_cost;
+//  cout << "traffic buffer cost: " << tr_buf_cost << endl;
+//  cout << "efficiency cost: " << eff_cost << endl;
+//  cout << "acceleration cost: " << acc_cost << endl;
+//  cout << "jerk cost: " << jerk_cost << endl;
+//  cout << "lane depart cost: " << lane_dep_cost << endl;
+  
+  cost = tr_buf_cost + eff_cost + acc_cost + jerk_cost + lane_dep_cost;
   return cost;
 }
 
@@ -262,8 +268,11 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     double goal_d_vel = 0.0;
     double goal_d_acc = 0.0;
     vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
-    goal_points.push_back(goal_vec);
-    //perturb_goal(goal_vec, goal_points);
+    vector<vector<double>> goal_points_straight = {goal_vec};
+    perturb_goal(goal_vec, goal_points_straight);
+    // add to goal points
+    goal_points.reserve(goal_points.size() + goal_points_straight.size());
+    goal_points.insert(goal_points.end(),goal_points_straight.begin(),goal_points_straight.end());
   }
   
   // FOLLOW OTHER VEHICLE
@@ -277,8 +286,11 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     double goal_d_vel = 0.0;
     double goal_d_acc = 0.0;
     vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
-    goal_points.push_back(goal_vec);
-    //perturb_goal(goal_vec, goal_points);
+    vector<vector<double>> goal_points_follow = {goal_vec};
+    perturb_goal(goal_vec, goal_points_follow);
+    // add to goal points
+    goal_points.reserve(goal_points.size() + goal_points_follow.size());
+    goal_points.insert(goal_points.end(),goal_points_follow.begin(),goal_points_follow.end());
   }
   
   // CHANGE LANE LEFT
@@ -289,12 +301,11 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // END - GENERATE GOALPOINTS
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-  
+    
   vector<pair<Polynomial, Polynomial>> trajectory_coefficients;
   for (vector<double> goal : goal_points) {
-    cout << "s goal: " << goal[0] << " " << goal[1] << " " << goal[2] << endl;
-    cout << "d goal: " << goal[3] << " " << goal[4] << " " << goal[5] << endl;
+//    cout << "s goal: " << goal[0] << " " << goal[1] << " " << goal[2] << endl;
+//    cout << "d goal: " << goal[3] << " " << goal[4] << " " << goal[5] << endl;
     vector<double> goal_s = {goal[0], goal[1], goal[2]};
     vector<double> goal_d = {goal[3], goal[4], goal[5]};
     // ignore goal points that are out of bounds
@@ -331,14 +342,25 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   }
   
   // choose least-cost trajectory
+  double min_cost = traj_costs[0];
+  int min_cost_i = 0;
+  for (int i = 1; i < traj_costs.size(); i++) {
+    if (traj_costs[i] < min_cost) {
+      min_cost = traj_costs[i];
+      min_cost_i = i;
+    }
+  }
   
-  // compute values for time horizon
-  pair<Polynomial, Polynomial> rand_traj = trajectory_coefficients[0];
+  cout << "cost: " << traj_costs[min_cost_i] << " - i: " << min_cost_i << endl;
+  cout << "lowest cost traj goal s/d: " << goal_points[min_cost_i][0] << " : " << goal_points[min_cost_i][3] << endl;
+  // ################################
+  // COMPUTE VALUES FOR TIME HORIZON
+  // ################################
   vector<double> traj_s(horizon);
   vector<double> traj_d(horizon);
   for(int t = 0; t < horizon; t++) {
-      traj_s[t] = rand_traj.first.eval(t);
-      traj_d[t] = rand_traj.second.eval(t);
+      traj_s[t] = trajectory_coefficients[min_cost_i].first.eval(t);
+      traj_d[t] = trajectory_coefficients[min_cost_i].second.eval(t);
   }
 
 // ###################################################  
@@ -372,20 +394,22 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
 
 
 void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<double>> &goal_points) {
-  std::normal_distribution<double> distribution_s_pos(goal[0], _delta_s_maxspeed / 5.0);
-  std::normal_distribution<double> distribution_s_vel(goal[1], _delta_s_maxspeed / 10.0);
-  std::normal_distribution<double> distribution_s_acc(goal[2], _delta_s_maxspeed / 20.0);
-  std::normal_distribution<double> distribution_d_pos(goal[3], 1.0);
-  std::normal_distribution<double> distribution_d_vel(goal[4], 0.5);
-  std::normal_distribution<double> distribution_d_acc(goal[5], 0.25);
+  std::normal_distribution<double> distribution_s_pos(goal[0], _delta_s_maxspeed / 10.0);
+  std::normal_distribution<double> distribution_s_vel(goal[1], 0.05);
+  std::normal_distribution<double> distribution_s_acc(goal[2], 0.02);
+  std::normal_distribution<double> distribution_d_pos(goal[3], 0.3);
+  std::normal_distribution<double> distribution_d_vel(goal[4], 0.01);
+  std::normal_distribution<double> distribution_d_acc(goal[5], 0.005);
   vector<double> pert_goal(6);
+  cout << "perturbed: " << endl;
   for (int i = 0; i < _goal_perturb_samples; i++) {
-    pert_goal.at(0) = distribution_s_pos(rand_generator);
-    pert_goal.at(1) = distribution_s_vel(rand_generator);
-    pert_goal.at(2) = distribution_s_acc(rand_generator);
-    pert_goal.at(3) = distribution_d_pos(rand_generator);
-    pert_goal.at(4) = distribution_d_vel(rand_generator);
-    pert_goal.at(5) = distribution_d_acc(rand_generator);
+    pert_goal.at(0) = distribution_s_pos(_rand_generator);
+    pert_goal.at(1) = distribution_s_vel(_rand_generator);
+    pert_goal.at(2) = distribution_s_acc(_rand_generator);
+    pert_goal.at(3) = distribution_d_pos(_rand_generator);
+    pert_goal.at(4) = distribution_d_vel(_rand_generator);
+    pert_goal.at(5) = distribution_d_acc(_rand_generator);
+    cout << pert_goal[0] << " : " <<  pert_goal[1] << " : " <<  pert_goal[2] << " : " <<  pert_goal[3] << " : " <<  pert_goal[4] << " : " <<  pert_goal[5] << endl;
     goal_points.push_back(pert_goal);
   }
 }

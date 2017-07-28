@@ -20,6 +20,7 @@ Polynomial::Polynomial(const Polynomial& orig) {
     _coeff = orig._coeff;
     _coeff_d = orig._coeff_d;
     _coeff_double_d = orig._coeff_double_d;
+    _coeff_triple_d = orig._coeff_triple_d;
 }
 
 Polynomial::~Polynomial() {
@@ -38,8 +39,7 @@ Polynomial::Polynomial(vector<double> const &coefficients) {
           }
         }
       }
-    }
-    
+    }    
 }
 
 double Polynomial::eval(double x) const {
