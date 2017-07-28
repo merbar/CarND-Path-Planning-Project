@@ -57,190 +57,180 @@ double distance(double x1, double y1, double x2, double y2)
 }
 int ClosestWaypoint(double x, double y, vector<double> maps_x, vector<double> maps_y)
 {
+  double closestLen = 100000; //large number
+  int closestWaypoint = 0;
 
-	double closestLen = 100000; //large number
-	int closestWaypoint = 0;
+  for(int i = 0; i < maps_x.size(); i++)
+  {
+          double map_x = maps_x[i];
+          double map_y = maps_y[i];
+          double dist = distance(x,y,map_x,map_y);
+          if(dist < closestLen)
+          {
+                  closestLen = dist;
+                  closestWaypoint = i;
+          }
 
-	for(int i = 0; i < maps_x.size(); i++)
-	{
-		double map_x = maps_x[i];
-		double map_y = maps_y[i];
-		double dist = distance(x,y,map_x,map_y);
-		if(dist < closestLen)
-		{
-			closestLen = dist;
-			closestWaypoint = i;
-		}
+  }
 
-	}
-
-	return closestWaypoint;
+  return closestWaypoint;
 
 }
 
 int NextWaypoint(double x, double y, double theta, vector<double> maps_x, vector<double> maps_y)
 {
+  int closestWaypoint = ClosestWaypoint(x,y,maps_x,maps_y);
 
-	int closestWaypoint = ClosestWaypoint(x,y,maps_x,maps_y);
+  double map_x = maps_x[closestWaypoint];
+  double map_y = maps_y[closestWaypoint];
 
-	double map_x = maps_x[closestWaypoint];
-	double map_y = maps_y[closestWaypoint];
+  double heading = atan2( (map_y-y),(map_x-x) );
 
-	double heading = atan2( (map_y-y),(map_x-x) );
+  double angle = abs(theta-heading);
 
-	double angle = abs(theta-heading);
+  if(angle > pi()/4)
+  {
+          closestWaypoint++;
+  }
 
-	if(angle > pi()/4)
-	{
-		closestWaypoint++;
-	}
-
-	return closestWaypoint;
+  return closestWaypoint;
 
 }
 
 // Transform from Cartesian x,y coordinates to Frenet s,d coordinates
 vector<double> getFrenet(double x, double y, double theta, vector<double> const &maps_x, vector<double> const &maps_y)
 {
-	int next_wp = NextWaypoint(x,y, theta, maps_x,maps_y);
+  int next_wp = NextWaypoint(x,y, theta, maps_x,maps_y);
 
-	int prev_wp;
-	prev_wp = next_wp-1;
-	if(next_wp == 0)
-	{
-		prev_wp  = maps_x.size()-1;
-	}
+  int prev_wp;
+  prev_wp = next_wp-1;
+  if(next_wp == 0)
+  {
+          prev_wp  = maps_x.size()-1;
+  }
 
-	double n_x = maps_x[next_wp]-maps_x[prev_wp];
-	double n_y = maps_y[next_wp]-maps_y[prev_wp];
-	double x_x = x - maps_x[prev_wp];
-	double x_y = y - maps_y[prev_wp];
+  double n_x = maps_x[next_wp]-maps_x[prev_wp];
+  double n_y = maps_y[next_wp]-maps_y[prev_wp];
+  double x_x = x - maps_x[prev_wp];
+  double x_y = y - maps_y[prev_wp];
 
-	// find the projection of x onto n
-	double proj_norm = (x_x*n_x+x_y*n_y)/(n_x*n_x+n_y*n_y);
-	double proj_x = proj_norm*n_x;
-	double proj_y = proj_norm*n_y;
+  // find the projection of x onto n
+  double proj_norm = (x_x*n_x+x_y*n_y)/(n_x*n_x+n_y*n_y);
+  double proj_x = proj_norm*n_x;
+  double proj_y = proj_norm*n_y;
 
-	double frenet_d = distance(x_x,x_y,proj_x,proj_y);
+  double frenet_d = distance(x_x,x_y,proj_x,proj_y);
 
-	//see if d value is positive or negative by comparing it to a center point
+  //see if d value is positive or negative by comparing it to a center point
 
-	double center_x = 1000-maps_x[prev_wp];
-	double center_y = 2000-maps_y[prev_wp];
-	double centerToPos = distance(center_x,center_y,x_x,x_y);
-	double centerToRef = distance(center_x,center_y,proj_x,proj_y);
+  double center_x = 1000-maps_x[prev_wp];
+  double center_y = 2000-maps_y[prev_wp];
+  double centerToPos = distance(center_x,center_y,x_x,x_y);
+  double centerToRef = distance(center_x,center_y,proj_x,proj_y);
 
-	if(centerToPos <= centerToRef)
-	{
-		frenet_d *= -1;
-	}
+  if(centerToPos <= centerToRef)
+  {
+          frenet_d *= -1;
+  }
 
-	// calculate s value
-	double frenet_s = 0;
-	for(int i = 0; i < prev_wp; i++)
-	{
-		frenet_s += distance(maps_x[i],maps_y[i],maps_x[i+1],maps_y[i+1]);
-	}
+  // calculate s value
+  double frenet_s = 0;
+  for(int i = 0; i < prev_wp; i++)
+  {
+          frenet_s += distance(maps_x[i],maps_y[i],maps_x[i+1],maps_y[i+1]);
+  }
 
-	frenet_s += distance(0,0,proj_x,proj_y);
+  frenet_s += distance(0,0,proj_x,proj_y);
 
-	return {frenet_s,frenet_d};
+  return {frenet_s,frenet_d};
 
 }
 
-//// Transform from Frenet s,d coordinates to Cartesian x,y
-//vector<double> getXY(double s, double d, tk::spline &spline_fit_s_to_x, tk::spline &spline_fit_s_to_y) {
-//    // needed to dial this way down to achieve more stable trajectories
-//    double seg_length = 0.001;
-//    
-//    double x_cur = spline_fit_s_to_x(s);
-//    double y_cur = spline_fit_s_to_y(s);
-//    double x_next = spline_fit_s_to_x(s + seg_length);
-//    double y_next = spline_fit_s_to_y(s + seg_length);
-//    // point at center of road. Now need to offset for d
-//    double heading = atan2((y_next - y_cur),(x_next - x_cur));
-//    // the x,y along the segment
-//    double seg_x = x_cur + seg_length * cos(heading);
-//    double seg_y = y_cur + seg_length * sin(heading);
-//
-//    double perp_heading = heading - pi() / 2.0;
-//
-//    double x = seg_x + d * cos(perp_heading);
-//    double y = seg_y + d * sin(perp_heading);    
-//
-//    return {x, y};
-//}
+// Transform from Frenet s,d coordinates to Cartesian x,y
+// in particular, uses splines instead of an estimated angle to project out into d, making the results much smoother
+vector<double> getXY_splines(double s, double d, tk::spline const &spline_fit_s_to_x, tk::spline const &spline_fit_s_to_y, tk::spline const &spline_fit_s_to_dx, tk::spline const &spline_fit_s_to_dy) {
+  double x_mid_road = spline_fit_s_to_x(s);
+  double y_mid_road = spline_fit_s_to_y(s);
+  double dx = spline_fit_s_to_dx(s);
+  double dy = spline_fit_s_to_dy(s);
+
+  double x = x_mid_road + dx * d;
+  double y = y_mid_road + dy * d;
+
+  return {x, y};
+}
 
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
 vector<double> getXY(double s, double d, vector<double> const &maps_s, vector<double> const &maps_x, vector<double> const &maps_y)
 {
-	int prev_wp = -1;
+  int prev_wp = -1;
 
-	while(s > maps_s[prev_wp+1] && (prev_wp < (int)(maps_s.size()-1) ))
-	{
-		prev_wp++;
-	}
+  while(s > maps_s[prev_wp+1] && (prev_wp < (int)(maps_s.size()-1) ))
+  {
+          prev_wp++;
+  }
 
-	int wp2 = (prev_wp+1)%maps_x.size();
+  int wp2 = (prev_wp+1)%maps_x.size();
 
-	double heading = atan2((maps_y[wp2]-maps_y[prev_wp]),(maps_x[wp2]-maps_x[prev_wp]));
-	// the x,y,s along the segment
-	double seg_s = (s-maps_s[prev_wp]);
+  double heading = atan2((maps_y[wp2]-maps_y[prev_wp]),(maps_x[wp2]-maps_x[prev_wp]));
+  // the x,y,s along the segment
+  double seg_s = (s-maps_s[prev_wp]);
 
-	double seg_x = maps_x[prev_wp]+seg_s*cos(heading);
-	double seg_y = maps_y[prev_wp]+seg_s*sin(heading);
+  double seg_x = maps_x[prev_wp]+seg_s*cos(heading);
+  double seg_y = maps_y[prev_wp]+seg_s*sin(heading);
 
-	double perp_heading = heading-pi()/2;
+  double perp_heading = heading-pi()/2;
 
-	double x = seg_x + d*cos(perp_heading);
-	double y = seg_y + d*sin(perp_heading);
+  double x = seg_x + d*cos(perp_heading);
+  double y = seg_y + d*sin(perp_heading);
 
-	return {x,y};
+  return {x,y};
 }
 
-vector<double> get_frenet_state_from_path(vector<double> const &previous_path_x, vector<double> const &previous_path_y, vector<double> const &maps_x, vector<double> const &maps_y) {
-  assert(previous_path_x.size() >= 4);
-  // get angle from 0 to 1
-  double x_diff = previous_path_x[1] - previous_path_x[0];
-  double y_diff = previous_path_y[1] - previous_path_y[0];
-  double angle0 = atan2(y_diff, x_diff);
-  vector<double> frenet_0 = getFrenet(previous_path_x[0], previous_path_y[0], angle0, maps_x, maps_y);
-  
-  if (pow(x_diff,2) + pow(y_diff,2) < 0.001)
-    return {0.0, 0.0, 0.0, 0.0};
-  
-  x_diff = previous_path_x[2] - previous_path_x[1];
-  y_diff = previous_path_y[2] - previous_path_y[1];
-  double angle1 = atan2(y_diff, x_diff);
-  vector<double> frenet_1 = getFrenet(previous_path_x[1], previous_path_y[1], angle1, maps_x, maps_y);
+//vector<double> get_frenet_state_from_path(vector<double> const &previous_path_x, vector<double> const &previous_path_y, vector<double> const &maps_x, vector<double> const &maps_y) {
+//  assert(previous_path_x.size() >= 4);
+//  // get angle from 0 to 1
+//  double x_diff = previous_path_x[1] - previous_path_x[0];
+//  double y_diff = previous_path_y[1] - previous_path_y[0];
+//  double angle0 = atan2(y_diff, x_diff);
+//  vector<double> frenet_0 = getFrenet(previous_path_x[0], previous_path_y[0], angle0, maps_x, maps_y);
+//  
+//  if (pow(x_diff,2) + pow(y_diff,2) < 0.001)
+//    return {0.0, 0.0, 0.0, 0.0};
+//  
+//  x_diff = previous_path_x[2] - previous_path_x[1];
+//  y_diff = previous_path_y[2] - previous_path_y[1];
+//  double angle1 = atan2(y_diff, x_diff);
+//  vector<double> frenet_1 = getFrenet(previous_path_x[1], previous_path_y[1], angle1, maps_x, maps_y);
+//
+//  x_diff = previous_path_x[3] - previous_path_x[2];
+//  y_diff = previous_path_y[3] - previous_path_y[2];
+//  double angle2 = atan2(y_diff, x_diff);
+//  vector<double> frenet_2 = getFrenet(previous_path_x[2], previous_path_y[2], angle2, maps_x, maps_y);
+//  
+//  double s_vel_1 = frenet_1[0] - frenet_0[0];
+//  double s_vel_2 = frenet_2[0] - frenet_1[0];
+//  double s_acc = s_vel_2 - s_vel_1;
+//  double d_vel_1 = frenet_1[1] - frenet_0[1];
+//  double d_vel_2 = frenet_2[1] - frenet_1[1];
+//  double d_acc = d_vel_2 - d_vel_1;
+//  
+//  
+//  cout << endl;
+//  cout << "x0: " << previous_path_x[0] << " x1: " << previous_path_x[1] << " x2: " << previous_path_x[2] << endl;
+//  cout << "y0: " << previous_path_y[0] << " y1: " << previous_path_y[1] << " y2: " << previous_path_y[2] << endl;
+//  cout << "a0: " << angle0 << " a1: " << angle1 << " a2: " << angle2 << endl;
+//  cout << "s0: " << frenet_0[0] << " s1: " << frenet_1[0] << " s2: " << frenet_2[0] << endl;
+//  cout << "d0: " << frenet_0[1] << " d1: " << frenet_1[1] << " d2: " << frenet_2[1] << endl;
+//  cout << " s_vel: " << s_vel_1 << " s_acc: " << s_acc << " d_vel: " << d_vel_1 << " d_acc: " << d_acc << endl;
+//  cout << endl;
+//  return {s_vel_1, s_acc, d_vel_1, d_acc};
+//}
 
-  x_diff = previous_path_x[3] - previous_path_x[2];
-  y_diff = previous_path_y[3] - previous_path_y[2];
-  double angle2 = atan2(y_diff, x_diff);
-  vector<double> frenet_2 = getFrenet(previous_path_x[2], previous_path_y[2], angle2, maps_x, maps_y);
-  
-  double s_vel_1 = frenet_1[0] - frenet_0[0];
-  double s_vel_2 = frenet_2[0] - frenet_1[0];
-  double s_acc = s_vel_2 - s_vel_1;
-  double d_vel_1 = frenet_1[1] - frenet_0[1];
-  double d_vel_2 = frenet_2[1] - frenet_1[1];
-  double d_acc = d_vel_2 - d_vel_1;
-  
-  
-  cout << endl;
-  cout << "x0: " << previous_path_x[0] << " x1: " << previous_path_x[1] << " x2: " << previous_path_x[2] << endl;
-  cout << "y0: " << previous_path_y[0] << " y1: " << previous_path_y[1] << " y2: " << previous_path_y[2] << endl;
-  cout << "a0: " << angle0 << " a1: " << angle1 << " a2: " << angle2 << endl;
-  cout << "s0: " << frenet_0[0] << " s1: " << frenet_1[0] << " s2: " << frenet_2[0] << endl;
-  cout << "d0: " << frenet_0[1] << " d1: " << frenet_1[1] << " d2: " << frenet_2[1] << endl;
-  cout << " s_vel: " << s_vel_1 << " s_acc: " << s_acc << " d_vel: " << d_vel_1 << " d_acc: " << d_acc << endl;
-  cout << endl;
-  return {s_vel_1, s_acc, d_vel_1, d_acc};
-}
-
-void fit_spline_segment(double car_s, vector<double> const &map_waypoints_s, vector<double> const &map_waypoints_x, vector<double> const &map_waypoints_y, vector<double> &waypoints_segment_x, vector<double> &waypoints_segment_y, vector<double> &waypoints_segment_s, vector<double> &waypoints_segment_s_worldSpace, vector<double> &map_waypoints_x_upsampled, vector<double> &map_waypoints_y_upsampled, vector<double> &map_waypoints_s_upsampled) {
+void fit_spline_segment(double car_s, vector<double> const &map_waypoints_s, vector<double> const &map_waypoints_x, vector<double> const &map_waypoints_y, vector<double> const &map_waypoints_dx, vector<double> const &map_waypoints_dy, vector<double> &waypoints_segment_s, vector<double> &waypoints_segment_s_worldSpace, vector<double> &map_waypoints_x_upsampled, vector<double> &map_waypoints_y_upsampled, vector<double> &map_waypoints_s_upsampled, vector<double> &map_waypoints_dx_upsampled, vector<double> &map_waypoints_dy_upsampled, tk::spline &spline_fit_s_to_x, tk::spline &spline_fit_s_to_y, tk::spline &spline_fit_s_to_dx, tk::spline &spline_fit_s_to_dy) {
   // get 10 previous and 15 next waypoints
+  vector<double> waypoints_segment_x, waypoints_segment_y, waypoints_segment_dx, waypoints_segment_dy;
   vector<int> wp_indeces;
   const int lower_wp_i = 9;
   const int upper_wp_i = 15;
@@ -265,6 +255,8 @@ void fit_spline_segment(double car_s, vector<double> const &map_waypoints_s, vec
     int cur_wp_i = wp_indeces[i];
     waypoints_segment_x.push_back(map_waypoints_x[cur_wp_i]);
     waypoints_segment_y.push_back(map_waypoints_y[cur_wp_i]);
+    waypoints_segment_dx.push_back(map_waypoints_dx[cur_wp_i]);
+    waypoints_segment_dy.push_back(map_waypoints_dy[cur_wp_i]);
     // need special treatment of segments that cross over the end/beginning of lap
     if (i > 0) {
       if (cur_wp_i < wp_indeces[i-1])
@@ -308,19 +300,27 @@ void fit_spline_segment(double car_s, vector<double> const &map_waypoints_s, vec
   
   // UPSAMPLING - 1 meter per sample
   // need to fit splines first to smooth out the path
-  tk::spline spline_fit_s_to_x;
-  tk::spline spline_fit_s_to_y;
+//  tk::spline spline_fit_s_to_x;
+//  tk::spline spline_fit_s_to_y;
+//  tk::spline spline_fit_s_to_dx;
+//  tk::spline spline_fit_s_to_dy;
   spline_fit_s_to_x.set_points(waypoints_segment_s, waypoints_segment_x);
   spline_fit_s_to_y.set_points(waypoints_segment_s, waypoints_segment_y);
+  spline_fit_s_to_dx.set_points(waypoints_segment_s, waypoints_segment_dx);
+  spline_fit_s_to_dy.set_points(waypoints_segment_s, waypoints_segment_dy);
 
   const int samples = int(waypoints_segment_s[waypoints_segment_s.size()-1]);
   map_waypoints_x_upsampled.reserve(samples);
   map_waypoints_y_upsampled.reserve(samples);
   map_waypoints_s_upsampled.reserve(samples);
+  map_waypoints_dx_upsampled.reserve(samples);
+  map_waypoints_dy_upsampled.reserve(samples);
   for (int i = 0; i < samples; i++) {
     map_waypoints_x_upsampled.push_back(spline_fit_s_to_x(i));
     map_waypoints_y_upsampled.push_back(spline_fit_s_to_y(i));
     map_waypoints_s_upsampled.push_back(i);
+    map_waypoints_dx_upsampled.push_back(spline_fit_s_to_dx(i));
+    map_waypoints_dy_upsampled.push_back(spline_fit_s_to_dy(i));
   }
 }
 
@@ -671,10 +671,15 @@ int main() {
             cout << "PATH UPDATE" << endl;
             
             // extract surrounding waypoints and fit a spline
-            vector<double> waypoints_segment_x, waypoints_segment_y, waypoints_segment_s;
+            vector<double> waypoints_segment_s;
             vector<double> waypoints_segment_s_worldSpace;
-            vector<double> map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled;
-            fit_spline_segment(car_s, map_waypoints_s, map_waypoints_x, map_waypoints_y, waypoints_segment_x, waypoints_segment_y, waypoints_segment_s, waypoints_segment_s_worldSpace, map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled);
+            // TODO: Clean most (all?) of these up! Change signature of fit_spline_segment as well.
+            vector<double> map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled, map_waypoints_dx_upsampled, map_waypoints_dy_upsampled;
+            tk::spline spline_fit_s_to_x;
+            tk::spline spline_fit_s_to_y;
+            tk::spline spline_fit_s_to_dx;
+            tk::spline spline_fit_s_to_dy;
+            fit_spline_segment(car_s, map_waypoints_s, map_waypoints_x, map_waypoints_y, map_waypoints_dx, map_waypoints_dy, waypoints_segment_s, waypoints_segment_s_worldSpace, map_waypoints_x_upsampled, map_waypoints_y_upsampled, map_waypoints_s_upsampled, map_waypoints_dx_upsampled, map_waypoints_dy_upsampled, spline_fit_s_to_x, spline_fit_s_to_y, spline_fit_s_to_dx, spline_fit_s_to_dy);
             
             // convert current car_s into our local Frenet space
             double car_local_s = get_local_s(car_s, waypoints_segment_s_worldSpace, waypoints_segment_s);
@@ -736,7 +741,8 @@ int main() {
             
             double new_x, new_y;
             // start with current car position in x/y
-            vector<double> prev_xy_planned = getXY(new_path[0][0], new_path[1][0], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+            //vector<double> prev_xy_planned = getXY(new_path[0][0], new_path[1][0], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+            vector<double> prev_xy_planned = getXY_splines(new_path[0][0], new_path[1][0], spline_fit_s_to_x, spline_fit_s_to_y, spline_fit_s_to_dx, spline_fit_s_to_dy);
             if (smooth_path) {
               // re-use first point of previous path
               new_x = previous_path_x[0];
@@ -748,9 +754,12 @@ int main() {
               next_x_vals.push_back(prev_xy_planned[0]);
               next_y_vals.push_back(prev_xy_planned[1]);
             }
-
+            
+//            cout << "dx: " << spline_fit_s_to_dx(car_local_s) << " - dy: " << spline_fit_s_to_dy(car_local_s) << endl;
+            
             for(int i = 1; i < horizon; i++) {
-              vector<double> xy_planned = getXY(new_path[0][i], new_path[1][i], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+              //vector<double> xy_planned = getXY(new_path[0][i], new_path[1][i], map_waypoints_s_upsampled, map_waypoints_x_upsampled, map_waypoints_y_upsampled);
+              vector<double> xy_planned = getXY_splines(new_path[0][i], new_path[1][i], spline_fit_s_to_x, spline_fit_s_to_y, spline_fit_s_to_dx, spline_fit_s_to_dy);
               if (smooth_path) {
                 double x_dif_planned =  xy_planned[0] - prev_xy_planned[0];
                 double y_dif_planned =  xy_planned[1] - prev_xy_planned[1];
@@ -858,83 +867,3 @@ int main() {
   }
   h.run();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

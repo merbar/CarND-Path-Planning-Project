@@ -13,7 +13,7 @@ PolyTrajectoryGenerator::PolyTrajectoryGenerator() {
 PolyTrajectoryGenerator::~PolyTrajectoryGenerator() {
 }
 
-float PolyTrajectoryGenerator::exceeds_speed_limit_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+double PolyTrajectoryGenerator::exceeds_speed_limit_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   for (int i = 0; i < _horizon; i++) {
     if (traj.first.eval_d(i) + traj.second.eval_d(i) > _hard_max_vel_per_timestep)
       return 1.0;
@@ -21,7 +21,7 @@ float PolyTrajectoryGenerator::exceeds_speed_limit_cost(pair<Polynomial, Polynom
   return 0.0;
 }
 
-float PolyTrajectoryGenerator::exceeds_accel_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+double PolyTrajectoryGenerator::exceeds_accel_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   for (int i = 0; i < _horizon; i++) {
     if (traj.first.eval_double_d(i) + traj.second.eval_double_d(i) > _hard_max_acc_per_timestep)
       return 1.0;
@@ -29,7 +29,7 @@ float PolyTrajectoryGenerator::exceeds_accel_cost(pair<Polynomial, Polynomial> c
   return 0.0;
 }
 
-float PolyTrajectoryGenerator::exceeds_jerk_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+double PolyTrajectoryGenerator::exceeds_jerk_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   for (int i = 0; i < _horizon; i++) {
     if (traj.first.eval_triple_d(i) + traj.second.eval_triple_d(i) > _hard_max_jerk_per_timestep)
       return 1.0;
@@ -37,7 +37,7 @@ float PolyTrajectoryGenerator::exceeds_jerk_cost(pair<Polynomial, Polynomial> co
   return 0.0;
 }
 
-float PolyTrajectoryGenerator::collision_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+double PolyTrajectoryGenerator::collision_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   for (int t = 0; t < _horizon; t++) {
     for (int i = 0; i < vehicles.size(); i++) {
       double ego_s = traj.first.eval(t);
@@ -54,7 +54,66 @@ float PolyTrajectoryGenerator::collision_cost(pair<Polynomial, Polynomial> const
   return 0.0;
 }
 
-float PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+// adds cost for getting too close to another vehicle
+double PolyTrajectoryGenerator::traffic_buffer_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+  double cost = 0.0;
+  for (int t = 0; t < _horizon; t++) {
+    for (int i = 0; i < vehicles.size(); i++) {
+      double ego_s = traj.first.eval(t);
+      double ego_d = traj.second.eval(t);
+      vector<double> traffic_state = vehicles[i].state_at(t); // {s,d}
+
+      double dif_s = abs(traffic_state[0] - ego_s);
+      double dif_d = abs(traffic_state[1] - ego_d);
+      
+      // if in the same lane and to close
+      if ((dif_s <= _col_buf_length) && (dif_d <= 2.0))
+        cost += 1 - logistic(dif_s);
+    }
+  }
+  return cost;
+}
+
+// penalizes low average speeds compared to speed limit
+double PolyTrajectoryGenerator::efficiency_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+  double s_dist = goal[0] - traj.first.eval(0);
+  double max_dist = _delta_s_maxspeed;
+  return abs(logistic(max_dist - s_dist)); // abs() because going faster is actually bad
+}
+
+double PolyTrajectoryGenerator::total_accel_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+  double cost = 0.0;
+  for (int t = 0; t < _horizon; t++) {
+    cost += abs(traj.first.eval_double_d(t));
+    cost += abs(traj.second.eval_double_d(t));
+  }
+  return logistic(cost);
+}
+
+double PolyTrajectoryGenerator::total_jerk_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+  double cost = 0.0;
+  for (int t = 0; t < _horizon; t++) {
+    cost += abs(traj.first.eval_triple_d(t));
+    cost += abs(traj.second.eval_triple_d(t));
+  }
+  return logistic(cost);
+}
+
+double PolyTrajectoryGenerator::lane_depart_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
+  double cost = 0.0;
+  for (int t = 0; t < _horizon; t++) {
+    double ego_d = traj.second.eval(t);
+    double lane_marking_proximity = fmod(ego_d, 4);
+    if (lane_marking_proximity > 2.0)
+      lane_marking_proximity = abs(lane_marking_proximity - 4);
+    if (lane_marking_proximity <= _car_col_width)
+      cost += 1 - logistic(lane_marking_proximity);
+  }
+  return cost;
+}
+
+
+double PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   Polynomial s = traj.first;
   Polynomial d = traj.second;
     
@@ -74,7 +133,25 @@ float PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> const
   if (infeasible_costs > 0.0)
     return 9999;
   
+  double tr_buf_cost = traffic_buffer_cost(traj, goal, vehicles);
+  double eff_cost = efficiency_cost(traj, goal, vehicles);
+  double acc_cost = total_accel_cost(traj, goal, vehicles);
+  double jerk_cost = total_jerk_cost(traj, goal, vehicles);
+  double lane_dep_cost = lane_depart_cost(traj, goal, vehicles);
+  cout << "traffic buffer cost: " << tr_buf_cost << endl;
+  cout << "efficiency cost: " << eff_cost << endl;
+  cout << "acceleration cost: " << acc_cost << endl;
+  cout << "jerk cost: " << jerk_cost << endl;
+  cout << "lane depart cost: " << lane_dep_cost << endl;
+  
+  cost = tr_buf_cost + eff_cost;
   return cost;
+}
+
+// returns a value between 0 and 1 for x in the range [0, infinity]
+// and -1 to 1 for x in the range [-infinity, infinity].
+double PolyTrajectoryGenerator::logistic(double x) {
+    return (2.0 / (1 + exp(-x)) - 1.0);
 }
 
 // searches for closest vehicle in current travel lane. Returns index and s-distance.
@@ -120,7 +197,7 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   if (start_d[0] > 8) cur_lane_i = 2;
   else if (start_d[0] > 4) cur_lane_i = 1;
   
-  cout << "ego local s: " << start_s[0] << " d: " << start_d[0] << endl;
+  cout << "ego local s: " << start_s[0] << " d_vel: " << start_s[1] << " d: " << start_d[0] << endl;
   
   vector<vector<double>> goal_points;
   vector<vector<double>> traj_goals; // s, s_dot, s_double_dot, d, d_dot, d_double_dot
@@ -137,24 +214,29 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   bool go_straight_follow_lead = false;
   bool change_left = false;
   bool change_right = false;
-  // find closest vehicle in current travel lane
+  // find closest vehicle ahead of us in current travel lane
   int closest_veh_i = closest_vehicle_in_lane(start, cur_lane_i, vehicles);
+  
   if (closest_veh_i != -1) {
-    // predict if a collision will occur
-    bool col_occurs_with_closest_veh = false;
-    for (int t = 0; t < _horizon; t++) {
-      double ego_s = start_s[0] + start_s[1] * t;
-      vector<double> traffic_state = vehicles[closest_veh_i].state_at(t); // {s,d}
-      double dif_s = abs(traffic_state[0] - ego_s);
-      if (dif_s <= _car_col_length) {
-        col_occurs_with_closest_veh = true;
-        break;
-      }
-    }
+    bool traffic_is_close = false;
+    vector<double> closest_veh_s = vehicles[closest_veh_i].get_s();
+    if (abs(closest_veh_s[0] - start_s[0]) < _col_buf_length)
+      traffic_is_close = true;
+//    // predict if a collision will occur
+//    bool col_occurs_with_closest_veh = false;
+//    for (int t = 0; t < _horizon; t++) {
+//      double ego_s = start_s[0] + start_s[1] * t;
+//      vector<double> traffic_state = vehicles[closest_veh_i].state_at(t); // {s,d}
+//      double dif_s = abs(traffic_state[0] - ego_s);
+//      if (dif_s <= _car_col_length * 4) {
+//        col_occurs_with_closest_veh = true;
+//        break;
+//      }
+//    }
     cout << "closest veh i " << closest_veh_i << " - position s: " << vehicles[closest_veh_i].get_s()[0] << " - position d: " << vehicles[closest_veh_i].get_d()[0] << endl;
-    if (col_occurs_with_closest_veh) {
-      bool go_straight = false;
-      bool go_straight_follow_lead = true;
+    if (traffic_is_close) {
+      go_straight = false;
+      go_straight_follow_lead = true;
   //    bool change_left = false;
   //    bool change_right = false;
     }
@@ -163,9 +245,9 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
 
   cout << "PLAN: ";
   if (go_straight)
-    cout << "GO STRAIGHT ";
+    cout << " :GO STRAIGHT: ";
   if (go_straight_follow_lead)
-    cout << "- FOLLOW LEAD";
+    cout << " :FOLLOW LEAD: ";
   cout << endl;
   
   // #########################################

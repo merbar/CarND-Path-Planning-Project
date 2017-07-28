@@ -64,3 +64,7 @@ PROCESS:
 - Start implementing cost functions and states to start being able to navigate through traffic. Just keep lane for now.
 -- implement costs functions that immediately make a trajectory infeasible (collision, speed limit / forces exceeded)
 -- two states: go straight at max speed; go straight and follow lead vehicle
+
+- forum post: asking about an issue with spline fits for dx/dy along with a plot of all three lanes around the track.
+-- much easier way to get world space coordinates from frenet!! And I was still dealing with a small but noticeable amount of noise originating from the way the provided getXY() comes up with d (estimated angle projected out - which amplifies noise the further to the right we drive)
+-- quickly implemented... and much smoother overall result. Probably cut off ~0.5-1 unit of jerk at any given time.

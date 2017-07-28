@@ -12,12 +12,14 @@
         <group>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/Vehicle.cpp</file>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/Polynomial.h</file>
+            <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/matplotlibcpp.h</file>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/main.cpp</file>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/Polynomial.cpp</file>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/polyTrajectoryGenerator.cpp</file>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/polyTrajectoryGenerator.h</file>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/notes.txt</file>
             <file>file:/home/merbar/git/CarND-Path-Planning-Project/src/Vehicle.h</file>
+            <file>file:/home/merbar/git/CarND-Path-Planning-Project/data/highway_map.csv</file>
         </group>
     </open-files>
 </project-private>
