@@ -60,6 +60,7 @@ PROCESS:
 - Now to figure out how to get accurate velocity and acceleration in S and D for trajectory planning
 -- tried using first three values of previous path x/y. With the angle-based projection and tiny value changes per time step, using the provided function to convert to Frenet space becomes less exact the further out in the road the vehicle is. Not useful.
 -- good success with using predicted value for vel/acc from predicted path. Eyeballing the latency at update frequency (100 steps) + lag (2). All in clean Frenets, so no need for problematic conversions.
+-- eyeballing worked okay, but still caused acceleration overruns in vel d. tried a possibly more exact measure that also yielded more robust results.
 
 - Start implementing cost functions and states to start being able to navigate through traffic. Just keep lane for now.
 -- implement costs functions that immediately make a trajectory infeasible (collision, speed limit / forces exceeded)
@@ -68,3 +69,15 @@ PROCESS:
 - forum post: asking about an issue with spline fits for dx/dy along with a plot of all three lanes around the track.
 -- much easier way to get world space coordinates from frenet!! And I was still dealing with a small but noticeable amount of noise originating from the way the provided getXY() comes up with d (estimated angle projected out - which amplifies noise the further to the right we drive)
 -- quickly implemented... and much smoother overall result. Probably cut off ~0.5-1 unit of jerk at any given time.
+
+- time to turn on path planner
+-- finish implementing cost functions
+=> first successful test
+-- tweak weights
+
+- issue: car is in left/rightmost lane with traffic ahead and in center lane, while opposing lane is free. It'll be stuck in it's lane.
+-- recognize this configuration in the path planner and "nudge" towards center lane via cost scaling
+- issue: undesirably high velocity in tight left turns
+-- rough measure to recognize turns ahead in potential path and reduce speed on a sliding scale
+- if behind slower vehicle in middle lane and other traffic slightly further out, vehicle might change into lane with actually slower traffic ahead
+-- new cost function traffic_ahead_cost. Also proactively switches ouf of lanes with traffic further ahead.
