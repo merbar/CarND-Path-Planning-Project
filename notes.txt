@@ -81,3 +81,10 @@ PROCESS:
 -- rough measure to recognize turns ahead in potential path and reduce speed on a sliding scale
 - if behind slower vehicle in middle lane and other traffic slightly further out, vehicle might change into lane with actually slower traffic ahead
 -- new cost function traffic_ahead_cost. Also proactively switches ouf of lanes with traffic further ahead.
+
+- guarantee that once lane change is planned, vehicle stays committed
+-- cur_plan variable
+
+There are some crappy drivers on that simulated road:
+- Crazy robots cutting me off and triggering an emergency brake (and exceeding force limits)
+- Traffic coming the other way briefly cross into my leftmost lane in the distance and triggering a lane change on my end

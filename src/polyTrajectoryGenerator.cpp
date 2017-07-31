@@ -86,15 +86,6 @@ double PolyTrajectoryGenerator::efficiency_cost(pair<Polynomial, Polynomial> con
   return abs(logistic((max_dist - s_dist) / max_dist)); // abs() because going faster is actually bad
 }
 
-double PolyTrajectoryGenerator::total_accel_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
-  double cost = 0.0;
-  for (int t = 0; t < _horizon; t++) {
-    cost += abs(traj.first.eval_double_d(t));
-    cost += abs(traj.second.eval_double_d(t));
-  }
-  return logistic(cost);
-}
-
 double PolyTrajectoryGenerator::total_accel_s_cost(pair<Polynomial, Polynomial> const &traj, vector<double> const &goal, vector<Vehicle> const &vehicles) {
   double cost = 0.0;
   for (int t = 0; t < _horizon; t++) {
@@ -138,6 +129,7 @@ double PolyTrajectoryGenerator::traffic_ahead_cost(pair<Polynomial, Polynomial> 
   double ego_s = traj.first.eval(0);
   double ego_d = traj.second.eval(0);
   double ego_d_end = traj.second.eval(_horizon);
+  int look_ahead = 200;
   
   int fut_lane_i = 0;
   if (ego_d_end > 8) fut_lane_i = 2;
@@ -147,24 +139,24 @@ double PolyTrajectoryGenerator::traffic_ahead_cost(pair<Polynomial, Polynomial> 
   if (closest_veh_fut_i != -1) {
     vector<double> fut_traffic_s = vehicles[closest_veh_fut_i].get_s();
     float dif_s = fut_traffic_s[0] - ego_s;
-    if (dif_s < 150) {
+    if (dif_s < look_ahead) {
       // don't switch into a lane with slower traffic ahead
       int cur_lane_i = 0;
       if (ego_d > 8) cur_lane_i = 2;
       else if (ego_d > 4) cur_lane_i = 1;
       int closest_veh_i = closest_vehicle_in_lane({ego_s, ego_d_end}, cur_lane_i, vehicles);
       // if there is a vehicle in the current lane AND make range a bit tighter
-      if ((closest_veh_i != -1) && (dif_s < 100)) {
+      if ((closest_veh_i != -1) && (dif_s < look_ahead / 2.0)) {
         vector<double> traffic_s = vehicles[closest_veh_i].get_s();
         double ego_s_vel = traj.first.eval_d(0);
-        // traffic in planned lane slower than in current?
-        if (fut_traffic_s[1] < traffic_s[1])
+        // traffic in planned lane clearly slower than in current?
+        if (fut_traffic_s[1] < traffic_s[1] * 0.95)
           return 1000;
       }
       // end - don't switch into a lane with slower traffic ahead
       
       // no slower traffic in goal lane, so return regular cost
-      return logistic(1 - (dif_s / 150));
+      return logistic(1 - (dif_s / look_ahead));
     }
   }
   return 0.0;
@@ -176,33 +168,20 @@ double PolyTrajectoryGenerator::calculate_cost(pair<Polynomial, Polynomial> cons
   Polynomial d = traj.second;
     
   double cost = 0.0;
-//  cout << "s poly:" << endl;
-//  traj.first.print();
-//  cout << "d poly:" << endl;
-//  traj.second.print();
-
   // first situations that immediately make a trajectory infeasible
   double ex_sp_lim_cost = exceeds_speed_limit_cost(traj, goal, vehicles);
   double ex_acc_lim_cost = exceeds_accel_cost(traj, goal, vehicles);
   double ex_jerk_lim_cost = exceeds_jerk_cost(traj, goal, vehicles);
   double col_cost = collision_cost(traj, goal, vehicles);
-//  cout << "COST FUNCTIONS" << endl;
-//  cout << "exceed speed limit: " << ex_sp_lim_cost << endl; 
-//  cout << "exceed acc limit: " << ex_acc_lim_cost << endl;
-//  cout << "exceed jerk limit: " << ex_jerk_lim_cost << endl;
-//  cout << "collision cost: " << col_cost << endl;
   
   double infeasible_costs = ex_sp_lim_cost + ex_acc_lim_cost + ex_jerk_lim_cost + col_cost;
   if (infeasible_costs > 0.0) {
     all_costs.push_back({999999});
     return 999999;
-  }
-  
-  
+  }  
   
   double tr_buf_cost   = traffic_buffer_cost(traj, goal, vehicles) * _cost_weights["tr_buf_cost"];
   double eff_cost      = efficiency_cost(traj, goal, vehicles) * _cost_weights["eff_cost"];
-  double acc_cost      = total_accel_cost(traj, goal, vehicles) * _cost_weights["acc_cost"];
   double acc_s_cost    = total_accel_s_cost(traj, goal, vehicles) * _cost_weights["acc_s_cost"];
   double acc_d_cost    = total_accel_d_cost(traj, goal, vehicles) * _cost_weights["acc_d_cost"];
   double jerk_cost     = total_jerk_cost(traj, goal, vehicles) * _cost_weights["jerk_cost"];
@@ -242,35 +221,19 @@ int PolyTrajectoryGenerator::closest_vehicle_in_lane(vector<double> const &start
       }        
     }
   }
-//  cout << "closest vehicle s dif: " << min_s_dif  << " - index: " << closest_i << " - s value: " << vehicles[closest_i].get_s()[0] << endl;
   return closest_i;
 }
 
 // searches for closest vehicle in current travel lane. Returns index and s-distance.
 vector<int> PolyTrajectoryGenerator::closest_vehicle_in_lanes(vector<double> const &start, vector<Vehicle> const &vehicles) {
   vector<int> closest_veh_i(3);
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 3; i++)
     closest_veh_i[i] = closest_vehicle_in_lane(start, i, vehicles);
-//    int closest_i = -1;
-//    float min_s_dif = 999;
-//    for (int j = 0; j < vehicles.size(); j++) {
-//      vector<double> traffic_d = vehicles[j].get_d();
-//      int traffic_lane_i = 0;
-//      if (traffic_d[0] > 8) traffic_lane_i = 2;
-//      else if (traffic_d[0] > 4) traffic_lane_i = 1;
-//
-//      if (i == traffic_lane_i) {
-//        vector<double> traffic_s = vehicles[j].get_s();
-//        float dif_s = traffic_s[0] - start[0];
-//        if ((dif_s > 0.0) && (dif_s < min_s_dif)) {
-//          closest_i = j;
-//          min_s_dif = dif_s;
-//        }        
-//      }
-//    }
-//    closest_veh_i[i] = closest_i;
-  }
   return closest_veh_i;
+}
+
+string PolyTrajectoryGenerator::get_current_action() {
+  return _current_action;
 }
 
 // returns: trajectory for given number of timesteps (horizon) in Frenet coordinates
@@ -311,8 +274,6 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   bool go_straight_follow_lead = false;
   bool change_left = false;
   bool change_right = false;
-  // find closest vehicle ahead of us in current travel lane
-  //int closest_veh_i = closest_vehicle_in_lane(start, cur_lane_i, vehicles);
   // get closest vehicle for each lane
   vector<int> closest_veh_i = closest_vehicle_in_lanes(start, vehicles);
 
@@ -387,12 +348,12 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     if (((lead_s[0] - start_s[0]) < _col_buf_length * 0.5) && (lead_s[1] < start_s[1] * 0.8)) {
       cout << "EMERGENCY" << endl;
       // reducing horizon to reduce speed faster
+      _current_action = "emergency";
       _horizon = 120;
       // and hold lane - getting forced into other lane in a small horizon will exceed force limits
       change_left = false;
       change_right = false;
-    }
-      
+    }      
     double goal_s_pos = start_s[0] + lead_s[1] * _horizon;
     double goal_s_vel = lead_s[1];
     double goal_s_acc = 0.0;
@@ -407,15 +368,21 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     goal_points.insert(goal_points.end(),goal_points_follow.begin(),goal_points_follow.end());
   }
   
+  // on lane change, need to reduce speed a bit to make up for discrepancy of point spacing between x/y and frenet coords
+  double left_change_speed_reduction = 0.85;
   // CHANGE LANE LEFT
   if (change_left && (cur_lane_i != 0)) {
-    double goal_s_pos = start_s[0] + _delta_s_maxspeed;
-    double goal_s_vel = _max_dist_per_timestep;
+    
+    double goal_s_pos = start_s[0] + _delta_s_maxspeed * left_change_speed_reduction;
+    double goal_s_vel = _max_dist_per_timestep  * left_change_speed_reduction;
     // less aggressive lane change if we are already following
     if (go_straight_follow_lead) {
       vector<double> lead_s = vehicles[closest_veh_i[cur_lane_i]].get_s();
-      goal_s_pos = start_s[0] + lead_s[1] * _horizon;
-      goal_s_vel = lead_s[1];  
+      // but only if following closely
+      if (lead_s[0] - start_s[0] < _col_buf_length * 0.5) {
+        goal_s_pos = start_s[0] + lead_s[1] * _horizon;
+        goal_s_vel = lead_s[1];
+      }
     }
     double goal_s_acc = 0.0;
     double goal_d_pos = (2 + 4 * cur_lane_i) - 4;
@@ -436,8 +403,11 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     // less aggressive lane change if we are already following
     if (go_straight_follow_lead) {
       vector<double> lead_s = vehicles[closest_veh_i[cur_lane_i]].get_s();
-      goal_s_pos = start_s[0] + lead_s[1] * _horizon;
-      goal_s_vel = lead_s[1];
+      // but only if following closely
+      if (lead_s[0] - start_s[0] < _col_buf_length * 0.5) {
+        goal_s_pos = start_s[0] + lead_s[1] * _horizon;
+        goal_s_vel = lead_s[1];
+      }
     }
     double goal_s_acc = 0.0;
     double goal_d_pos = (2 + 4 * cur_lane_i) + 4;
@@ -506,6 +476,10 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     }
   }
   
+  _current_action = "straight";
+  if (min_cost_i > _goal_perturb_samples)
+    _current_action = "lane_change";  
+  
   cout << "cost: " << traj_costs[min_cost_i] << " - i: " << min_cost_i << endl;
   cout << "traffic buffer cost: " << all_costs[min_cost_i][0] << endl;
   cout << "efficiency cost: " << all_costs[min_cost_i][1] << endl;
@@ -534,8 +508,6 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
 
 
 // creates randomly generated variations of goal point
-// it is not fully random: if we decrease distance in s, then velocity must also
-// go down in order to create more feasible goals
 void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<double>> &goal_points) {
   double percentage_std_deviation = 0.1;
   std::normal_distribution<double> distribution_10_percent(0.0, percentage_std_deviation);
