@@ -46,8 +46,9 @@ double PolyTrajectoryGenerator::collision_cost(pair<Polynomial, Polynomial> cons
 
       double dif_s = abs(traffic_state[0] - ego_s);
       double dif_d = abs(traffic_state[1] - ego_d);
-
-      if ((dif_s <= _car_col_length) && (dif_d <= _car_col_width * 2.0))
+      
+      // make the envelope a little wider to stay "out of trouble"
+      if ((dif_s <= _car_col_length * 5.0) && (dif_d <= _car_col_width * 3.0))
         return 1.0;
     }
   }
@@ -370,10 +371,8 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   
   // CHANGE LANE LEFT
   if (change_left && (cur_lane_i != 0)) {
-    // on lane change, need to reduce speed a bit to make up for discrepancy of point spacing between x/y and frenet coords
-    double left_change_speed_reduction = 0.975;
-    double goal_s_pos = start_s[0] + _delta_s_maxspeed * left_change_speed_reduction;
-    double goal_s_vel = _max_dist_per_timestep  * left_change_speed_reduction;
+    double goal_s_pos = start_s[0] + _delta_s_maxspeed;
+    double goal_s_vel = _max_dist_per_timestep;
     // less aggressive lane change if we are already following
     if (go_straight_follow_lead) {
       vector<double> lead_s = vehicles[closest_veh_i[cur_lane_i]].get_s();
@@ -443,8 +442,8 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     vector<double> goal_d = {goal[3], goal[4], goal[5]};
     // ignore goal points that are out of bounds
     if ((goal[3] > 1.0) && (goal[3] < 11.0)) {      
-      Polynomial traj_s_poly = jmt(start_s, goal_s, horizon);
-      Polynomial traj_d_poly = jmt(start_d, goal_d, horizon);
+      Polynomial traj_s_poly = jmt(start_s, goal_s, _horizon);
+      Polynomial traj_d_poly = jmt(start_d, goal_d, _horizon);
       trajectory_coefficients.push_back(std::make_pair(traj_s_poly, traj_d_poly));
       traj_goals.push_back({goal[0], goal[1], goal[2], goal[3], goal[4], goal[5]});
     }     
@@ -468,11 +467,24 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   // choose least-cost trajectory
   double min_cost = traj_costs[0];
   int min_cost_i = 0;
-  for (int i = 1; i < traj_costs.size(); i++) {
+  for (int i = 1; i < trajectory_coefficients.size(); i++) {
     if (traj_costs[i] < min_cost) {
       min_cost = traj_costs[i];
       min_cost_i = i;
     }
+  }
+  // rare edge case: vehicle is stuck in infeasible trajectory (usually stuck close behind other car)
+  if (min_cost == 999999) {
+    double min_s = trajectory_coefficients[0].first.eval(_horizon);
+    int min_s_i = 0;
+    // find trajectory going straight with minimum s
+    for (int i = 1; i < _goal_perturb_samples; i++) {
+      if (trajectory_coefficients[i].first.eval(_horizon) < min_s){
+        min_s = trajectory_coefficients[i].first.eval(_horizon);
+        min_s_i = i;
+      }
+    }
+    min_cost_i = min_s_i;
   }
   
   _current_action = "straight";
@@ -491,9 +503,9 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
   // ################################
   // COMPUTE VALUES FOR TIME HORIZON
   // ################################
-  vector<double> traj_s(horizon);
-  vector<double> traj_d(horizon);
-  for(int t = 0; t < horizon; t++) {
+  vector<double> traj_s(_horizon);
+  vector<double> traj_d(_horizon);
+  for(int t = 0; t < _horizon; t++) {
       traj_s[t] = trajectory_coefficients[min_cost_i].first.eval(t);
       traj_d[t] = trajectory_coefficients[min_cost_i].second.eval(t);
   }

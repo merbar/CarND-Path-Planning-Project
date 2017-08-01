@@ -65,7 +65,7 @@ private:
     std::default_random_engine _rand_generator;
     std::map<std::string, double> _cost_weights = {
                                             {"tr_buf_cost", 140.0},
-                                            {"eff_cost", 140.0},
+                                            {"eff_cost", 110.0},
                                             {"acc_s_cost", 10.0},
                                             {"acc_d_cost", 10.0},
                                             {"jerk_cost", 10.0},

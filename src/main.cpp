@@ -14,12 +14,6 @@
 #include "spline.h"
 #include <cassert>
 
-// FOR PLOTTING
-//#include <ctime>
-//#include <sstream>
-#include "matplotlibcpp.h"
-
-namespace plt = matplotlibcpp;
 using namespace std;
 
 // for convenience
@@ -29,12 +23,6 @@ using json = nlohmann::json;
 constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
-
-// FOR PLOTTING
-bool do_plot = false;
-
-// start position at end of lap to test transitions
-//bool teleport_to_end = false;
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -252,55 +240,10 @@ double get_local_s(double world_s, vector<double> const &waypoints_segment_s_wor
   double s_local = waypoints_segment_s[prev_wp] + diff_world;
   return s_local;
 }
-
-
-void plot(double car_s, double car_yaw, vector<double> const &next_x_vals, vector<double> const &next_y_vals, vector<double> const &map_waypoints_x_upsampled, vector<double> const &map_waypoints_y_upsampled, vector<vector<double>> const &sensor_fusion) {
-  int track_s_lookahead = 200;
-  vector<double> track_s = {car_s, car_s + 300};
-  const vector<double> lane_mark_1 = {0, 0};
-  const vector<double> lane_mark_2 = {4, 4};
-  const vector<double> lane_mark_3 = {8, 8};
-  const vector<double> lane_mark_4 = {12, 12};
-  const vector<vector<double>> lane_markings = {lane_mark_1,lane_mark_2,lane_mark_3,lane_mark_4};
-  vector<double> traj_s(next_x_vals.size());
-  vector<double> traj_d(next_x_vals.size());
-  for (int i = 0; i < next_x_vals.size(); i++) {
-      vector<double> s_d = getFrenet(next_x_vals[i], next_y_vals[i], deg2rad(car_yaw), map_waypoints_x_upsampled, map_waypoints_y_upsampled);
-      traj_s[i] = s_d[0];
-      traj_d[i] = s_d[1];
-  }
-
-  plt::ylim(12, 0);
-  // three lanes in travel direction
-  for (auto marking : lane_markings) {
-    plt::plot(track_s, marking, "r");
-  }
-  // other cars
-  for (auto veh : sensor_fusion) {
-    plt::plot({veh[5]}, {veh[6]}, "b+");
-  }
-  // current trajectory
-  // this is still buggy, but in the ballpark
-  plt::plot(traj_s, traj_d, "g");
-  std::string filename = "../img/plot_";
-  filename += std::to_string(100);
-  plt::xlim(car_s-10, car_s+track_s_lookahead+10);
-  plt::save(filename);
-  plt::clf();
-}
-
             
 int main() {
   uWS::Hub h;
-  
-  // FOR PLOTTING
-  clock_t cur_time = clock();
-  clock_t last_plot_time = clock();
-  int plot_i = 10000;
-  if (do_plot) {
-    plt::figure();
-  }
-   
+    
   PolyTrajectoryGenerator PTG;
   
   // Load up map values for waypoint's x,y,s and d normalized normal vectors
@@ -343,7 +286,7 @@ int main() {
   // #################################
   // CONFIG
   // #################################
-  int horizon_global = 200;
+  int horizon_global = 175; //200
   int horizon = horizon_global;
   int update_interval_global = 40; // update every second
   int update_interval = update_interval_global;
@@ -351,13 +294,12 @@ int main() {
   
 
   h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,
-            &map_waypoints_dy,&cur_time,&last_plot_time,&plot_i,&PTG,&ego_veh,&horizon,&horizon_global,&update_interval_global,&update_interval,&speed_limit_global]
+            &map_waypoints_dy,&PTG,&ego_veh,&horizon,&horizon_global,&update_interval_global,&update_interval,&speed_limit_global]
             (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
     //auto sdata = string(data).substr(0, length);
-    //cout << sdata << endl;
     if (length && length > 2 && data[0] == '4' && data[1] == '2') {
 
       auto s = hasData(data);
