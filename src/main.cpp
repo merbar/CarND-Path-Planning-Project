@@ -178,7 +178,7 @@ vector<double> getXY(double s, double d, vector<double> const &maps_s, vector<do
 
 
 void fit_spline_segment(double car_s, vector<double> const &map_waypoints_s, vector<double> const &map_waypoints_x, vector<double> const &map_waypoints_y, vector<double> const &map_waypoints_dx, vector<double> const &map_waypoints_dy, vector<double> &waypoints_segment_s, vector<double> &waypoints_segment_s_worldSpace, tk::spline &spline_fit_s_to_x, tk::spline &spline_fit_s_to_y, tk::spline &spline_fit_s_to_dx, tk::spline &spline_fit_s_to_dy) {
-  // get 10 previous and 15 next waypoints
+  // get 10 previous and 20 next waypoints
   vector<double> waypoints_segment_x, waypoints_segment_y, waypoints_segment_dx, waypoints_segment_dy;
   vector<int> wp_indeces;
   const int lower_wp_i = 9;
