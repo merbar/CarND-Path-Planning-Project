@@ -29,7 +29,7 @@ public:
     
     vector<vector<double>> generate_trajectory(vector<double> const &start, double max_speed, double horizon, vector<Vehicle> const &vehicles);
     Polynomial jmt(vector<double> const &start, vector<double> const &goal, int t);
-    void perturb_goal(vector<double> goal, vector<vector<double>> &goal_points);
+    void perturb_goal(vector<double> goal, vector<vector<double>> &goal_points, bool no_ahead=false);
     double logistic(double x);
     int closest_vehicle_in_lane(vector<double> const &start, int ego_lane_i, vector<Vehicle> const &vehicles);
     vector<int> closest_vehicle_in_lanes(vector<double> const &start, vector<Vehicle> const &vehicles);

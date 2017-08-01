@@ -347,7 +347,7 @@ int main() {
   int horizon = horizon_global;
   int update_interval_global = 40; // update every second
   int update_interval = update_interval_global;
-  double speed_limit_global = 46;
+  double speed_limit_global = 47.5;
   
 
   h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,

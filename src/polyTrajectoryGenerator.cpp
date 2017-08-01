@@ -47,7 +47,7 @@ double PolyTrajectoryGenerator::collision_cost(pair<Polynomial, Polynomial> cons
       double dif_s = abs(traffic_state[0] - ego_s);
       double dif_d = abs(traffic_state[1] - ego_d);
 
-      if ((dif_s <= _car_col_length) && (dif_d <= _car_col_width))
+      if ((dif_s <= _car_col_length) && (dif_d <= _car_col_width * 2.0))
         return 1.0;
     }
   }
@@ -368,11 +368,10 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     goal_points.insert(goal_points.end(),goal_points_follow.begin(),goal_points_follow.end());
   }
   
-  // on lane change, need to reduce speed a bit to make up for discrepancy of point spacing between x/y and frenet coords
-  double left_change_speed_reduction = 0.85;
   // CHANGE LANE LEFT
   if (change_left && (cur_lane_i != 0)) {
-    
+    // on lane change, need to reduce speed a bit to make up for discrepancy of point spacing between x/y and frenet coords
+    double left_change_speed_reduction = 0.975;
     double goal_s_pos = start_s[0] + _delta_s_maxspeed * left_change_speed_reduction;
     double goal_s_vel = _max_dist_per_timestep  * left_change_speed_reduction;
     // less aggressive lane change if we are already following
@@ -390,7 +389,7 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
     double goal_d_acc = 0.0;
     vector<double> goal_vec = {goal_s_pos, goal_s_vel, goal_s_acc, goal_d_pos, goal_d_vel, goal_d_acc};
     vector<vector<double>> goal_points_left = {goal_vec};
-    perturb_goal(goal_vec, goal_points_left);
+    perturb_goal(goal_vec, goal_points_left, true);
     // add to goal points
     goal_points.reserve(goal_points.size() + goal_points_left.size());
     goal_points.insert(goal_points.end(),goal_points_left.begin(),goal_points_left.end());
@@ -508,12 +507,14 @@ vector<vector<double>> PolyTrajectoryGenerator::generate_trajectory(vector<doubl
 
 
 // creates randomly generated variations of goal point
-void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<double>> &goal_points) {
+void PolyTrajectoryGenerator::perturb_goal(vector<double> goal, vector<vector<double>> &goal_points, bool no_ahead) {
   double percentage_std_deviation = 0.1;
   std::normal_distribution<double> distribution_10_percent(0.0, percentage_std_deviation);
   vector<double> pert_goal(6);
   for (int i = 0; i < _goal_perturb_samples; i++) {
     double multiplier = distribution_10_percent(_rand_generator);
+    if (no_ahead && (multiplier > 0.0))
+      multiplier *= -1.0;
     pert_goal.at(0) = goal[0] + (_delta_s_maxspeed * multiplier);
     pert_goal.at(1) = goal[1] + (_max_dist_per_timestep * multiplier);
     pert_goal.at(2) = 0.0;
