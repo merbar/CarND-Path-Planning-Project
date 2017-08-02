@@ -51,7 +51,7 @@ With highway driving being a fairly controlled environment, the path planner has
 
 These trajectories are then evaluated for feasibility (no collisions, does not exceed speed limit, etc). Feasible trajectories are then given a weighted cost with the "cheapest" trajectory becoming the output of the path planner. 
 
-It became slightly tricky when trying to get accurate start states for velocity and acceleration to generate feasible trajectories. The path planning happens in Frenet coordinates and the simulator does not send accurate velocity and acceleration for the s and d components. Conversions from X/Y to Frenet is very susceptible to tiny inaccuracies and not useable. Instead - keeping in mind that the vehicle follows the exact input the planner gives it - I am simply storing the state of the vehicle at my **future** update step and pick it up during the next cycle as start state to my jerk-minimized trajectory generator.
+It became slightly tricky when trying to get accurate start states for velocity and acceleration to generate feasible trajectories. The path planning happens in Frenet coordinates and the simulator does not send accurate velocity and acceleration for the s and d components. Conversions from X/Y to Frenet is very susceptible to tiny inaccuracies and not useable. Instead - keeping in mind that the vehicle follows the exact input the planner gives it - I am simply storing the state of the vehicle at my **future** update step and pick it up during the next cycle as velocity/acceleration start state to my jerk-minimized trajectory generator.
 
 **Path planner outline**  
 ![alt tag](img/pathplanner.png "Path planner outline")
