@@ -255,6 +255,7 @@ int main() {
 
   // Waypoint map to read from
   string map_file_ = "../data/highway_map.csv";
+//  string map_file_ = "../data/highway_map_bosch1.csv";
   // The max s value before wrapping around the track back to 0
   double max_s = 6945.554;
 
@@ -459,7 +460,8 @@ int main() {
             // store ego vehicle velocity and acceleration in s and d for next cycle
             // ###################################################
             // make a bold prediction into the future
-            for (int i = 0; i < 10; i++) {
+            // 30 future steps chosen as arbitrary value that should never be exceeded
+            for (int i = 0; i < 30; i++) {
               double s0 = new_path[0][i + update_interval];
               double s1 = new_path[0][i + update_interval + 1];
               double s2 = new_path[0][i + update_interval + 2];

@@ -33,6 +33,10 @@ public:
     // part of hack to fight lag. Range of states from previous path 10 steps out from update_interval
     // contains {s_vel, s_acc, d_vel, d_acc}
     vector<vector<double>> _future_states = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},
+                                             {0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},
+                                             {0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},
+                                             {0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},
+                                             {0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},
                                              {0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
 private:
     //double _pos_x;
